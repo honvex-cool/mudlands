@@ -4,8 +4,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class MudlandsGame extends Game {
     @Override
     public void create() {
-        setScreen(new MainMenuScreen(this));
-    }
+        setScreen(new GameScreen(this));
+    } //change to MainMenuScreen latah bruda
 
     @Override
     public void render() {
