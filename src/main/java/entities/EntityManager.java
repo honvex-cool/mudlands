@@ -35,17 +35,17 @@ public class EntityManager {
     public List<Entity> getEntitiesWithComponents(Class<? extends Component>... componentClasses) {
         List<Entity> matchingEntities = new ArrayList<>();
 
-        for (Entity entity : entities.values()) {
+        for(Entity entity : entities.values()) {
             boolean allComponentsFound = true;
 
-            for (Class<? extends Component> componentClass : componentClasses) {
-                if (!entity.has(componentClass)) {
+            for(Class<? extends Component> componentClass : componentClasses) {
+                if(!entity.has(componentClass)) {
                     allComponentsFound = false;
                     break;
                 }
             }
 
-            if (allComponentsFound) {
+            if(allComponentsFound) {
                 matchingEntities.add(entity);
             }
         }

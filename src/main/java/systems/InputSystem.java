@@ -19,17 +19,17 @@ public class InputSystem extends System {
 
         float speed = 200;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             velocity.setX(-speed);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             velocity.setX(speed);
         } else {
             velocity.setX(0);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
             velocity.setY(speed);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        } else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             velocity.setY(-speed);
         } else {
             velocity.setY(0);

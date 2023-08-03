@@ -22,7 +22,7 @@ public class RenderingSystem extends System {
 
         List<Entity> entities = entityManager.getEntitiesWithComponents(RenderComponent.class);
 
-        for (Entity entity : entities) {
+        for(Entity entity : entities) {
             RenderComponent circleRender = entity.get(RenderComponent.class);
             PositionComponent position = entity.get(PositionComponent.class);
 

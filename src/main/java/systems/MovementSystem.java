@@ -16,7 +16,7 @@ public class MovementSystem extends System {
     public void update(float deltaTime) {
         List<Entity> entities = entityManager.getEntitiesWithComponents(PositionComponent.class, VelocityComponent.class);
 
-        for (Entity entity : entities) {
+        for(Entity entity : entities) {
             PositionComponent position = entity.get(PositionComponent.class);
             VelocityComponent velocity = entity.get(VelocityComponent.class);
 
