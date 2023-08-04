@@ -1,6 +1,7 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import components.PlayerComponent;
 import components.PositionComponent;
 import components.RenderComponent;
 import components.VelocityComponent;
@@ -29,6 +30,7 @@ public class GameScreen implements Screen {
         inputSystem = new InputSystem(world);
 
         Entity player = world.createEntity();
+        player.add(new PlayerComponent());
         player.add(new PositionComponent(Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight() / 2.0f));
         player.add(new VelocityComponent());
         player.add(new RenderComponent(50, Color.RED));

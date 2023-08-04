@@ -7,15 +7,17 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Entity {
+    private World world;
     private final int id;
     private String name;
     private final Map<Class<? extends Component>, Component> components;
 
-    public Entity(int id) {
-        this(id, null);
+    Entity(int id, String name) {
+        this(null, id, name);
     }
 
-    public Entity(int id, String name) {
+    Entity(World world, int id, String name) {
+        this.world = world;
         this.id = id;
         this.name = name;
         components = new HashMap<>();
@@ -41,7 +43,7 @@ public class Entity {
         return componentClass.cast(components.get(componentClass));
     }
 
-    public <T extends Component> void remove(Class<T> componentClass) {
+    public void remove(Class<? extends Component> componentClass) {
         components.remove(componentClass);
     }
 

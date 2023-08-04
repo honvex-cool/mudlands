@@ -1,10 +1,13 @@
 package systems;
 
+import components.PlayerComponent;
 import components.VelocityComponent;
 import entities.Entity;
 import entities.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+
+import java.util.List;
 
 public class InputSystem extends System {
     public InputSystem(World world) {
@@ -13,7 +16,10 @@ public class InputSystem extends System {
 
     @Override
     public void update(float deltaTime) {
-        Entity player = world.getEntity(1);
+        Entity player = world.getEntitiesWithComponents(
+            PlayerComponent.class,
+            VelocityComponent.class
+        ).get(0);
 
         VelocityComponent velocity = player.get(VelocityComponent.class);
 

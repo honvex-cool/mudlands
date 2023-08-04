@@ -3,37 +3,32 @@ package entities;
 import components.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public class World {
-    private int nextEntityId;
-    private Map<Integer, Entity> entities;
-
-    public World() {
-        nextEntityId = 1;
-        entities = new HashMap<>();
-    }
+    private int nextEntityId = 0;
+    private final Set<Entity> entities = new HashSet<>();
 
     public Entity createEntity() {
-        Entity entity = new Entity(nextEntityId++);
-        entities.put(entity.getId(), entity);
+        return createEntity(null);
+    }
+
+    public Entity createEntity(String name) {
+        Entity entity = new Entity(this, nextEntityId++, name);
+        entities.add(entity);
         return entity;
     }
 
-    public Entity getEntity(int entityId) {
-        return entities.get(entityId);
-    }
-
-    public void removeEntity(int entityId) {
-        entities.remove(entityId);
+    public void removeEntity(Entity entity) {
+        entities.remove(entity);
     }
 
     public List<Entity> getEntitiesWithComponents(Class<? extends Component>... componentClasses) {
         List<Entity> matchingEntities = new ArrayList<>();
 
-        for(Entity entity : entities.values()) {
+        for(Entity entity : entities) {
             boolean allComponentsFound = true;
 
             for(Class<? extends Component> componentClass : componentClasses) {
