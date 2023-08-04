@@ -17,10 +17,8 @@ public class EntityManager {
     }
 
     public Entity createEntity() {
-        int entityId = nextEntityId++;
-        Entity entity = new Entity();
-        entity.setId(entityId);
-        entities.put(entityId, entity);
+        Entity entity = new Entity(nextEntityId++);
+        entities.put(entity.getId(), entity);
         return entity;
     }
 
