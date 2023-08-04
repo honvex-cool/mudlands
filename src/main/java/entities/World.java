@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EntityManager {
+public class World {
     private int nextEntityId;
     private Map<Integer, Entity> entities;
 
-    public EntityManager() {
+    public World() {
         nextEntityId = 1;
         entities = new HashMap<>();
     }

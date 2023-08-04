@@ -3,18 +3,18 @@ package systems;
 import components.PositionComponent;
 import components.VelocityComponent;
 import entities.Entity;
-import entities.EntityManager;
+import entities.World;
 
 import java.util.List;
 
 public class MovementSystem extends System {
-    public MovementSystem(EntityManager entityManager) {
-        super(entityManager);
+    public MovementSystem(World world) {
+        super(world);
     }
 
     @Override
     public void update(float deltaTime) {
-        List<Entity> entities = entityManager.getEntitiesWithComponents(PositionComponent.class, VelocityComponent.class);
+        List<Entity> entities = world.getEntitiesWithComponents(PositionComponent.class, VelocityComponent.class);
 
         for(Entity entity : entities) {
             PositionComponent position = entity.get(PositionComponent.class);

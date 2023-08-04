@@ -5,7 +5,7 @@ import components.PositionComponent;
 import components.RenderComponent;
 import components.VelocityComponent;
 import entities.Entity;
-import entities.EntityManager;
+import entities.World;
 import systems.InputSystem;
 import systems.MovementSystem;
 import systems.RenderingSystem;
@@ -14,7 +14,7 @@ public class GameScreen implements Screen {
 
     private final MudlandsGame game;
 
-    private EntityManager entityManager;
+    private World world;
 
     private RenderingSystem renderingSystem;
     private MovementSystem movementSystem;
@@ -23,12 +23,12 @@ public class GameScreen implements Screen {
 
     public GameScreen(MudlandsGame mudlandsGame) {
         game = mudlandsGame;
-        entityManager = new EntityManager();
-        renderingSystem = new RenderingSystem(entityManager);
-        movementSystem = new MovementSystem(entityManager);
-        inputSystem = new InputSystem(entityManager);
+        world = new World();
+        renderingSystem = new RenderingSystem(world);
+        movementSystem = new MovementSystem(world);
+        inputSystem = new InputSystem(world);
 
-        Entity player = entityManager.createEntity();
+        Entity player = world.createEntity();
         player.add(new PositionComponent(Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight() / 2.0f));
         player.add(new VelocityComponent());
         player.add(new RenderComponent(50, Color.RED));

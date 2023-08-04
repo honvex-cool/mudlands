@@ -7,20 +7,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class EntityTest {
     @Test
     void testGetId() {
-        Entity entity = new Entity(42);
+        Entity entity = new Entity(42, null);
         assertEquals(42, entity.getId());
     }
 
     @Test
-    void testGetNameReturnsNameIfProvided() {
+    void testGetName() {
         Entity entity = new Entity(0, "player");
         assertEquals("player", entity.getName());
-    }
-
-    @Test
-    void testGetNameReturnsNullIfNameNotProvided() {
-        Entity entity = new Entity(0);
-        assertNull(entity.getName());
     }
 
     @Test

@@ -1,12 +1,12 @@
 package systems;
 
-import entities.EntityManager;
+import entities.World;
 
 public abstract class System {
-    protected EntityManager entityManager;
+    protected World world;
 
-    public System(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public System(World world) {
+        this.world = world;
     }
 
     public abstract void update(float deltaTime);

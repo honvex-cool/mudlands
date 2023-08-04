@@ -2,18 +2,18 @@ package systems;
 
 import components.VelocityComponent;
 import entities.Entity;
-import entities.EntityManager;
+import entities.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 public class InputSystem extends System {
-    public InputSystem(EntityManager entityManager) {
-        super(entityManager);
+    public InputSystem(World world) {
+        super(world);
     }
 
     @Override
     public void update(float deltaTime) {
-        Entity player = entityManager.getEntity(1);
+        Entity player = world.getEntity(1);
 
         VelocityComponent velocity = player.get(VelocityComponent.class);
 

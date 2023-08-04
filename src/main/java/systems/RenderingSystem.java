@@ -3,7 +3,7 @@ package systems;
 import components.PositionComponent;
 import components.RenderComponent;
 import entities.Entity;
-import entities.EntityManager;
+import entities.World;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.List;
 public class RenderingSystem extends System {
     private ShapeRenderer shapeRenderer;
 
-    public RenderingSystem(EntityManager entityManager) {
-        super(entityManager);
+    public RenderingSystem(World world) {
+        super(world);
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -20,7 +20,7 @@ public class RenderingSystem extends System {
     public void update(float deltaTime) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        List<Entity> entities = entityManager.getEntitiesWithComponents(RenderComponent.class);
+        List<Entity> entities = world.getEntitiesWithComponents(RenderComponent.class);
 
         for(Entity entity : entities) {
             RenderComponent circleRender = entity.get(RenderComponent.class);
