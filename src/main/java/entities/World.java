@@ -1,48 +1,81 @@
 package entities;
 
-import components.Component;
+import systems.System;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class World {
     private int nextEntityId = 0;
+
+    private final Set<System> systems = new HashSet<>();
     private final Set<Entity> entities = new HashSet<>();
 
-    public Entity createEntity() {
-        return createEntity(null);
+    private final Set<Entity> pendingUpgraded = new HashSet<>();
+    private final Set<Entity> pendingDowngraded = new HashSet<>();
+    private final Set<Entity> pendingDiscarded = new HashSet<>();
+
+    public void update(float deltaTime) {
+        triggerReactions();
+        for(System system : systems)
+            system.update(deltaTime);
     }
 
-    public Entity createEntity(String name) {
-        Entity entity = new Entity(this, nextEntityId++, name);
+    public Entity createEntity() {
+        Entity entity = createEntity(null);
         entities.add(entity);
         return entity;
     }
 
-    public void removeEntity(Entity entity) {
+    public Entity createEntity(String name) {
+        return new Entity(this, nextEntityId++, name);
+    }
+
+    public void addSystem(System system) {
+        systems.add(system);
+        entities.forEach(system::reactToUpgrade);
+    }
+
+    public void removeSystem(System system) {
+        systems.remove(system);
+    }
+
+    void upgrade(Entity entity) {
+        pendingUpgraded.add(entity);
+    }
+
+    void downgrade(Entity entity) {
+        pendingDowngraded.add(entity);
+    }
+
+    void discard(Entity entity) {
+        pendingDiscarded.add(entity);
         entities.remove(entity);
     }
 
-    public List<Entity> getEntitiesWithComponents(Class<? extends Component>... componentClasses) {
-        List<Entity> matchingEntities = new ArrayList<>();
+    private void triggerReactionsToUpgrade() {
+        handleAll(pendingUpgraded, system -> system::reactToUpgrade);
+    }
 
-        for(Entity entity : entities) {
-            boolean allComponentsFound = true;
+    private void triggerReactionsToDowngrade() {
+        handleAll(pendingDowngraded, system -> system::reactToDowngrade);
+    }
 
-            for(Class<? extends Component> componentClass : componentClasses) {
-                if(!entity.has(componentClass)) {
-                    allComponentsFound = false;
-                    break;
-                }
-            }
+    private void triggerReactionsToDiscard() {
+        handleAll(pendingDiscarded, system -> system::removeEntity);
+    }
 
-            if(allComponentsFound) {
-                matchingEntities.add(entity);
-            }
-        }
+    private void triggerReactions() {
+        triggerReactionsToDiscard();
+        triggerReactionsToUpgrade();
+        triggerReactionsToDowngrade();
+    }
 
-        return matchingEntities;
+    private void handleAll(Set<Entity> pending, Function<System, Consumer<Entity>> getReaction) {
+        for(System system : systems)
+            pending.forEach(getReaction.apply(system));
+        pending.clear();
     }
 }

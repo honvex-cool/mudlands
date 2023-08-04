@@ -1,36 +1,41 @@
 package systems;
 
+import components.Component;
 import components.PositionComponent;
 import components.RenderComponent;
 import entities.Entity;
-import entities.World;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import java.util.List;
+import java.util.Set;
 
-public class RenderingSystem extends System {
-    private ShapeRenderer shapeRenderer;
+public class RenderingSystem extends RepetitiveSystem {
+    private static final Set<Class<? extends Component>> REQUIRED_COMPONENTS = Set.of(
+        PositionComponent.class,
+        RenderComponent.class
+    );
 
-    public RenderingSystem(World world) {
-        super(world);
-        shapeRenderer = new ShapeRenderer();
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+
+    @Override
+    protected void begin() {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
     }
 
     @Override
-    public void update(float deltaTime) {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+    public void updateOne(Entity entity, float deltaTime) {
+        RenderComponent circleRender = entity.get(RenderComponent.class);
+        PositionComponent position = entity.get(PositionComponent.class);
+        shapeRenderer.setColor(circleRender.getColor());
+        shapeRenderer.circle(position.getX(), position.getY(), circleRender.getRadius());
+    }
 
-        List<Entity> entities = world.getEntitiesWithComponents(RenderComponent.class);
-
-        for(Entity entity : entities) {
-            RenderComponent circleRender = entity.get(RenderComponent.class);
-            PositionComponent position = entity.get(PositionComponent.class);
-
-            shapeRenderer.setColor(circleRender.getColor());
-            shapeRenderer.circle(position.getX(), position.getY(), circleRender.getRadius());
-        }
-
+    @Override
+    protected void end() {
         shapeRenderer.end();
+    }
 
+    @Override
+    protected Set<Class<? extends Component>> requirements() {
+        return REQUIRED_COMPONENTS;
     }
 }

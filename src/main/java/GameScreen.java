@@ -7,27 +7,20 @@ import components.RenderComponent;
 import components.VelocityComponent;
 import entities.Entity;
 import entities.World;
+import systems.DeathSystem;
 import systems.InputSystem;
 import systems.MovementSystem;
 import systems.RenderingSystem;
 
 public class GameScreen implements Screen {
-
-    private final MudlandsGame game;
-
-    private World world;
-
-    private RenderingSystem renderingSystem;
-    private MovementSystem movementSystem;
-
-    private InputSystem inputSystem;
+    private final World world;
 
     public GameScreen(MudlandsGame mudlandsGame) {
-        game = mudlandsGame;
         world = new World();
-        renderingSystem = new RenderingSystem(world);
-        movementSystem = new MovementSystem(world);
-        inputSystem = new InputSystem(world);
+        world.addSystem(new RenderingSystem());
+        world.addSystem(new MovementSystem());
+        world.addSystem(new InputSystem());
+        world.addSystem(new DeathSystem());
 
         Entity player = world.createEntity();
         player.add(new PlayerComponent());
@@ -43,10 +36,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         float deltaTime = Gdx.graphics.getDeltaTime();
-
-        inputSystem.update(deltaTime);
-        movementSystem.update(deltaTime);
-        renderingSystem.update(deltaTime);
+        world.update(deltaTime);
     }
 
     @Override

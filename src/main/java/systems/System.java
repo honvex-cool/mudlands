@@ -1,13 +1,13 @@
 package systems;
 
-import entities.World;
+import entities.Entity;
 
-public abstract class System {
-    protected World world;
+public interface System {
+    void update(float deltaTime);
 
-    public System(World world) {
-        this.world = world;
-    }
+    void reactToUpgrade(Entity entity);
 
-    public abstract void update(float deltaTime);
+    void reactToDowngrade(Entity entity);
+
+    void removeEntity(Entity entity);
 }

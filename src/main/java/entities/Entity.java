@@ -37,6 +37,7 @@ public class Entity {
 
     public void add(Component component) {
         components.put(component.getClass(), component);
+        world.upgrade(this);
     }
 
     public <T extends Component> T get(Class<T> componentClass) {
@@ -45,10 +46,19 @@ public class Entity {
 
     public void remove(Class<? extends Component> componentClass) {
         components.remove(componentClass);
+        world.downgrade(this);
     }
 
     public boolean has(Class<? extends Component> componentClass) {
         return components.containsKey(componentClass);
+    }
+
+    public boolean discard() {
+        if(world == null)
+            return false;
+        world.discard(this);
+        world = null;
+        return true;
     }
 
     @Override

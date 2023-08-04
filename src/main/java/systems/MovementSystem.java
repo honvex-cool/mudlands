@@ -1,27 +1,28 @@
 package systems;
 
+import components.Component;
 import components.PositionComponent;
 import components.VelocityComponent;
 import entities.Entity;
-import entities.World;
 
-import java.util.List;
+import java.util.Set;
 
-public class MovementSystem extends System {
-    public MovementSystem(World world) {
-        super(world);
+public class MovementSystem extends RepetitiveSystem {
+    public static final Set<Class<? extends Component>> REQUIRED_COMPONENTS = Set.of(
+        PositionComponent.class,
+        VelocityComponent.class
+    );
+
+    @Override
+    public void updateOne(Entity entity, float deltaTime) {
+        PositionComponent position = entity.get(PositionComponent.class);
+        VelocityComponent velocity = entity.get(VelocityComponent.class);
+        position.setX(position.getX() + velocity.getX() * deltaTime);
+        position.setY(position.getY() + velocity.getY() * deltaTime);
     }
 
     @Override
-    public void update(float deltaTime) {
-        List<Entity> entities = world.getEntitiesWithComponents(PositionComponent.class, VelocityComponent.class);
-
-        for(Entity entity : entities) {
-            PositionComponent position = entity.get(PositionComponent.class);
-            VelocityComponent velocity = entity.get(VelocityComponent.class);
-
-            position.setX(position.getX() + velocity.getX() * deltaTime);
-            position.setY(position.getY() + velocity.getY() * deltaTime);
-        }
+    protected Set<Class<? extends Component>> requirements() {
+        return REQUIRED_COMPONENTS;
     }
 }
