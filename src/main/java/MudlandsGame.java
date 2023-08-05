@@ -1,3 +1,4 @@
+import utils.Config;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.utils.ScreenUtils;
 
