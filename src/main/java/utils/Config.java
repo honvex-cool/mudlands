@@ -9,4 +9,5 @@ public class Config {
     public static final int NATIVE_HEIGHT = 640;
     public static final String NAME = "Mudlands";
     public static final Color CLEAR_COLOR = Color.MAGENTA;
+    public static final int CHUNK_SIZE = 16;
 }

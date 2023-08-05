@@ -9,7 +9,6 @@ import java.util.function.Function;
 
 public class World {
     private int nextEntityId = 0;
-
     private final Set<GameSystem> systems = new HashSet<>();
     private final Set<Entity> entities = new HashSet<>();
 
