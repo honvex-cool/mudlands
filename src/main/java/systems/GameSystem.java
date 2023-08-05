@@ -2,7 +2,7 @@ package systems;
 
 import entities.Entity;
 
-public interface System {
+public interface GameSystem {
     void update(float deltaTime);
 
     void reactToUpgrade(Entity entity);

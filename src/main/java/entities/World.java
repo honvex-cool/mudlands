@@ -1,6 +1,6 @@
 package entities;
 
-import systems.System;
+import systems.GameSystem;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +10,7 @@ import java.util.function.Function;
 public class World {
     private int nextEntityId = 0;
 
-    private final Set<System> systems = new HashSet<>();
+    private final Set<GameSystem> systems = new HashSet<>();
     private final Set<Entity> entities = new HashSet<>();
 
     private final Set<Entity> pendingUpgraded = new HashSet<>();
@@ -19,7 +19,7 @@ public class World {
 
     public void update(float deltaTime) {
         triggerReactions();
-        for(System system : systems)
+        for(GameSystem system : systems)
             system.update(deltaTime);
     }
 
@@ -33,12 +33,12 @@ public class World {
         return new Entity(this, nextEntityId++, name);
     }
 
-    public void addSystem(System system) {
+    public void addSystem(GameSystem system) {
         systems.add(system);
         entities.forEach(system::reactToUpgrade);
     }
 
-    public void removeSystem(System system) {
+    public void removeSystem(GameSystem system) {
         systems.remove(system);
     }
 
@@ -73,8 +73,8 @@ public class World {
         triggerReactionsToDowngrade();
     }
 
-    private void handleAll(Set<Entity> pending, Function<System, Consumer<Entity>> getReaction) {
-        for(System system : systems)
+    private void handleAll(Set<Entity> pending, Function<GameSystem, Consumer<Entity>> getReaction) {
+        for(GameSystem system : systems)
             pending.forEach(getReaction.apply(system));
         pending.clear();
     }
