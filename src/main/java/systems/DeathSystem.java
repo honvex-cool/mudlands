@@ -12,7 +12,7 @@ public class DeathSystem extends RepetitiveSystem {
     @Override
     protected void updateOne(Entity entity, float deltaTime) {
         time += deltaTime;
-        if(time >= 5.0f)
+        if(time >= 200.0f)
             entity.discard();
     }
 

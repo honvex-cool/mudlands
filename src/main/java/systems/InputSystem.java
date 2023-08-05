@@ -20,7 +20,6 @@ public class InputSystem extends RepetitiveSystem {
     @Override
     public void updateOne(Entity player, float deltaTime) {
         VelocityComponent velocity = player.get(VelocityComponent.class);
-        out.println(deltaTime);
 
         float speed = 200;
 

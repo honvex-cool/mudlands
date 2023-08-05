@@ -1,6 +1,7 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import components.PlayerComponent;
 import components.PositionComponent;
 import components.RenderComponent;
@@ -21,10 +22,9 @@ public class GameScreen implements Screen {
         world.addSystem(new MovementSystem());
         world.addSystem(new InputSystem());
         world.addSystem(new DeathSystem());
-
         Entity player = world.createEntity();
         player.add(new PlayerComponent());
-        player.add(new PositionComponent(Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight() / 2.0f));
+        player.add(new PositionComponent(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f));
         player.add(new VelocityComponent());
         player.add(new RenderComponent(50, Color.RED));
     }
@@ -35,6 +35,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         float deltaTime = Gdx.graphics.getDeltaTime();
         world.update(deltaTime);
     }
