@@ -14,14 +14,20 @@ import systems.*;
 import utils.Config;
 import world.WorldMap;
 
+import java.io.IOException;
+
 public class GameScreen implements Screen {
     private final EntityManager entityManager;
+    private final WorldLoader loader = new WorldLoader();
 
     private final SpriteBatch spriteBatch = new SpriteBatch();
 
     public GameScreen(MudlandsGame mudlandsGame) {
-        WorldLoader loader = new WorldLoader();
-        loader.createWorld(Config.WORLD_SEED, Config.WORLD_NAME);
+        try {
+            loader.loadWorld("w1");
+        } catch(IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         WorldMap worldMap = new WorldMap(loader);
 
@@ -69,6 +75,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        System.out.println("HELLO FROM THE OTHER SIDE");
         spriteBatch.dispose();
+        try {
+            loader.saveWorld();
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
