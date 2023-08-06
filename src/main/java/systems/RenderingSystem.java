@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import components.Component;
+import components.PlayerComponent;
 import components.PositionComponent;
 import components.RenderComponent;
 import entities.Entity;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.Set;
 
-public class RenderingSystem extends RepetitiveSystem {
+public class RenderingSystem extends RepetitiveSystem implements AutoCloseable {
 
     private OrthographicCamera camera;
     private SpriteBatch spriteBatch;
@@ -30,43 +31,39 @@ public class RenderingSystem extends RepetitiveSystem {
         spriteBatch = new SpriteBatch();
     }
 
-    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     @Override
     protected void begin() {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         spriteBatch.begin();
     }
 
     @Override
     public void updateOne(Entity entity, float deltaTime) {
-        //RenderComponent circleRender = entity.get(RenderComponent.class);
         PositionComponent position = entity.get(PositionComponent.class);
         RenderComponent render = entity.get(RenderComponent.class);
 
-        camera.position.set(position.getX(), position.getY(), 0);
-        camera.update();
-        shapeRenderer.setProjectionMatrix(camera.combined);
-
-        shapeRenderer.setColor(Color.RED);
-        //shapeRenderer.circle(200f, 300f, 10);
-
-        shapeRenderer.setColor(Color.WHITE);
-        //shapeRenderer.circle(400f, 300f, 10);
+        if(entity.has(PlayerComponent.class)) {
+            camera.position.set(position.getX(), position.getY(), 0);
+            camera.update();
+            spriteBatch.setProjectionMatrix(camera.combined);
+        }
 
         render.getSprite().setPosition(position.getX(), position.getY());
         render.getSprite().draw(spriteBatch);
-        //spriteBatch.draw(render.getTexture(),position.getX(), position.getY());
     }
 
     @Override
     protected void end() {
-        shapeRenderer.end();
         spriteBatch.end();
     }
 
     @Override
     protected Set<Class<? extends Component>> requirements() {
         return REQUIRED_COMPONENTS;
+    }
+
+    @Override
+    public void close() {
+        spriteBatch.dispose();
     }
 }
