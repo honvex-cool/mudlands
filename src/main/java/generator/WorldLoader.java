@@ -8,7 +8,7 @@ import java.util.Map;
 public class WorldLoader {
 
     private Generator generator;
-    private Map<Pair<Integer, Integer>, Pair<Object, Object>> changes; //object is temporary and will be replaced be appropriate class
+    private Map<Pair<Integer, Integer>, Pair<GroundType, ObjectType>> changes; //object is temporary and will be replaced be appropriate class
 
     public void loadChanges() {
         //from disk
