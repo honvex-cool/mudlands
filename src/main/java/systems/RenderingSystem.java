@@ -39,6 +39,7 @@ public class RenderingSystem extends RepetitiveSystem {
 
     @Override
     public void updateOne(Entity entity, float deltaTime) {
+        float tileSize = Gdx.graphics.getWidth() / 16f;
         PositionComponent position = entity.get(PositionComponent.class);
         RenderComponent render = entity.get(RenderComponent.class);
 
@@ -49,6 +50,7 @@ public class RenderingSystem extends RepetitiveSystem {
         }
 
         render.getSprite().setPosition(position.getX(), position.getY());
+        render.getSprite().setSize(tileSize / 2, tileSize / 2);
         render.getSprite().draw(spriteBatch);
     }
 

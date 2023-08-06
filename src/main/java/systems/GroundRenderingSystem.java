@@ -34,7 +34,7 @@ public class GroundRenderingSystem extends RepetitiveSystem {
         for(GroundType type : GroundType.values())
             spriteMap.put(
                 type,
-                new Sprite(new Texture(Gdx.files.internal("assets/textures/SAND.png")))
+                new Sprite(new Texture(Gdx.files.internal("assets/textures/" + type.name() + ".png")))
             );
     }
 
@@ -54,10 +54,11 @@ public class GroundRenderingSystem extends RepetitiveSystem {
         PositionComponent position = player.get(PositionComponent.class);
         int row = (int)Math.floor(position.getY() / tileSize);
         int column = (int)Math.floor(position.getX() / tileSize);
+        System.out.println("r: " + row + " c: " + column + " " + deltaTime);
         for(int r = -9; r <= 9; r++) {
             for(int c = -16; c <= 16; c++) {
                 Sprite sprite = spriteMap.get(worldMap.query(row + r, column + c));
-                sprite.setPosition(c * tileSize, r * tileSize);
+                sprite.setPosition((column + c) * tileSize, (row + r) * tileSize);
                 sprite.setSize(tileSize, tileSize);
                 sprite.draw(spriteBatch);
             }

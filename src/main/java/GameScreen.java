@@ -26,17 +26,17 @@ public class GameScreen implements Screen {
         WorldMap worldMap = new WorldMap(loader);
 
         entityManager = new EntityManager();
-        entityManager.addSystem(new GroundRenderingSystem(worldMap, spriteBatch));
         entityManager.addSystem(new RenderingSystem(spriteBatch));
         entityManager.addSystem(new MovementSystem());
         entityManager.addSystem(new InputSystem());
         entityManager.addSystem(new DeathSystem());
+        entityManager.addSystem(new GroundRenderingSystem(worldMap, spriteBatch));
 
         Entity player = entityManager.createEntity();
         player.add(new PlayerComponent());
         player.add(new PositionComponent(0f, 0f));
         player.add(new VelocityComponent());
-        player.add(new RenderComponent(50, new Texture(Gdx.files.internal("assets/textures/TALLGRASS.png"))));
+        player.add(new RenderComponent(50, new Texture(Gdx.files.internal("assets/textures/Player.png"))));
     }
 
     @Override
