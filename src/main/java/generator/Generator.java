@@ -28,8 +28,8 @@ public class Generator {
         return seed;
     }
 
-    public Map<Pair<Integer, Integer>, Pair<GroundType, ObjectType>> generateChunk(int chunk_x, int chunk_y) { //object is temporary and will be replaced be appropriate class
-        var map = new HashMap<Pair<Integer, Integer>, Pair<GroundType, ObjectType>>();
+    public Map<Pair<Integer, Integer>, FieldStruct> generateChunk(int chunk_x, int chunk_y) { //object is temporary and will be replaced be appropriate class
+        var map = new HashMap<Pair<Integer, Integer>, FieldStruct>();
         for(int y = 0; y < Config.CHUNK_SIZE; y++) {
             for(int x = 0; x < Config.CHUNK_SIZE; x++) {
                 int rx = x + chunk_x * Config.CHUNK_SIZE;
@@ -39,7 +39,7 @@ public class Generator {
                 GroundType ground = getGroundType(height, humidity);
                 ObjectType object = getObjectType(height, humidity, ground, x, y);
 
-                map.put(new Pair(rx, ry), new Pair(ground, object));
+                map.put(new Pair(rx, ry), new FieldStruct(ground, object));
             }
         }
         return map;
@@ -83,6 +83,7 @@ public class Generator {
         return object;
     }
 
+    @Deprecated
     void printMap(Map<Pair<Integer, Integer>, Pair<GroundType, ObjectType>> map) {
         int minx = Integer.MAX_VALUE;
         int maxx = Integer.MIN_VALUE;
@@ -111,8 +112,7 @@ public class Generator {
         }
     }
 
-
-    void saveMapToFile(Map<Pair<Integer, Integer>, Pair<GroundType, ObjectType>> map, String filename) throws IOException {
+    void saveMapToFile(Map<Pair<Integer, Integer>, FieldStruct> map, String filename) throws IOException {
         File file = new File(filename + ".map");
         file.createNewFile();
         FileWriter fileWriter;
@@ -134,7 +134,7 @@ public class Generator {
         }
         for(int y = 0; y < maxy - miny; y++) {
             for(int x = 0; x < maxx - minx; x++) {
-                char symbol = switch(map.get(new Pair(x + minx, y + miny)).getFirst()) {
+                char symbol = switch(map.get(new Pair(x + minx, y + miny)).groundType) {
                     case WATER -> ' ';
                     case SAND -> '.';
                     case GRASS -> '/';
@@ -142,7 +142,7 @@ public class Generator {
                     case MUD -> '~';
                     default -> '?';
                 };
-                char symbol2 = switch(map.get(new Pair(x + minx, y + miny)).getSecond()) {
+                char symbol2 = switch(map.get(new Pair(x + minx, y + miny)).objectType) {
                     case TREE -> 't';
                     case STONE -> 's';
                     default -> '?';

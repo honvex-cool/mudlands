@@ -13,4 +13,6 @@ public class Config {
     public static final int DEFAULT_GRID_SIZE = 32;
     public static final int WORLD_SEED = 42;
     public static final String WORLD_NAME = "mudlands";
+    public static final String SAVE_PATH = "src/main/resources/saves/";
+    public static final String EXTENSION = ".mud";
 }
