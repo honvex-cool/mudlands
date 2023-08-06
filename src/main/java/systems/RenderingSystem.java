@@ -14,21 +14,21 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.Set;
 
-public class RenderingSystem extends RepetitiveSystem implements AutoCloseable {
+public class RenderingSystem extends RepetitiveSystem {
 
-    private OrthographicCamera camera;
-    private SpriteBatch spriteBatch;
+    private final OrthographicCamera camera;
+    private final SpriteBatch spriteBatch;
     private static final Set<Class<? extends Component>> REQUIRED_COMPONENTS = Set.of(
         PositionComponent.class,
         RenderComponent.class
     );
 
-    public RenderingSystem() {
+    public RenderingSystem(SpriteBatch spriteBatch) {
+        this.spriteBatch = spriteBatch;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, 0);
         camera.update();
-        spriteBatch = new SpriteBatch();
     }
 
 
@@ -60,10 +60,5 @@ public class RenderingSystem extends RepetitiveSystem implements AutoCloseable {
     @Override
     protected Set<Class<? extends Component>> requirements() {
         return REQUIRED_COMPONENTS;
-    }
-
-    @Override
-    public void close() {
-        spriteBatch.dispose();
     }
 }

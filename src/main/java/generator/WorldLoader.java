@@ -12,8 +12,13 @@ public class WorldLoader {
     private Generator generator;
     private Map<Pair<Integer, Integer>, FieldStruct> changes;
 
-    public WorldLoader(Generator generator) {
-        this.generator = generator;
+    public WorldLoader() {
+    }
+
+    public void createWorld(Integer seed, String world_name) {
+    }
+
+    public void loadWorld(String world_name) {
     }
 
     public void loadChanges() {

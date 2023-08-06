@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Entity {
-    private World world;
+    private EntityManager entityManager;
     private final int id;
     private String name;
     private final Map<Class<? extends Component>, Component> components;
@@ -16,8 +16,8 @@ public class Entity {
         this(null, id, name);
     }
 
-    Entity(World world, int id, String name) {
-        this.world = world;
+    Entity(EntityManager entityManager, int id, String name) {
+        this.entityManager = entityManager;
         this.id = id;
         this.name = name;
         components = new HashMap<>();
@@ -37,7 +37,7 @@ public class Entity {
 
     public void add(Component component) {
         components.put(component.getClass(), component);
-        world.upgrade(this);
+        entityManager.upgrade(this);
     }
 
     public <T extends Component> T get(Class<T> componentClass) {
@@ -46,7 +46,7 @@ public class Entity {
 
     public void remove(Class<? extends Component> componentClass) {
         components.remove(componentClass);
-        world.downgrade(this);
+        entityManager.downgrade(this);
     }
 
     public boolean has(Class<? extends Component> componentClass) {
@@ -54,10 +54,10 @@ public class Entity {
     }
 
     public boolean discard() {
-        if(world == null)
+        if(entityManager == null)
             return false;
-        world.discard(this);
-        world = null;
+        entityManager.discard(this);
+        entityManager = null;
         return true;
     }
 

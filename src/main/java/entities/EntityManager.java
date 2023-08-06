@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class World {
+public class EntityManager {
     private int nextEntityId = 0;
     private final Set<GameSystem> systems = new HashSet<>();
     private final Set<Entity> entities = new HashSet<>();
