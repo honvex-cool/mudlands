@@ -1,6 +1,9 @@
 package generator;
 
-public class FieldStruct {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class FieldStruct implements Serializable {
     public GroundType groundType;
     public ObjectType objectType;
     public int data0;
@@ -13,9 +16,30 @@ public class FieldStruct {
         this.data0 = data0;
         this.data1 = data1;
         this.data2 = data2;
+        groundType = GroundType.values()[0];
     }
 
     public FieldStruct(GroundType groundType, ObjectType objectType) {
-        this(groundType, objectType, 0, 0, 0);
+        this(groundType, objectType, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+    }
+
+    public FieldStruct(FieldStruct struct) {
+        this(struct.groundType, struct.objectType, struct.data0, struct.data1, struct.data2);
+    }
+
+    public void applyDiffs(FieldStruct diff_field) {
+        this.groundType = diff_field.groundType;
+        this.objectType = diff_field.objectType;
+        this.data0 = diff_field.data0;
+        this.data1 = diff_field.data1;
+        this.data2 = diff_field.data2;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        FieldStruct that = (FieldStruct) o;
+        return data0 == that.data0 && data1 == that.data1 && data2 == that.data2 && groundType == that.groundType && objectType == that.objectType;
     }
 }

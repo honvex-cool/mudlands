@@ -11,4 +11,6 @@ public class Config {
     public static final Color CLEAR_COLOR = Color.MAGENTA;
     public static final int CHUNK_SIZE = 16;
     public static final int DEFAULT_GRID_SIZE = 32;
+    public static final String SAVE_PATH = "src/main/resources/saves/";
+    public static final String EXTENSION = ".mud";
 }
