@@ -21,7 +21,7 @@ public class InputSystem extends RepetitiveSystem {
     public void updateOne(Entity player, float deltaTime) {
         VelocityComponent velocity = player.get(VelocityComponent.class);
 
-        float speed = 200;
+        float speed = 200f;
 
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             velocity.setX(-speed);

@@ -1,33 +1,48 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import components.PlayerComponent;
 import components.PositionComponent;
 import components.RenderComponent;
 import components.VelocityComponent;
 import entities.Entity;
-import entities.World;
-import systems.DeathSystem;
-import systems.InputSystem;
-import systems.MovementSystem;
-import systems.RenderingSystem;
+import entities.EntityManager;
+import generator.WorldLoader;
+import systems.*;
+import utils.Config;
+import world.WorldMap;
+
+import java.io.IOException;
 
 public class GameScreen implements Screen {
-    private final World world;
+    private final EntityManager entityManager;
+    private final WorldLoader loader = new WorldLoader();
+
+    private final SpriteBatch spriteBatch = new SpriteBatch();
 
     public GameScreen(MudlandsGame mudlandsGame) {
-        world = new World();
-        world.addSystem(new RenderingSystem());
-        world.addSystem(new MovementSystem());
-        world.addSystem(new InputSystem());
-        world.addSystem(new DeathSystem());
-        Entity player = world.createEntity();
+        try {
+            loader.loadWorld("w1");
+        } catch(IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        WorldMap worldMap = new WorldMap(loader);
+
+        entityManager = new EntityManager();
+        entityManager.addSystem(new RenderingSystem(spriteBatch));
+        entityManager.addSystem(new MovementSystem());
+        entityManager.addSystem(new InputSystem());
+        entityManager.addSystem(new DeathSystem());
+        entityManager.addSystem(new GroundRenderingSystem(worldMap, spriteBatch));
+
+        Entity player = entityManager.createEntity();
         player.add(new PlayerComponent());
-        player.add(new PositionComponent(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f));
+        player.add(new PositionComponent(0f, 0f));
         player.add(new VelocityComponent());
-        player.add(new RenderComponent(50, new Texture(Gdx.files.internal("assets/textures/SAND.png"))));
+        player.add(new RenderComponent(50, new Texture(Gdx.files.internal("assets/textures/Player.png"))));
     }
 
     @Override
@@ -39,7 +54,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         float deltaTime = Gdx.graphics.getDeltaTime();
-        world.update(deltaTime);
+        entityManager.update(deltaTime);
     }
 
     @Override
@@ -60,5 +75,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        System.out.println("HELLO FROM THE OTHER SIDE");
+        spriteBatch.dispose();
+        try {
+            loader.saveWorld();
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

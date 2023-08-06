@@ -1,8 +1,9 @@
 package utils;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Pair<T, S> {
+public class Pair<T, S> implements Serializable {
     private T first;
     private S second;
 
@@ -10,6 +11,12 @@ public class Pair<T, S> {
         this.first = first;
         this.second = second;
     }
+
+    public Pair(Pair<T, S> pair) {
+        this.first = pair.first;
+        this.second = pair.second;
+    }
+
 
     public T getFirst() {
         return first;
