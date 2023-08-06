@@ -3,10 +3,10 @@ package generator;
 import utils.Config;
 import utils.Pair;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 public class Generator {
     private int seed;
@@ -37,7 +37,7 @@ public class Generator {
                 double height = height_noise.getNoise(rx, ry) + 0.2 * Math.abs(height_noise2.getNoise(rx, ry));
                 double humidity = humidity_noise.getNoise(rx, ry) + 0.2 * Math.abs(humidity_noise2.getNoise(rx, ry));
                 GroundType ground = getGroundType(height, humidity);
-                ObjectType object = ObjectType.NONE;
+                ObjectType object = getObjectType(height, humidity, ground, x, y);
 
                 map.put(new Pair(rx, ry), new Pair(ground, object));
             }
@@ -49,8 +49,6 @@ public class Generator {
         GroundType ground;
         if(height < -0.3)
             ground = GroundType.WATER;
-            //else if(height < 0)
-            //ground = GroundType.SAND;
         else if(height <= 0) {
             ground = GroundType.SAND;
         } else if(height < 0.5)
@@ -61,6 +59,28 @@ public class Generator {
         if(height >= -0.3 && height < 0.1 && humidity > 0.1)
             ground = GroundType.MUD;
         return ground;
+    }
+
+    private ObjectType getObjectType(double height, double humidity, GroundType ground, int x, int y) {
+        ObjectType object = ObjectType.NONE;
+        Random random = new Random(x * this.seed + y);
+        int rand_val = random.nextInt();
+        switch(ground) {
+            case GRASS -> {
+                if((humidity > 0 && rand_val % 4 == 0) || rand_val % 30 == 0) {
+                    object = ObjectType.TREE;
+                }
+                if(height > 0.4 && rand_val % 10 == 0) {
+                    object = ObjectType.STONE;
+                }
+            }
+            case STONE -> {
+                if(rand_val % 5 == 0) {
+                    object = ObjectType.STONE;
+                }
+            }
+        }
+        return object;
     }
 
     void printMap(Map<Pair<Integer, Integer>, Pair<GroundType, ObjectType>> map) {
@@ -90,4 +110,53 @@ public class Generator {
             System.err.println();
         }
     }
+
+
+    void saveMapToFile(Map<Pair<Integer, Integer>, Pair<GroundType, ObjectType>> map, String filename) throws IOException {
+        File file = new File(filename + ".map");
+        file.createNewFile();
+        FileWriter fileWriter;
+        try {
+            fileWriter = new FileWriter(file);
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        int minx = Integer.MAX_VALUE;
+        int maxx = Integer.MIN_VALUE;
+        int miny = Integer.MAX_VALUE;
+        int maxy = Integer.MIN_VALUE;
+        for(var p : map.keySet()) {
+            minx = Math.min(minx, p.getFirst());
+            miny = Math.min(miny, p.getSecond());
+            maxx = Math.max(maxx, p.getFirst());
+            maxy = Math.max(maxy, p.getSecond());
+        }
+        for(int y = 0; y < maxy - miny; y++) {
+            for(int x = 0; x < maxx - minx; x++) {
+                char symbol = switch(map.get(new Pair(x + minx, y + miny)).getFirst()) {
+                    case WATER -> ' ';
+                    case SAND -> '.';
+                    case GRASS -> '/';
+                    case STONE -> '#';
+                    case MUD -> '~';
+                    default -> '?';
+                };
+                char symbol2 = switch(map.get(new Pair(x + minx, y + miny)).getSecond()) {
+                    case TREE -> 't';
+                    case STONE -> 's';
+                    default -> '?';
+                };
+
+                if(symbol2 != '?')
+                    symbol = symbol2;
+
+                fileWriter.write(symbol);
+                fileWriter.write(' ');
+            }
+            fileWriter.write('\n');
+        }
+        fileWriter.close();
+    }
+
 }

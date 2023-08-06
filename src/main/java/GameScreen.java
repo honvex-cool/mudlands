@@ -2,6 +2,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import components.PlayerComponent;
 import components.PositionComponent;
 import components.RenderComponent;
@@ -26,7 +27,7 @@ public class GameScreen implements Screen {
         player.add(new PlayerComponent());
         player.add(new PositionComponent(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f));
         player.add(new VelocityComponent());
-        player.add(new RenderComponent(50, Color.RED));
+        player.add(new RenderComponent(50, new Texture(Gdx.files.internal("assets/textures/SAND.png"))));
     }
 
     @Override

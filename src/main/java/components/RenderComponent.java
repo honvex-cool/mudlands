@@ -1,26 +1,35 @@
 package components;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class RenderComponent extends Component {
-    private float radius;
-    private Color color;
+    private float size;
+    private Sprite sprite;
 
-    public RenderComponent(float radius, Color color) {
-        this.radius = radius;
-        this.color = color;
+    private Texture texture;
+
+    public RenderComponent(float size, Texture texture) {
+        this.size = size;
+        this.texture = texture;
+        this.sprite = new Sprite(texture);
     }
 
-    public float getRadius() {
-        return radius;
+    public float getSize() {
+        return size;
     }
 
-    public void setRadius(float radius) {
-        this.radius = radius;
+    public void setSize(float size) {
+        this.size = size;
     }
 
-    public Color getColor() {
-        return color;
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public Texture getTexture() {
+        return texture;
     }
 
 }
