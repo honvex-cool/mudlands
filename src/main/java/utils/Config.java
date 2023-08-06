@@ -10,4 +10,5 @@ public class Config {
     public static final String NAME = "Mudlands";
     public static final Color CLEAR_COLOR = Color.MAGENTA;
     public static final int CHUNK_SIZE = 16;
+    public static final int DEFAULT_GRID_SIZE = 32;
 }
