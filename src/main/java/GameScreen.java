@@ -39,11 +39,11 @@ public class GameScreen implements Screen {
         inventoryRendering = new InventoryRendering();
         craftingRendering = new CraftingRendering();
 
-        player = new Player(0,0,new Texture(Gdx.files.internal("assets/textures/Player.png")));
+        player = new Player(0, 0, new Texture(Gdx.files.internal("assets/textures/Player.png")));
 
         renderingSystem = new RenderingSystem(spriteBatch);
         inputSystem = new InputSystem();
-        chunkManagerSystem = new ChunkManagerSystem(player,loader);
+        chunkManagerSystem = new ChunkManagerSystem(player, loader);
 
         ground = new ArrayList<>();
         passives = new ArrayList<>();
@@ -62,13 +62,13 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        chunkManagerSystem.update(ground,passives,mobs);
+        chunkManagerSystem.update(ground, passives, mobs);
         float deltaTime = Gdx.graphics.getDeltaTime();
-        System.err.println(" " + deltaTime + "   " + passives.size());
-        inputSystem.update(player,deltaTime);
-        renderingSystem.update(ground,deltaTime);
-        renderingSystem.update(passives,deltaTime);
-        renderingSystem.updatePlayer(player,deltaTime);
+        //System.err.println(" " + deltaTime + "   " + passives.size());
+        inputSystem.update(player, deltaTime);
+        renderingSystem.update(ground, deltaTime);
+        renderingSystem.update(passives, deltaTime);
+        renderingSystem.updatePlayer(player, deltaTime);
         inventoryRendering.oneTick();
         craftingRendering.oneTick(); //TODO add one class that manages opening crafting and inventory or make systems for them
     }

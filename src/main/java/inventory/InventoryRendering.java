@@ -10,10 +10,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
+
 import static utils.Config.*;
 
 public class InventoryRendering {
@@ -30,20 +30,65 @@ public class InventoryRendering {
     private Skin skin;
     private Stage stage;
 
+    private Label objectLabel;
+
+    private Label edible;
+
+    private Label equippable;
+
+    private Label number;
+
+    private TextButton UseButton;
+
+    private TextButton DestroyButton;
+
+    private TextButton EquipButton;
+
+    private final Inventory inventory = new Inventory();
+
+    private int lastClickedI = -1;
+    private int lastClickedJ = -1;
+
     public InventoryRendering() {
+        skin = new Skin(Gdx.files.internal(UISKIN));
         spriteBatch = new SpriteBatch();
 
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
+
 
         mainTable = new Table();
         mainTable.setFillParent(true);
 
+        Table leftTable = new Table();
+
+        objectLabel = new Label("Name: ", skin);
+        edible = new Label("Edible: ", skin);
+        equippable = new Label("Can Equip: ", skin);
+        number = new Label("Number: " + 0, skin);
+
+        leftTable.add(objectLabel).row();
+        leftTable.add(edible).row();
+        leftTable.add(equippable).row();
+        leftTable.add(number).row();
+
+        UseButton = new TextButton("USE", skin);
+        DestroyButton = new TextButton("DESTROY", skin);
+        EquipButton = new TextButton("EQUIP", skin);
+        leftTable.defaults().size(200f, 50f);
+
+        leftTable.add(UseButton).row();
+        leftTable.add(DestroyButton).row();
+        leftTable.add(EquipButton).row();
+
+
+        mainTable.add(leftTable).expand().fill().width(20f);
+        mainTable.pad(20f);
+
 
         inventoryTable = new Table();
-        for (int row = 0; row < INVENTORY_HEIGHT; row++) {
+        for(int row = 0; row < INVENTORY_HEIGHT; row++) {
             for(int col = 0; col < INVENTORY_WIDTH; col++) {
-                ImageButton inventorySlot = createInventorySlot();
+                ImageButton inventorySlot = createInventorySlot(inventory.get(row, col).getObjectType());
                 inventoryTable.add(inventorySlot).size(64).pad(5);
                 int finalRow = row;
                 int finalCol = col;
@@ -65,12 +110,16 @@ public class InventoryRendering {
         if(inventoryOpen) {
             if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
                 inventoryOpen = !inventoryOpen;
+                Gdx.input.setInputProcessor(null);
+                lastClickedI = -1;
+                lastClickedJ = 1;
             }
             this.update();
         }
         if(!inventoryOpen) {
             if(Gdx.input.isKeyPressed(Input.Keys.E)) {
                 inventoryOpen = !inventoryOpen;
+                Gdx.input.setInputProcessor(stage);
             }
         }
     }
@@ -83,12 +132,33 @@ public class InventoryRendering {
         shapeRenderer.rect(10f, 10f, Gdx.graphics.getWidth() - 20f, Gdx.graphics.getHeight() - 20f);
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
+        if(lastClickedI != -1) {
+            objectLabel.setText("Name: " + inventory.get(lastClickedI, lastClickedJ).getObjectType().name());
+            edible.setText("Edible: " + inventory.get(lastClickedI, lastClickedJ).isEdible());
+            equippable.setText("Can Equip: " + inventory.get(lastClickedI, lastClickedJ).isEquippable());
+            number.setText("Number: " + inventory.get(lastClickedI, lastClickedJ).getNumber());
+        }
+        else {
+            objectLabel.setText("Name: ");
+            edible.setText("Edible: ");
+            equippable.setText("Can Equip: ");
+            number.setText("Number: ");
+        }
         stage.act();
         stage.draw();
     }
 
-    private ImageButton createInventorySlot(){
-        Texture upTexture = new Texture("assets/textures/DIRT.png");
+
+
+
+    private ImageButton createInventorySlot(InventoryFieldType fieldType) {
+        Texture upTexture;
+        if(fieldType.name().equals("NONE")){
+            upTexture = new Texture("assets/textures/MUD.png");
+        }
+        else{
+            upTexture = new Texture("assets/inventory/" + fieldType.name() + ".png");
+        }
         Texture downTexture = new Texture("assets/textures/MUD.png");
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = new TextureRegionDrawable(upTexture);
@@ -100,5 +170,7 @@ public class InventoryRendering {
 
     private void handleClick(int row, int col) {
         System.out.println("button " + row + " " + col);
+        lastClickedI = row;
+        lastClickedJ = col;
     }
 }

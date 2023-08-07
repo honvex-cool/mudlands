@@ -9,24 +9,25 @@ public class Grid {
     private final int width;
     private final int height;
     ArrayList<ArrayList<InventoryField>> inventoryFields;
-    Grid(int width, int height){
+
+    Grid(int width, int height) {
         this.width = width;
         this.height = height;
         inventoryFields = new ArrayList<>();
-        for(int i = 0; i < this.height; i++){
+        for(int i = 0; i < this.height; i++) {
             ArrayList<InventoryField> arrayList = new ArrayList<>();
-            for(int j = 0; j < this.width; j++){
+            for(int j = 0; j < this.width; j++) {
                 arrayList.add(new InventoryField());
             }
             inventoryFields.add(arrayList);
         }
     }
 
-    Grid(){
+    Grid() {
         this(INVENTORY_WIDTH, INVENTORY_HEIGHT);
     }
 
-    public ArrayList<InventoryField> get(int i){
+    public ArrayList<InventoryField> get(int i) {
         return inventoryFields.get(i);
     }
 
@@ -35,7 +36,7 @@ public class Grid {
         return width;
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return height;
     }
 }

@@ -16,10 +16,10 @@ public class Config {
     public static final String WORLD_NAME = "mudlands";
     public static final String SAVE_PATH = "src/main/resources/saves/";
     public static final String EXTENSION = ".mud";
-    public static final float TILE_SIZE = Gdx.graphics.getWidth()/16f;
+    public static final float TILE_SIZE = Gdx.graphics.getWidth() / 16f;
 
     public static final int INVENTORY_WIDTH = 7;
     public static final int INVENTORY_HEIGHT = 6;
 
-    public static final String UISKIN = "/src/main/resources/assets/textures/uiskin.json";
+    public static final String UISKIN = "assets/inventory/uiskin.json";
 }
