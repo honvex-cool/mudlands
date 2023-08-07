@@ -12,6 +12,7 @@ class Program {
         configuration.setIdleFPS(Config.FPS);
         configuration.useVsync(Config.VSYNC_ENABLED);
         configuration.setWindowedMode(Config.NATIVE_WIDTH, Config.NATIVE_HEIGHT);
+        configuration.setResizable(false);
         configuration.setTitle(Config.NAME);
         return configuration;
     }

@@ -1,5 +1,6 @@
 package utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
 public class Config {
@@ -9,12 +10,13 @@ public class Config {
     public static final int NATIVE_HEIGHT = 540;
     public static final String NAME = "Mudlands";
     public static final Color CLEAR_COLOR = Color.MAGENTA;
-    public static final int CHUNK_SIZE = 16;
+    public static final int CHUNK_SIZE = 8;
     public static final int DEFAULT_GRID_SIZE = 32;
     public static final int WORLD_SEED = 42;
     public static final String WORLD_NAME = "mudlands";
     public static final String SAVE_PATH = "src/main/resources/saves/";
     public static final String EXTENSION = ".mud";
+    public static final float TILE_SIZE = Gdx.graphics.getWidth()/16f;
 
     public static final int INVENTORY_WIDTH = 7;
     public static final int INVENTORY_HEIGHT = 6;
