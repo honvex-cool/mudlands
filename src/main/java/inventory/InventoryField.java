@@ -35,4 +35,11 @@ public class InventoryField {
     public boolean isEdible() {
         return edible;
     }
+
+    public void clearField(){
+        fieldType = InventoryFieldType.NONE;
+        number = 0;
+        edible = false;
+        equippable = false;
+    }
 }

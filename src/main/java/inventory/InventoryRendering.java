@@ -24,24 +24,15 @@ public class InventoryRendering {
 
     private Table inventoryTable;
 
+    private boolean destroying;
+
     private Table mainTable;
 
     private Skin skin;
     private Stage stage;
 
-    private Label objectLabel;
-
-    private Label edible;
-
-    private Label equippable;
-
-    private Label number;
-
-    private TextButton useButton;
-
-    private TextButton destroyButton;
-
-    private TextButton equipButton;
+    private Label objectLabel, edible, equippable, number;
+    private TextButton useButton, destroyButton, equipButton;
 
     private final Inventory inventory = new Inventory();
 
@@ -63,7 +54,7 @@ public class InventoryRendering {
         objectLabel = new Label("Name: ", skin);
         edible = new Label("Edible: ", skin);
         equippable = new Label("Can Equip: ", skin);
-        number = new Label("Number: " + 0, skin);
+        number = new Label("Number: ", skin);
 
         leftTable.add(objectLabel).row();
         leftTable.add(edible).row();
@@ -77,6 +68,13 @@ public class InventoryRendering {
 
         leftTable.add(useButton).row();
         leftTable.add(destroyButton).row();
+        destroyButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                handleDestroyButton();
+                return true;
+            }
+        });
         leftTable.add(equipButton).row();
 
 
@@ -94,6 +92,14 @@ public class InventoryRendering {
                 inventorySlot.addListener(new InputListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        if(destroying){
+                            inventory.removeObject(finalRow, finalCol);
+                            Texture downTexture = new Texture("assets/textures/MUD.png");
+                            ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+                            style.up = new TextureRegionDrawable(downTexture);
+                            style.down = new TextureRegionDrawable(downTexture);
+                            inventorySlot.setStyle(style);
+                        }
                         handleClick(finalRow, finalCol);
                         return true;
                     }
@@ -147,12 +153,9 @@ public class InventoryRendering {
         stage.draw();
     }
 
-
-
-
     private ImageButton createInventorySlot(InventoryFieldType fieldType) {
         Texture upTexture;
-        if(fieldType.name().equals("NONE")){
+        if(fieldType == InventoryFieldType.NONE){
             upTexture = new Texture("assets/textures/MUD.png");
         }
         else{
@@ -174,6 +177,6 @@ public class InventoryRendering {
     }
 
     private void handleDestroyButton(){
-
+        destroying = !destroying;
     }
 }

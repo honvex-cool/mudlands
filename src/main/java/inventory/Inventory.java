@@ -25,4 +25,9 @@ public class Inventory {
     public InventoryField get(int i, int j) {
         return fields.get(i).get(j);
     }
+
+    public void removeObject(int i, int j){
+        InventoryField field = fields.get(i).get(j);
+        field.clearField();
+    }
 }
