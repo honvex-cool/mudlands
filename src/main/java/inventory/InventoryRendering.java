@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 
 import static utils.Config.*;
 
@@ -38,11 +37,11 @@ public class InventoryRendering {
 
     private Label number;
 
-    private TextButton UseButton;
+    private TextButton useButton;
 
-    private TextButton DestroyButton;
+    private TextButton destroyButton;
 
-    private TextButton EquipButton;
+    private TextButton equipButton;
 
     private final Inventory inventory = new Inventory();
 
@@ -71,14 +70,14 @@ public class InventoryRendering {
         leftTable.add(equippable).row();
         leftTable.add(number).row();
 
-        UseButton = new TextButton("USE", skin);
-        DestroyButton = new TextButton("DESTROY", skin);
-        EquipButton = new TextButton("EQUIP", skin);
+        useButton = new TextButton("USE", skin);
+        destroyButton = new TextButton("DESTROY", skin);
+        equipButton = new TextButton("EQUIP", skin);
         leftTable.defaults().size(200f, 50f);
 
-        leftTable.add(UseButton).row();
-        leftTable.add(DestroyButton).row();
-        leftTable.add(EquipButton).row();
+        leftTable.add(useButton).row();
+        leftTable.add(destroyButton).row();
+        leftTable.add(equipButton).row();
 
 
         mainTable.add(leftTable).expand().fill().width(20f);
@@ -172,5 +171,9 @@ public class InventoryRendering {
         System.out.println("button " + row + " " + col);
         lastClickedI = row;
         lastClickedJ = col;
+    }
+
+    private void handleDestroyButton(){
+
     }
 }
