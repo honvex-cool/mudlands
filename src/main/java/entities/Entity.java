@@ -12,6 +12,8 @@ public class Entity {
     private String name;
     private final Map<Class<? extends Component>, Component> components;
 
+    private Inventory inventory;
+
     Entity(int id, String name) {
         this(null, id, name);
     }
@@ -21,6 +23,7 @@ public class Entity {
         this.id = id;
         this.name = name;
         components = new HashMap<>();
+        inventory = new Inventory();
     }
 
     public int getId() {
