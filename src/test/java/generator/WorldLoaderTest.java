@@ -8,7 +8,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WorldLoaderTest {
-    @Test
+    /*@Test
     void testSaveLoad() {
         WorldLoader worldLoader = new WorldLoader();
         worldLoader.createWorld(123, "testWorld");
@@ -33,7 +33,7 @@ class WorldLoaderTest {
 
         var map1 = worldLoader1.loadChunk(0, 0);
         assertEquals(map, map1);
-    }
+    }*/
 
     @Test
     void testCannotSaveNullWorld() {

@@ -9,13 +9,12 @@ import components.PlayerComponent;
 import components.PositionComponent;
 import entities.Entity;
 import generator.GroundType;
-import world.WorldMap;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class GroundRenderingSystem extends RepetitiveSystem {
+/*public class GroundRenderingSystem extends RepetitiveSystem {
     private static final Set<Class<? extends Component>> REQUIRED_COMPONENTS = Set.of(
         PlayerComponent.class,
         PositionComponent.class
@@ -51,9 +50,9 @@ public class GroundRenderingSystem extends RepetitiveSystem {
 
     @Override
     protected void updateOne(Entity player, float deltaTime) {
-        PositionComponent position = player.get(PositionComponent.class);
-        int row = (int) Math.floor(position.getY() / tileSize);
-        int column = (int) Math.floor(position.getX() / tileSize);
+        /*PositionComponent position = player.get(PositionComponent.class);
+        int row = (int)Math.floor(position.getY());
+        int column = (int)Math.floor(position.getX());
         for(int r = -9; r <= 9; r++) {
             for(int c = -16; c <= 16; c++) {
                 Sprite sprite = spriteMap.get(worldMap.query(row + r, column + c));
@@ -68,4 +67,4 @@ public class GroundRenderingSystem extends RepetitiveSystem {
     protected Set<Class<? extends Component>> requirements() {
         return REQUIRED_COMPONENTS;
     }
-}
+}*/

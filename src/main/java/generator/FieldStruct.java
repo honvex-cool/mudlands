@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class FieldStruct implements Serializable {
-    public GroundType groundType;
+    public GroundType groundType;//0-99 100-999
     public ObjectType objectType;
     public int data0;
     public int data1;
