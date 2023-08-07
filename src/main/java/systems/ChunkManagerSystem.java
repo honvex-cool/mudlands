@@ -50,7 +50,7 @@ public class ChunkManagerSystem{
             for(Passive passive:passives) {
                 if(passive.positionComponent.getChunk().equals(pair)){
                     to_remove.add(passive);
-                    to_save.add(new SaveStruct(EntityTag.PASSIVE,passive.type,passive.positionComponent.getX(),passive.positionComponent.getY(),passive.getSaveMap()));
+                    to_save.add(new SaveStruct(EntityTag.PASSIVE,passive.type,(float)Math.floor(passive.positionComponent.getX()),(float)Math.floor(passive.positionComponent.getY()),passive.getSaveMap()));
                 }
             }
 
@@ -87,8 +87,8 @@ public class ChunkManagerSystem{
     }
     private Set<Pair<Integer,Integer>> getSurroundingChunks(Pair<Integer,Integer> center){
         Set<Pair<Integer,Integer>> set = new HashSet<>();
-        for(int i=-1;i<2;i++){
-            for(int j=-1;j<2;j++){
+        for(int i=-1;i<=1;i++){
+            for(int j=-1;j<=1;j++){
                 set.add(new Pair<>(center.getFirst()+i,center.getSecond()+j));
             }
         }
