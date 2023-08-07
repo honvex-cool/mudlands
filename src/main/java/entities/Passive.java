@@ -11,7 +11,7 @@ public class Passive extends Entity {
     }
 
     public Passive(SaveStruct saveStruct) {
-        super(saveStruct.x, saveStruct.y,Config.TILE_SIZE,new Texture(Gdx.files.internal("assets/textures/DIRT.png")), saveStruct.type);
+        super(saveStruct.x+0.25f, saveStruct.y+0.25f,Config.TILE_SIZE/2,new Texture(Gdx.files.internal("assets/textures/DIRT.png")), saveStruct.type);
         String name = switch(saveStruct.type) {
             case 0 -> "DIRT";
             case 1 -> "DIRT";

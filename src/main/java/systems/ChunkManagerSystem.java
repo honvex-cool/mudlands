@@ -19,12 +19,11 @@ public class ChunkManagerSystem{
     private PositionComponent player_position;
     private Set<Pair<Integer,Integer>> loaded;
 
-    public ChunkManagerSystem(Player player){
+    public ChunkManagerSystem(Player player,WorldLoader worldLoader){
         this.player = player;
         this.player_position = player.positionComponent;
         central_chunk_coordinates = new Pair<>(player_position.getChunkX()+1,player_position.getChunkY());
-        this.worldLoader = new WorldLoader();
-        worldLoader.createWorld(123,"test");
+        this.worldLoader = worldLoader;
         loaded = new HashSet<>();
     }
     public void update(Collection<Ground> grounds, Collection<Passive> passives, Collection<Mob> mobs) {

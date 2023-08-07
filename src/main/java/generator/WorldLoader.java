@@ -92,7 +92,7 @@ public class WorldLoader {
             //apply changes
             for(var saveStruct : diffs) {
                 if(saveStruct.entityTag == EntityTag.PASSIVE) {
-                    Pair<Integer, Integer> coords = new Pair<>((int) saveStruct.x, (int) saveStruct.y);
+                    Pair<Integer, Integer> coords = new Pair<>((int)Math.floor(saveStruct.x), (int) Math.floor(saveStruct.y));
                     map.get(coords).objectType = ObjectType.NONE;
                     answer.add(saveStruct);
                 }

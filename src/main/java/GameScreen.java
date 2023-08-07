@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
 
         renderingSystem = new RenderingSystem(spriteBatch);
         inputSystem = new InputSystem();
-        chunkManagerSystem = new ChunkManagerSystem(player);
+        chunkManagerSystem = new ChunkManagerSystem(player,loader);
 
         ground = new ArrayList<>();
         passives = new ArrayList<>();
@@ -66,6 +66,7 @@ public class GameScreen implements Screen {
         System.err.println(" " + deltaTime + "   " + passives.size());
         inputSystem.update(player,deltaTime);
         renderingSystem.update(ground,deltaTime);
+        renderingSystem.update(passives,deltaTime);
         renderingSystem.updatePlayer(player,deltaTime);
         inventoryRendering.oneTick();
         craftingRendering.oneTick(); //TODO add one class that manages opening crafting and inventory or make systems for them
