@@ -2,6 +2,9 @@ package inventory;
 
 public class InventoryField {
     private InventoryFieldType fieldType;
+
+
+
     private int number;
 
     private boolean edible;
@@ -41,5 +44,27 @@ public class InventoryField {
         number = 0;
         edible = false;
         equippable = false;
+    }
+    public void setFieldType(InventoryFieldType fieldType) {
+        this.fieldType = fieldType;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public void setEdible(boolean edible) {
+        this.edible = edible;
+    }
+
+    public void setEquippable(boolean equippable) {
+        this.equippable = equippable;
+    }
+
+    public void setField(InventoryField field){
+        this.number = field.getNumber();
+        this.equippable = field.isEquippable();
+        this.edible = field.isEdible();
+        this.fieldType = field.getObjectType();
     }
 }

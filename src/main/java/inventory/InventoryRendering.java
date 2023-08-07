@@ -12,6 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import utils.Pair;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static utils.Config.*;
 
@@ -24,7 +28,7 @@ public class InventoryRendering {
 
     private Table inventoryTable;
 
-    private boolean destroying;
+    private boolean moving = false;
 
     private Table mainTable;
 
@@ -32,13 +36,22 @@ public class InventoryRendering {
     private Stage stage;
 
     private Label objectLabel, edible, equippable, number;
-    private TextButton useButton, destroyButton, equipButton;
+    private TextButton useButton, destroyButton, equipButton, moveButton;
 
     private final Inventory inventory = new Inventory();
 
     private int lastClickedI = -1;
     private int lastClickedJ = -1;
 
+    private int movingFromI = -1;
+
+    private int movingFromJ = -1;
+
+    private int movingToI = -1;
+
+    private int movingToJ = -1;
+
+    private Map<Pair<Integer, Integer>, ImageButton> imageButtonMap = new HashMap<>();
     public InventoryRendering() {
         skin = new Skin(Gdx.files.internal(UISKIN));
         spriteBatch = new SpriteBatch();
@@ -64,6 +77,7 @@ public class InventoryRendering {
         useButton = new TextButton("USE", skin);
         destroyButton = new TextButton("DESTROY", skin);
         equipButton = new TextButton("EQUIP", skin);
+        moveButton = new TextButton("MOVE", skin);
         leftTable.defaults().size(200f, 50f);
 
         leftTable.add(useButton).row();
@@ -72,10 +86,24 @@ public class InventoryRendering {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 handleDestroyButton();
+                moving = false;
                 return true;
             }
         });
         leftTable.add(equipButton).row();
+        leftTable.add(moveButton).row();
+
+        moveButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(lastClickedJ != -1){
+                    movingFromI = lastClickedI;
+                    movingFromJ = lastClickedJ;
+                    moving = true;
+                }
+                return true;
+            }
+        });
 
 
         mainTable.add(leftTable).expand().fill().width(20f);
@@ -87,18 +115,15 @@ public class InventoryRendering {
             for(int col = 0; col < INVENTORY_WIDTH; col++) {
                 ImageButton inventorySlot = createInventorySlot(inventory.get(row, col).getObjectType());
                 inventoryTable.add(inventorySlot).size(64).pad(5);
+                imageButtonMap.put(new Pair<>(row, col), inventorySlot);
                 int finalRow = row;
                 int finalCol = col;
                 inventorySlot.addListener(new InputListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(destroying){
-                            inventory.removeObject(finalRow, finalCol);
-                            Texture downTexture = new Texture("assets/textures/MUD.png");
-                            ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-                            style.up = new TextureRegionDrawable(downTexture);
-                            style.down = new TextureRegionDrawable(downTexture);
-                            inventorySlot.setStyle(style);
+                        if(moving){
+                            movingToI = finalRow;
+                            movingToJ = finalCol;
                         }
                         handleClick(finalRow, finalCol);
                         return true;
@@ -149,19 +174,46 @@ public class InventoryRendering {
             equippable.setText("Can Equip: ");
             number.setText("Number: ");
         }
+        if(moving && movingToI != -1){
+            InventoryField tmp = new InventoryField();
+            InventoryField from = inventory.get(movingFromI, movingFromJ);
+            ImageButton fromImage = imageButtonMap.get(new Pair<>(movingFromI, movingFromJ));
+
+
+
+            InventoryField to = inventory.get(movingToI, movingToJ);
+            ImageButton toImage = imageButtonMap.get(new Pair<>(movingToI, movingToJ));
+            tmp.setField(from);
+            from.setField(to);
+            to.setField(tmp);
+
+            //TODO this is done very badly, we are making to many textures and we are not tiding up
+
+            Texture upTexture = new Texture("assets/inventory/" + from.getObjectType().name() + ".png");
+            ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+            Texture downTexture = new Texture("assets/inventory/NONE.png");
+            style.up = new TextureRegionDrawable(upTexture);
+            style.down = new TextureRegionDrawable(downTexture);
+            fromImage.setStyle(style);
+
+            Texture upTexture1 = new Texture("assets/inventory/" + to.getObjectType().name() + ".png");
+            ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
+            Texture downTexture1 = new Texture("assets/inventory/NONE.png");
+            style1.up = new TextureRegionDrawable(upTexture1);
+            style1.down = new TextureRegionDrawable(downTexture1);
+            toImage.setStyle(style1);
+
+            moving = false;
+            movingToI = -1;
+            movingToJ = -1;
+        }
         stage.act();
         stage.draw();
     }
 
     private ImageButton createInventorySlot(InventoryFieldType fieldType) {
-        Texture upTexture;
-        if(fieldType == InventoryFieldType.NONE){
-            upTexture = new Texture("assets/textures/MUD.png");
-        }
-        else{
-            upTexture = new Texture("assets/inventory/" + fieldType.name() + ".png");
-        }
-        Texture downTexture = new Texture("assets/textures/MUD.png");
+        Texture upTexture = new Texture("assets/inventory/" + fieldType.name() + ".png");
+        Texture downTexture = new Texture("assets/inventory/NONE.png");
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = new TextureRegionDrawable(upTexture);
         style.down = new TextureRegionDrawable(downTexture);
@@ -177,6 +229,15 @@ public class InventoryRendering {
     }
 
     private void handleDestroyButton(){
-        destroying = !destroying;
+        if(lastClickedI == -1){
+            return;
+        }
+        inventory.removeObject(lastClickedI, lastClickedJ);
+        Texture downTexture = new Texture("assets/inventory/NONE.png"); //TODO very bad implementation -> we are not getting rid of not used Textures
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        Pair<Integer, Integer> coords = new Pair<>(lastClickedI, lastClickedJ);
+        style.up = new TextureRegionDrawable(downTexture);
+        style.down = new TextureRegionDrawable(downTexture);
+        imageButtonMap.get(coords).setStyle(style);
     }
 }
