@@ -2,22 +2,20 @@ package systems;
 
 import components.Component;
 import components.PlayerComponent;
+import components.PositionComponent;
 import components.VelocityComponent;
 import entities.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import entities.Player;
 
 import java.util.Set;
 
-public class InputSystem extends RepetitiveSystem {
-    private static final Set<Class<? extends Component>> REQUIRED_COMPONENTS = Set.of(
-        PlayerComponent.class,
-        VelocityComponent.class
-    );
+public class InputSystem {
 
-    @Override
-    public void updateOne(Entity player, float deltaTime) {
-        VelocityComponent velocity = player.get(VelocityComponent.class);
+    public void update(Player player, float deltaTime) {
+        PositionComponent position = player.positionComponent;
+        VelocityComponent velocity = player.velocityComponent;
 
         float speed = 2f;
 
@@ -36,10 +34,8 @@ public class InputSystem extends RepetitiveSystem {
         } else {
             velocity.setY(0);
         }
-    }
 
-    @Override
-    protected Set<Class<? extends Component>> requirements() {
-        return REQUIRED_COMPONENTS;
+        position.setX(position.getX() + velocity.getX() * deltaTime);
+        position.setY(position.getY() + velocity.getY() * deltaTime);
     }
 }

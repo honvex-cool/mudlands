@@ -2,18 +2,17 @@ package generator;
 
 import utils.Config;
 import utils.Pair;
+import utils.SaveStruct;
+import world.EntityTag;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WorldLoader {
 
     private Generator generator;
-    private Map<Pair<Integer, Integer>, Map<Pair<Integer, Integer>, FieldStruct>> changes;
+    private Map<Pair<Integer, Integer>, Set<SaveStruct>> changes;
     private String world_name;
 
     public WorldLoader() {
@@ -31,7 +30,7 @@ public class WorldLoader {
             }
         }
         this.generator = new Generator(seed);
-        this.world_name = new String(world_name);
+        this.world_name = world_name;
         this.changes = new HashMap<>();
     }
 
@@ -80,33 +79,77 @@ public class WorldLoader {
         fileWriter.close();*/
     }
 
-    public Map<Pair<Integer, Integer>, FieldStruct> loadChunk(int chunk_x, int chunk_y) {
-        //generate chunk
-        var map = generator.generateChunk(chunk_x, chunk_y);
-        var diff_map = changes.get(new Pair(chunk_x, chunk_y));
-        if(diff_map == null)
-            return map;
-
-        //apply changes
-        for(var key : diff_map.keySet()) {
-            map.get(key).applyDiffs(diff_map.get(key));
-        }
-        return map;
+    public Set<SaveStruct> loadChunk(Pair<Integer,Integer> chunk) {
+        return loadChunk(chunk.getFirst(),chunk.getSecond());
     }
 
-    public void saveChunk(int chunk_x, int chunk_y, Map<Pair<Integer, Integer>, FieldStruct> state) {
+    public Set<SaveStruct> loadChunk(int chunk_x, int chunk_y) {
         //generate chunk
-        var generated_map = generator.generateChunk(chunk_x, chunk_y);
+        var map = generator.generateChunk(chunk_x, chunk_y);
+        var diffs = changes.get(new Pair(chunk_x, chunk_y));
+        Set<SaveStruct> answer = new HashSet<>();
+        if(diffs != null) {
+            //apply changes
+            for(var saveStruct : diffs) {
+                if(saveStruct.entityTag == EntityTag.PASSIVE) {
+                    Pair<Integer, Integer> coords = new Pair<>((int) saveStruct.x, (int) saveStruct.y);
+                    map.get(coords).objectType = ObjectType.NONE;
+                    answer.add(saveStruct);
+                }
+                else{
+                    answer.add(saveStruct);
+                }
+            }
+        }
+        answer.addAll(getSaveStructs(map));
+        return answer;
+    }
+
+    public void saveChunk(Pair<Integer,Integer> chunk, Set<SaveStruct> passive) {
+        saveChunk(chunk.getFirst(),chunk.getSecond(),passive);
+    }
+    public void saveChunk(int chunk_x, int chunk_y, Set<SaveStruct> passive) {
+        //generate chunk
+        //var generated = getSaveStructs(generator.generateChunk(chunk_x, chunk_y));
 
         //calculate differences between generation and state
-        Map<Pair<Integer, Integer>, FieldStruct> diffs = new HashMap<>();
-        for(var key : generated_map.keySet()) {
-            if(!generated_map.get(key).equals(state.get(key))) {
+        /*Set<SaveStruct> diffs = new HashSet<>();
+        for(var entity : passive) {
+            if(entity) {
                 diffs.put(new Pair(key), new FieldStruct(state.get(key)));
+            }
+        }*/
+
+        //save differences
+        changes.put(new Pair(chunk_x, chunk_y), passive);
+    }
+
+    public Set<SaveStruct> getSaveStructs(Map<Pair<Integer,Integer>,FieldStruct> map){
+        Set<SaveStruct> set = new HashSet<>();
+
+        for(var key:map.keySet()) {
+            FieldStruct fieldStruct = map.get(key);
+            int type = switch(fieldStruct.groundType){
+                case WATER -> 0;
+                case SAND -> 1;
+                case GRASS -> 2;
+                case MUD -> 3;
+                case STONE -> 4;
+                case DIRT -> 5;
+            };
+            set.add(new SaveStruct(EntityTag.GROUND,type, key.getFirst(), key.getSecond(), new HashMap<>()));
+
+            type = switch(fieldStruct.objectType){
+                case NONE -> -1;
+                case TREE -> 0;
+                case STONE -> 1;
+                default -> -1;
+            };
+            if(type != -1){
+                set.add(new SaveStruct(EntityTag.PASSIVE,type, key.getFirst(), key.getSecond(), new HashMap<>()));
             }
         }
 
-        //save differences
-        changes.put(new Pair(chunk_x, chunk_y), diffs);
+        return set;
     }
 }

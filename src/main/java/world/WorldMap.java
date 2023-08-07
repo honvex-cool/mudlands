@@ -8,7 +8,7 @@ import utils.Pair;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WorldMap {
+/*public class WorldMap {
     private final Map<Pair<Integer, Integer>, GroundType> loadedSquares = new HashMap<>();
 
     public WorldMap(WorldLoader loader) {
@@ -25,4 +25,4 @@ public class WorldMap {
     public GroundType query(int i, int j) {
         return loadedSquares.get(new Pair<>(i, j));
     }
-}
+}*/
