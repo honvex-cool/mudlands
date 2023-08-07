@@ -11,7 +11,6 @@ import entities.Entity;
 import entities.EntityManager;
 import generator.WorldLoader;
 import systems.*;
-import utils.Config;
 import world.WorldMap;
 
 import java.io.IOException;
@@ -21,22 +20,24 @@ public class GameScreen implements Screen {
     private final WorldLoader loader = new WorldLoader();
 
     private final SpriteBatch spriteBatch = new SpriteBatch();
+    private final InventoryRendering inventoryRendering;
+    private final CraftingRendering craftingRendering;
 
     public GameScreen(MudlandsGame mudlandsGame) {
-        try {
-            loader.loadWorld("w1");
-        } catch(IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        loader.createWorld(42, "testWorld");
 
         WorldMap worldMap = new WorldMap(loader);
 
+        inventoryRendering = new InventoryRendering();
+        craftingRendering = new CraftingRendering();
+
         entityManager = new EntityManager();
+        entityManager.addSystem(new GroundRenderingSystem(worldMap, spriteBatch));
         entityManager.addSystem(new RenderingSystem(spriteBatch));
         entityManager.addSystem(new MovementSystem());
         entityManager.addSystem(new InputSystem());
         entityManager.addSystem(new DeathSystem());
-        entityManager.addSystem(new GroundRenderingSystem(worldMap, spriteBatch));
+
 
         Entity player = entityManager.createEntity();
         player.add(new PlayerComponent());
@@ -55,6 +56,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         float deltaTime = Gdx.graphics.getDeltaTime();
         entityManager.update(deltaTime);
+        inventoryRendering.oneTick();
+        craftingRendering.oneTick(); //TODO add one class that manages opening crafting and inventory or make systems for them
     }
 
     @Override
