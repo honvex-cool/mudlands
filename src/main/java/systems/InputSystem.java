@@ -14,7 +14,6 @@ import java.util.Set;
 public class InputSystem {
 
     public void update(Player player, float deltaTime) {
-        PositionComponent position = player.positionComponent;
         VelocityComponent velocity = player.velocityComponent;
 
         float speed = 2f;
@@ -34,8 +33,5 @@ public class InputSystem {
         } else {
             velocity.setY(0);
         }
-
-        position.setX(position.getX() + velocity.getX() * deltaTime);
-        position.setY(position.getY() + velocity.getY() * deltaTime);
     }
 }

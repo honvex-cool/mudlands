@@ -1,12 +1,15 @@
 package entities;
 
 import com.badlogic.gdx.graphics.Texture;
-import inventory.Inventory;
+import utils.Pair;
 
 public class Player extends Mob{
-    private Inventory inventory;
     public Player(float x, float y, Texture texture){
-        super(x,y,texture,0);
-        inventory = new Inventory();
+        super(x,y,0.25f,texture,0);
+    }
+
+    @Override
+    public void updateVelocity() {
+        super.updateVelocity();
     }
 }
