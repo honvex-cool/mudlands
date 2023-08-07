@@ -75,7 +75,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        System.out.println("HELLO FROM THE OTHER SIDE");
         spriteBatch.dispose();
         try {
             loader.saveWorld();

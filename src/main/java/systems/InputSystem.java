@@ -9,8 +9,6 @@ import com.badlogic.gdx.Input;
 
 import java.util.Set;
 
-import static java.lang.System.out;
-
 public class InputSystem extends RepetitiveSystem {
     private static final Set<Class<? extends Component>> REQUIRED_COMPONENTS = Set.of(
         PlayerComponent.class,
@@ -21,7 +19,7 @@ public class InputSystem extends RepetitiveSystem {
     public void updateOne(Entity player, float deltaTime) {
         VelocityComponent velocity = player.get(VelocityComponent.class);
 
-        float speed = 200f;
+        float speed = 2f;
 
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             velocity.setX(-speed);

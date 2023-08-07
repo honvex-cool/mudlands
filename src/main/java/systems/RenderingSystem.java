@@ -1,16 +1,13 @@
 package systems;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import components.Component;
 import components.PlayerComponent;
 import components.PositionComponent;
 import components.RenderComponent;
 import entities.Entity;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.Set;
 
@@ -27,7 +24,6 @@ public class RenderingSystem extends RepetitiveSystem {
         this.spriteBatch = spriteBatch;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, 0);
         camera.update();
     }
 
@@ -44,12 +40,12 @@ public class RenderingSystem extends RepetitiveSystem {
         RenderComponent render = entity.get(RenderComponent.class);
 
         if(entity.has(PlayerComponent.class)) {
-            camera.position.set(position.getX(), position.getY(), 0);
+            camera.position.set(position.getX() * tileSize, position.getY() * tileSize, 0);
             camera.update();
             spriteBatch.setProjectionMatrix(camera.combined);
         }
 
-        render.getSprite().setPosition(position.getX(), position.getY());
+        render.getSprite().setPosition(position.getX() * tileSize, position.getY() * tileSize);
         render.getSprite().setSize(tileSize / 2, tileSize / 2);
         render.getSprite().draw(spriteBatch);
     }

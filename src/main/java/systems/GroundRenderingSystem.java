@@ -52,9 +52,8 @@ public class GroundRenderingSystem extends RepetitiveSystem {
     @Override
     protected void updateOne(Entity player, float deltaTime) {
         PositionComponent position = player.get(PositionComponent.class);
-        int row = (int)Math.floor(position.getY() / tileSize);
-        int column = (int)Math.floor(position.getX() / tileSize);
-        System.out.println("r: " + row + " c: " + column + " " + deltaTime);
+        int row = (int)Math.floor(position.getY());
+        int column = (int)Math.floor(position.getX());
         for(int r = -9; r <= 9; r++) {
             for(int c = -16; c <= 16; c++) {
                 Sprite sprite = spriteMap.get(worldMap.query(row + r, column + c));
