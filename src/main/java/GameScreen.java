@@ -10,6 +10,8 @@ import components.VelocityComponent;
 import entities.Entity;
 import entities.EntityManager;
 import generator.WorldLoader;
+import inventory.Inventory;
+import inventory.InventoryRendering;
 import systems.*;
 import world.WorldMap;
 
@@ -23,6 +25,8 @@ public class GameScreen implements Screen {
     private final InventoryRendering inventoryRendering;
     private final CraftingRendering craftingRendering;
 
+    private final Inventory playerInventory;
+
     public GameScreen(MudlandsGame mudlandsGame) {
         loader.createWorld(42, "testWorld");
 
@@ -32,14 +36,17 @@ public class GameScreen implements Screen {
         craftingRendering = new CraftingRendering();
 
         entityManager = new EntityManager();
+
         entityManager.addSystem(new GroundRenderingSystem(worldMap, spriteBatch));
         entityManager.addSystem(new RenderingSystem(spriteBatch));
+
         entityManager.addSystem(new MovementSystem());
         entityManager.addSystem(new InputSystem());
         entityManager.addSystem(new DeathSystem());
 
 
         Entity player = entityManager.createEntity();
+        playerInventory = new Inventory();
         player.add(new PlayerComponent());
         player.add(new PositionComponent(0f, 0f));
         player.add(new VelocityComponent());
