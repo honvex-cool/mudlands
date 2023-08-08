@@ -5,7 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import utils.Config;
 import utils.SaveStruct;
 
+import java.util.Map;
+
 public class Passive extends Entity implements Hitbox {
+
+    private boolean generated;
+
     public Passive(float x, float y, Texture texture, int type) {
         super(x, y, Config.TILE_SIZE, texture, type);
     }
@@ -22,7 +27,8 @@ public class Passive extends Entity implements Hitbox {
         }
     }
 
-    public boolean isDefault() {
-        return true;
+    @Override
+    public boolean isGenerated() {
+        return generated;
     }
 }
