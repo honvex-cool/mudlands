@@ -114,6 +114,7 @@ public class GameScreen implements Screen {
     public void dispose() {
         spriteBatch.dispose();
         assetManager.dispose();
+        chunkManagerSystem.unloadAll(ground,passives,mobs);
         loader.setPlayerSaveStruct(entityLoader.savePlayer(player));
         try {
             loader.saveWorld();

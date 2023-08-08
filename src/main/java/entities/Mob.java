@@ -10,6 +10,8 @@ public class Mob extends Entity implements Hitbox {
     public VelocityComponent velocityComponent;
     private float moveSpeed;
 
+    public int attackStrength = 6;
+
     public Mob() {
         this(0,0);
     }
@@ -20,5 +22,9 @@ public class Mob extends Entity implements Hitbox {
     }
 
     public void updateVelocity() {
+    }
+
+    public int getAttackStrength(){
+        return attackStrength;
     }
 }

@@ -10,7 +10,13 @@ import utils.SaveStruct;
 import java.util.Map;
 
 public class Passive extends Entity implements Hitbox {
-    private boolean generated;
+    protected boolean generated;
+
+    @Override
+    public void construct(Map<Integer, Integer> struct, boolean generated) {
+        super.construct(struct, generated);
+        this.generated = generated;
+    }
 
     @Override
     public boolean isGenerated() {
