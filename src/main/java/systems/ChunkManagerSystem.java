@@ -6,6 +6,7 @@ import components.PositionComponent;
 import entities.*;
 import generator.FieldStruct;
 import generator.WorldLoader;
+import utils.Config;
 import utils.Pair;
 import utils.SaveStruct;
 import world.EntityTag;
@@ -26,7 +27,7 @@ public class ChunkManagerSystem{
         this.worldLoader = worldLoader;
         loaded = new HashSet<>();
     }
-    public void update(Collection<Ground> grounds, Collection<Passive> passives, Collection<Mob> mobs) {
+    public void update(Map<Pair<Integer,Integer>,Ground> grounds, Map<Pair<Integer,Integer>,Passive> passives, Collection<Mob> mobs) {
         var curr_chunk = player_position.getChunk();
         if(curr_chunk.equals(central_chunk_coordinates)) {
             return;
@@ -41,16 +42,15 @@ public class ChunkManagerSystem{
         for(var pair:unloading_chunks) {
             Set<SaveStruct> to_save = new HashSet<>();
 
-            for(Ground ground:grounds) {
-                if(ground.positionComponent.getChunk().equals(pair)){
-                    to_remove.add(ground);
-                }
-            }
-
-            for(Passive passive:passives) {
-                if(passive.positionComponent.getChunk().equals(pair)){
-                    to_remove.add(passive);
-                    to_save.add(new SaveStruct(EntityTag.PASSIVE,passive.type,(float)Math.floor(passive.positionComponent.getX()),(float)Math.floor(passive.positionComponent.getY()),passive.getSaveMap()));
+            for(int dx=0;dx<Config.CHUNK_SIZE;dx++) {
+                for(int dy=0;dy<Config.CHUNK_SIZE;dy++){
+                    Pair<Integer,Integer> curr = new Pair<>(pair.getFirst()*Config.CHUNK_SIZE+dx,pair.getSecond()*Config.CHUNK_SIZE+dy);
+                    if(passives.containsKey(curr)){
+                        Passive passive = passives.get(curr);
+                        to_save.add(new SaveStruct(EntityTag.PASSIVE,passive.type,(float)Math.floor(passive.positionComponent.getX()),(float)Math.floor(passive.positionComponent.getY()),passive.getSaveMap()));
+                    }
+                    grounds.remove(curr);
+                    passives.remove(curr);
                 }
             }
 
@@ -63,9 +63,6 @@ public class ChunkManagerSystem{
 
             worldLoader.saveChunk(pair,to_save);
         }
-
-        grounds.removeAll(to_remove);
-        passives.removeAll(to_remove);
         mobs.removeAll(to_remove);
 
 
@@ -76,8 +73,8 @@ public class ChunkManagerSystem{
             var set = worldLoader.loadChunk(pair);
             for(SaveStruct struct:set){
                 switch(struct.entityTag){
-                    case GROUND -> grounds.add(new Ground(struct));
-                    case PASSIVE -> passives.add(new Passive(struct));
+                    case GROUND -> grounds.put(new Pair<>((int)Math.floor(struct.x),(int)Math.floor(struct.y)),new Ground(struct));
+                    case PASSIVE -> passives.put(new Pair<>((int)Math.floor(struct.x),(int)Math.floor(struct.y)),new Passive(struct));
                     //case MOB -> passives.add(new Mob(struct));
                 }
             }

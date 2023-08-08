@@ -6,6 +6,8 @@ import utils.Config;
 import utils.SaveStruct;
 
 public class Ground extends Entity{
+
+    private float speedModifier = 1f;
     public Ground(float x, float y, Texture texture,int type){
         super(x,y,Config.TILE_SIZE,texture,type);
     }
@@ -20,6 +22,13 @@ public class Ground extends Entity{
             case 5 -> "DIRT";
             default -> "";
         };
+        if(saveStruct.type == 0){
+            speedModifier = 3f;
+        }
         this.renderComponent.getSprite().setTexture(new Texture(Gdx.files.internal("assets/textures/" + name + ".png")));
+    }
+
+    public float getSpeedModifier() {
+        return speedModifier;
     }
 }

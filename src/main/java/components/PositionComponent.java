@@ -35,4 +35,5 @@ public class PositionComponent extends Component {
     public int getChunkY(){return (int)Math.floor(y/ Config.CHUNK_SIZE);}
 
     public Pair<Integer,Integer> getChunk(){return new Pair<>(getChunkX(),getChunkY());}
+    public Pair<Integer,Integer> getAsPair(){return new Pair<>((int)Math.floor(getX()),(int)Math.floor(getY()));}
 }

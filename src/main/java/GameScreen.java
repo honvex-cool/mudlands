@@ -13,10 +13,10 @@ import generator.GroundType;
 import generator.WorldLoader;
 import inventory.InventoryRendering;
 import systems.*;
+import utils.Pair;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 public class GameScreen implements Screen {
     private final WorldLoader loader = new WorldLoader();
@@ -29,8 +29,8 @@ public class GameScreen implements Screen {
     private MoveSystem moveSystem;
 
     private Player player;
-    private Collection<Ground> ground;
-    private Collection<Passive> passives;
+    private Map<Pair<Integer,Integer>,Ground> ground;
+    private Map<Pair<Integer,Integer>,Passive> passives;
     private Collection<Mob> mobs;
 
     public GameScreen(MudlandsGame mudlandsGame) {
@@ -47,8 +47,8 @@ public class GameScreen implements Screen {
         chunkManagerSystem = new ChunkManagerSystem(player,loader);
         moveSystem = new MoveSystem();
 
-        ground = new ArrayList<>();
-        passives = new ArrayList<>();
+        ground = new HashMap<>();
+        passives = new HashMap<>();
         mobs = new ArrayList<>();
         //ground.add(new Ground(0,0,new Texture(Gdx.files.internal("assets/textures/WATER.png")),0));
 
@@ -68,10 +68,10 @@ public class GameScreen implements Screen {
         System.err.println(" " + delta + "   " + passives.size());
         inputSystem.update(player, delta);
         mobs.add(player);
-        moveSystem.move(mobs, passives, delta);;
+        moveSystem.move(mobs, passives, ground,delta);;
         mobs.remove(player);
-        renderingSystem.update(ground, delta);
-        renderingSystem.update(passives,delta);
+        renderingSystem.update(ground.values(), delta);
+        renderingSystem.update(passives.values(),delta);
         renderingSystem.updatePlayer(player,delta);
         inventoryRendering.oneTick();
         craftingRendering.oneTick(); //TODO add one class that manages opening crafting and inventory or make systems for them
