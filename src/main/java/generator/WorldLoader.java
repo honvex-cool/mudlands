@@ -3,10 +3,9 @@ package generator;
 import utils.Config;
 import utils.Pair;
 import utils.SaveStruct;
-import world.EntityTag;
+import entities.EntityTag;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.util.*;
 
 public class WorldLoader {

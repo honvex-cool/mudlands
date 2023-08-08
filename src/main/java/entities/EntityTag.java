@@ -1,4 +1,4 @@
-package world;
+package entities;
 
 import components.Component;
 

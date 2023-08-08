@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import components.Component;
-import components.PlayerComponent;
 import components.PositionComponent;
 import components.RenderComponent;
 import entities.Entity;

@@ -23,17 +23,6 @@ public class MoveSystem {
             float y = mob.positionComponent.getY();
             float newX = x + velocity.getFirst() * deltaTime * modifier;
             float newY = y + velocity.getSecond() * deltaTime * modifier;
-            /*var all = Stream.concat(mobs.stream(), passives.stream());
-            boolean collision = all.anyMatch(
-                entity -> entity != mob && entity.isActive() && colliding(
-                    newX,
-                    newY,
-                    mob.getRadius(),
-                    entity.positionComponent.getX(),
-                    entity.positionComponent.getY(),
-                    entity.getRadius()
-                )
-            );*/
             Passive passive = passives.get(new Pair<>((int)Math.floor(newX),(int)Math.floor(newY)));
             if(passive != null && passive.isActive())
                 continue;
@@ -41,12 +30,4 @@ public class MoveSystem {
             mob.positionComponent.setY(newY);
         }
     }
-
-    /*private static boolean colliding(float firstX, float firstY, float firstRadius, float secondX, float secondY, float secondRadius) {
-        float xDiff = firstX - secondX;
-        float yDiff = firstY - secondY;
-        float squaredDistance = xDiff * xDiff + yDiff * yDiff;
-        float radiusSum = firstRadius + secondRadius;
-        return squaredDistance <= radiusSum * radiusSum;
-    }*/
 }

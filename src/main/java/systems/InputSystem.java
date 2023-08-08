@@ -1,15 +1,9 @@
 package systems;
 
-import components.Component;
-import components.PlayerComponent;
-import components.PositionComponent;
 import components.VelocityComponent;
-import entities.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import entities.Player;
-
-import java.util.Set;
 
 public class InputSystem {
 

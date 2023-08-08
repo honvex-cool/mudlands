@@ -1,15 +1,12 @@
 package systems;
 
-import components.Component;
-import components.PlayerComponent;
 import components.PositionComponent;
 import entities.*;
-import generator.FieldStruct;
 import generator.WorldLoader;
 import utils.Config;
 import utils.Pair;
 import utils.SaveStruct;
-import world.EntityTag;
+import entities.EntityTag;
 
 import java.util.*;
 

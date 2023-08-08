@@ -1,6 +1,6 @@
 package utils;
 
-import world.EntityTag;
+import entities.EntityTag;
 
 import java.io.Serializable;
 import java.util.Map;

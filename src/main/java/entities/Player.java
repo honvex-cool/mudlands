@@ -5,7 +5,7 @@ import utils.Pair;
 
 public class Player extends Mob{
     public Player(float x, float y, Texture texture){
-        super(x,y,0.25f,texture,0);
+        super(x,y,texture,0);
     }
 
     @Override

@@ -6,11 +6,8 @@ import utils.Config;
 import utils.SaveStruct;
 
 public class Passive extends Entity implements Hitbox {
-    private float radius = 0.2f;
-
-    public Passive(float x, float y, float radius, Texture texture, int type) {
+    public Passive(float x, float y, Texture texture, int type) {
         super(x, y, Config.TILE_SIZE, texture, type);
-        this.radius = radius;
     }
 
     public Passive(SaveStruct saveStruct) {
@@ -27,10 +24,5 @@ public class Passive extends Entity implements Hitbox {
 
     public boolean isDefault() {
         return true;
-    }
-
-    @Override
-    public float getRadius() {
-        return this.radius;
     }
 }
