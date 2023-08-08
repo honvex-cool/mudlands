@@ -52,6 +52,7 @@ public class InventoryRendering {
     private int movingToJ = -1;
 
     private Map<Pair<Integer, Integer>, ImageButton> imageButtonMap = new HashMap<>();
+
     public InventoryRendering() {
         skin = new Skin(Gdx.files.internal(UISKIN));
         spriteBatch = new SpriteBatch();
@@ -82,7 +83,7 @@ public class InventoryRendering {
 
         leftTable.add(useButton).row();
         leftTable.add(destroyButton).row();
-        destroyButton.addListener(new InputListener(){
+        destroyButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 handleDestroyButton();
@@ -93,10 +94,10 @@ public class InventoryRendering {
         leftTable.add(equipButton).row();
         leftTable.add(moveButton).row();
 
-        moveButton.addListener(new InputListener(){
+        moveButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(lastClickedJ != -1){
+                if(lastClickedJ != -1) {
                     movingFromI = lastClickedI;
                     movingFromJ = lastClickedJ;
                     moving = true;
@@ -113,7 +114,7 @@ public class InventoryRendering {
         inventoryTable = new Table();
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
             for(int col = 0; col < INVENTORY_WIDTH; col++) {
-                ImageButton inventorySlot = createInventorySlot(inventory.get(row, col).getObjectType());
+                ImageButton inventorySlot = createInventorySlot(inventory.get(row, col).getItemType());
                 inventoryTable.add(inventorySlot).size(64).pad(5);
                 imageButtonMap.put(new Pair<>(row, col), inventorySlot);
                 int finalRow = row;
@@ -121,7 +122,7 @@ public class InventoryRendering {
                 inventorySlot.addListener(new InputListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(moving){
+                        if(moving) {
                             movingToI = finalRow;
                             movingToJ = finalCol;
                         }
@@ -163,22 +164,20 @@ public class InventoryRendering {
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
         if(lastClickedI != -1) {
-            objectLabel.setText("Name: " + inventory.get(lastClickedI, lastClickedJ).getObjectType().name());
+            objectLabel.setText("Name: " + inventory.get(lastClickedI, lastClickedJ).getItemType().name());
             edible.setText("Edible: " + inventory.get(lastClickedI, lastClickedJ).isEdible());
             equippable.setText("Can Equip: " + inventory.get(lastClickedI, lastClickedJ).isEquippable());
             number.setText("Number: " + inventory.get(lastClickedI, lastClickedJ).getNumber());
-        }
-        else {
+        } else {
             objectLabel.setText("Name: ");
             edible.setText("Edible: ");
             equippable.setText("Can Equip: ");
             number.setText("Number: ");
         }
-        if(moving && movingToI != -1){
+        if(moving && movingToI != -1) {
             InventoryField tmp = new InventoryField();
             InventoryField from = inventory.get(movingFromI, movingFromJ);
             ImageButton fromImage = imageButtonMap.get(new Pair<>(movingFromI, movingFromJ));
-
 
 
             InventoryField to = inventory.get(movingToI, movingToJ);
@@ -189,14 +188,14 @@ public class InventoryRendering {
 
             //TODO this is done very badly, we are making to many textures and we are not tiding up
 
-            Texture upTexture = new Texture("assets/inventory/" + from.getObjectType().name() + ".png");
+            Texture upTexture = new Texture("assets/inventory/" + from.getItemType().name() + ".png");
             ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
             Texture downTexture = new Texture("assets/inventory/NONE.png");
             style.up = new TextureRegionDrawable(upTexture);
             style.down = new TextureRegionDrawable(downTexture);
             fromImage.setStyle(style);
 
-            Texture upTexture1 = new Texture("assets/inventory/" + to.getObjectType().name() + ".png");
+            Texture upTexture1 = new Texture("assets/inventory/" + to.getItemType().name() + ".png");
             ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
             Texture downTexture1 = new Texture("assets/inventory/NONE.png");
             style1.up = new TextureRegionDrawable(upTexture1);
@@ -228,11 +227,11 @@ public class InventoryRendering {
         lastClickedJ = col;
     }
 
-    private void handleDestroyButton(){
-        if(lastClickedI == -1){
+    private void handleDestroyButton() {
+        if(lastClickedI == -1) {
             return;
         }
-        inventory.removeObject(lastClickedI, lastClickedJ);
+        inventory.removeItem(lastClickedI, lastClickedJ);
         Texture downTexture = new Texture("assets/inventory/NONE.png"); //TODO very bad implementation -> we are not getting rid of not used Textures
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         Pair<Integer, Integer> coords = new Pair<>(lastClickedI, lastClickedJ);
