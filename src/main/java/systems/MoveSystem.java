@@ -1,13 +1,12 @@
 package systems;
 
-import entities.Ground;
+import entities.grounds.Ground;
 import entities.Mob;
-import entities.Passive;
+import entities.passives.Passive;
 import utils.Pair;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class MoveSystem {
     public MoveSystem() {

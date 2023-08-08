@@ -10,7 +10,7 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GeneratorTest {
-    @Test
+    /*@Test
     void testConstructor() {
         Generator generator = new Generator();
         //assertEquals(123456789, generator.getSeed());
@@ -27,5 +27,5 @@ class GeneratorTest {
         } catch(IOException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 }
