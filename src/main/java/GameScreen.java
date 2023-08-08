@@ -1,17 +1,16 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import components.PositionComponent;
-import components.RenderComponent;
-import components.VelocityComponent;
 import entities.*;
-import generator.GroundType;
+import entities.grounds.Ground;
+import entities.passives.Passive;
 import generator.WorldLoader;
 import inventory.InventoryRendering;
 import systems.*;
+import utils.AssetManager;
+import utils.Debug;
 import utils.Pair;
 
 import java.io.IOException;
@@ -20,6 +19,8 @@ import java.util.*;
 public class GameScreen implements Screen {
     private final WorldLoader loader = new WorldLoader();
     private final SpriteBatch spriteBatch = new SpriteBatch();
+    private final AssetManager assetManager = new AssetManager("assets");
+    private final UniversalLoader entityLoader;
     private final InventoryRendering inventoryRendering;
     private final CraftingRendering craftingRendering;
     private RenderingSystem renderingSystem;
@@ -28,23 +29,40 @@ public class GameScreen implements Screen {
     private MoveSystem moveSystem;
 
     private Player player;
-    private Map<Pair<Integer,Integer>,Ground> ground;
-    private Map<Pair<Integer,Integer>,Passive> passives;
+    private Map<Pair<Integer,Integer>, Ground> ground;
+    private Map<Pair<Integer,Integer>, Passive> passives;
     private Collection<Mob> mobs;
 
     public GameScreen(MudlandsGame mudlandsGame) {
+        entityLoader = new UniversalLoader(
+            EntityMappings.GROUND_MAP,
+            EntityMappings.PASSIVE_MAP,
+            EntityMappings.MOB_MAP,
+            assetManager
+        );
 
-        loader.createWorld(42, "testWorld");
+        if(Debug.LOAD_WORLD) {
+            try {
+                loader.loadWorld("testWorld");
+                player = entityLoader.loadPlayer(loader.getPlayerSaveStruct());
+            } catch(IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            loader.createWorld(42, "testWorld");
+            player = new Player(assetManager);
+        }
 
         inventoryRendering = new InventoryRendering();
         craftingRendering = new CraftingRendering();
 
-        player = new Player(0, 0, new Texture(Gdx.files.internal("assets/textures/Player.png")));
-
         renderingSystem = new RenderingSystem(spriteBatch);
         inputSystem = new InputSystem();
-        chunkManagerSystem = new ChunkManagerSystem(player,loader);
+
+
+        chunkManagerSystem = new ChunkManagerSystem(player,loader,entityLoader);
         moveSystem = new MoveSystem();
+
 
         ground = new HashMap<>();
         passives = new HashMap<>();
@@ -64,7 +82,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         chunkManagerSystem.update(ground,passives,mobs);
-        System.err.println(" " + delta + "   " + passives.size());
+        Debug.log(delta, passives.size());
         inputSystem.update(player, delta);
         mobs.add(player);
         moveSystem.move(mobs, passives, ground,delta);;
@@ -95,6 +113,8 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         spriteBatch.dispose();
+        assetManager.dispose();
+        loader.setPlayerSaveStruct(entityLoader.savePlayer(player));
         try {
             loader.saveWorld();
         } catch(IOException e) {

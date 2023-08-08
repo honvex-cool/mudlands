@@ -1,11 +1,18 @@
 package entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import utils.AssetManager;
 import utils.Pair;
 
 public class Player extends Mob{
-    public Player(float x, float y, Texture texture){
-        super(x,y,texture,0);
+
+    public Player() {
+        super();
+    }
+
+    public Player(AssetManager assetManager) {
+        super();
+        loadAssets(assetManager);
     }
 
     @Override

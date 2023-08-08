@@ -127,12 +127,12 @@ public class WorldLoader {
         for(var key:map.keySet()) {
             FieldStruct fieldStruct = map.get(key);
             int type = switch(fieldStruct.groundType){
-                case WATER -> 0;
-                case SAND -> 1;
-                case GRASS -> 2;
-                case MUD -> 3;
-                case STONE -> 4;
-                case DIRT -> 5;
+                case WATER -> 1;
+                case SAND -> 2;
+                case GRASS -> 3;
+                case MUD -> 4;
+                case STONE -> 5;
+                case DIRT -> 6;
             };
             set.add(new SaveStruct(EntityTag.GROUND,type, key.getFirst(), key.getSecond(), new HashMap<>()));
 

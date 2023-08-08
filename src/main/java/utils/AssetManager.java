@@ -29,4 +29,8 @@ public class AssetManager {
     }
 
 
+    public void dispose() {
+        for(Sprite sprite : sprites.values())
+            sprite.getTexture().dispose();
+    }
 }

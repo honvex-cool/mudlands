@@ -1,5 +1,7 @@
 package entities;
 
+import entities.grounds.Ground;
+import entities.passives.Passive;
 import utils.AssetManager;
 import utils.SaveStruct;
 
@@ -9,8 +11,9 @@ public class UniversalLoader {
     private final EntityLoader<Ground> groundLoader;
     private final EntityLoader<Passive> passiveLoader;
     private final EntityLoader<Mob> mobLoader;
+    private final EntityLoader<Player> playerLoader;
 
-    private UniversalLoader(
+    public UniversalLoader(
         Map<Integer, Class<? extends Ground>> groundMap,
         Map<Integer, Class<? extends Passive>> passiveMap,
         Map<Integer, Class<? extends Mob>> mobMap,
@@ -19,6 +22,7 @@ public class UniversalLoader {
         groundLoader = new EntityLoader<>(groundMap, assetManager);
         passiveLoader = new EntityLoader<>(passiveMap, assetManager);
         mobLoader = new EntityLoader<>(mobMap, assetManager);
+        playerLoader = new EntityLoader<>(Map.of(0, Player.class), assetManager);
     }
 
     public Ground loadGround(SaveStruct struct) {
@@ -26,7 +30,9 @@ public class UniversalLoader {
     }
 
     public SaveStruct saveGround(Ground ground) {
-        return groundLoader.structFromEntity(ground);
+        SaveStruct struct = groundLoader.structFromEntity(ground);
+        struct.entityTag = EntityTag.GROUND;
+        return struct;
     }
 
     public Passive loadPassive(SaveStruct struct) {
@@ -34,7 +40,9 @@ public class UniversalLoader {
     }
 
     public SaveStruct savePassive(Passive passive) {
-        return passiveLoader.structFromEntity(passive);
+        SaveStruct struct = passiveLoader.structFromEntity(passive);
+        struct.entityTag = EntityTag.PASSIVE;
+        return struct;
     }
 
     public Mob loadMob(SaveStruct struct) {
@@ -42,6 +50,18 @@ public class UniversalLoader {
     }
 
     public SaveStruct saveMob(Mob mob) {
-        return mobLoader.structFromEntity(mob);
+        SaveStruct struct = mobLoader.structFromEntity(mob);
+        struct.entityTag = EntityTag.MOB;
+        return struct;
+    }
+
+    public Player loadPlayer(SaveStruct struct) {
+        return playerLoader.entityFromStruct(struct);
+    }
+
+    public SaveStruct savePlayer(Player player) {
+        SaveStruct struct = playerLoader.structFromEntity(player);
+        struct.entityTag = EntityTag.PLAYER;
+        return struct;
     }
 }
