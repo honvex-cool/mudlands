@@ -1,5 +1,6 @@
 package systems;
 
+import actions.ActionType;
 import components.PositionComponent;
 import entities.*;
 import entities.grounds.Ground;
@@ -29,17 +30,8 @@ public class ChunkManagerSystem{
         this.entityLoader = entityLoader;
         loaded = new HashSet<>();
     }
-    public void update(Map<Pair<Integer,Integer>, Ground> grounds, Map<Pair<Integer,Integer>, Passive> passives, Collection<Mob> mobs) {
-        var curr_chunk = player_position.getChunk();
-        if(curr_chunk.equals(central_chunk_coordinates)) {
-            return;
-        }
-        Set<Pair<Integer,Integer>> expected = getSurroundingChunks(curr_chunk);
-        Set<Pair<Integer,Integer>> unloading_chunks,loading_chunks;
 
-        unloading_chunks = new HashSet<>(loaded);
-        unloading_chunks.removeAll(expected);
-
+    private void unload(Map<Pair<Integer,Integer>, Ground> grounds, Map<Pair<Integer,Integer>, Passive> passives, Collection<Mob> mobs, Set<Pair<Integer,Integer>> unloading_chunks){
         Set<Mob> to_remove = new HashSet<>();
 
         for(var pair:unloading_chunks) {
@@ -69,10 +61,9 @@ public class ChunkManagerSystem{
         }
 
         mobs.removeAll(to_remove);
+    }
 
-        loading_chunks = new HashSet<>(expected);
-        loading_chunks.removeAll(loaded);
-
+    public void load(Map<Pair<Integer,Integer>, Ground> grounds, Map<Pair<Integer,Integer>, Passive> passives, Collection<Mob> mobs, Set<Pair<Integer,Integer>> loading_chunks){
         for(var pair:loading_chunks){
             var set = worldLoader.loadChunk(pair);
             for(SaveStruct struct:set){
@@ -83,8 +74,35 @@ public class ChunkManagerSystem{
                 }
             }
         }
+    }
+    public void update(Map<Pair<Integer,Integer>, Ground> grounds, Map<Pair<Integer,Integer>, Passive> passives, Collection<Mob> mobs) {
+
+        handleDestroyed(passives,mobs);
+
+        var curr_chunk = player_position.getChunk();
+        if(curr_chunk.equals(central_chunk_coordinates)) {
+            return;
+        }
+        Set<Pair<Integer,Integer>> expected = getSurroundingChunks(curr_chunk);
+        Set<Pair<Integer,Integer>> unloading_chunks,loading_chunks;
+
+        unloading_chunks = new HashSet<>(loaded);
+        unloading_chunks.removeAll(expected);
+
+        unload(grounds,passives,mobs,unloading_chunks);
+
+        loading_chunks = new HashSet<>(expected);
+        loading_chunks.removeAll(loaded);
+
+        load(grounds,passives,mobs,loading_chunks);
+
         central_chunk_coordinates = curr_chunk;
         loaded = expected;
+    }
+
+    public void unloadAll(Map<Pair<Integer,Integer>, Ground> grounds, Map<Pair<Integer,Integer>, Passive> passives, Collection<Mob> mobs){
+        handleDestroyed(passives,mobs);
+        unload(grounds,passives,mobs,loaded);
     }
     private Set<Pair<Integer,Integer>> getSurroundingChunks(Pair<Integer,Integer> center){
         Set<Pair<Integer,Integer>> set = new HashSet<>();
@@ -94,5 +112,26 @@ public class ChunkManagerSystem{
             }
         }
         return set;
+    }
+
+    private void handleDestroyed(Map<Pair<Integer,Integer>, Passive> passives, Collection<Mob> mobs){
+        Set<Pair<Integer,Integer>> passivesToDelete = new HashSet<>();
+        for(var key:passives.keySet()) {
+            passives.get(key).react(ActionType.HIT,player);
+            if(passives.get(key).isDestroyed()){
+                SaveStruct struct = passives.get(key).getSuccessor();
+                switch(struct.entityTag){
+                    case PASSIVE -> {
+                        passives.put(key,entityLoader.loadPassive(struct));
+                        continue;
+                    }
+                    case MOB -> mobs.add(entityLoader.loadMob(struct));
+                }
+                passivesToDelete.add(key);
+            }
+        }
+        for(var key:passivesToDelete) {
+            passives.remove(key);
+        }
     }
 }
