@@ -14,6 +14,7 @@ public class RenderComponent extends Component {
         this.size = size;
         this.texture = texture;
         this.sprite = new Sprite(texture);
+        this.sprite.setSize(size,size);
     }
 
     public float getSize() {

@@ -1,5 +1,6 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -7,43 +8,52 @@ import components.PlayerComponent;
 import components.PositionComponent;
 import components.RenderComponent;
 import components.VelocityComponent;
-import entities.Entity;
-import entities.EntityManager;
+import entities.*;
+import generator.GroundType;
 import generator.WorldLoader;
+import inventory.InventoryRendering;
 import systems.*;
-import world.WorldMap;
+import utils.Pair;
 
 import java.io.IOException;
+import java.util.*;
 
 public class GameScreen implements Screen {
-    private final EntityManager entityManager;
     private final WorldLoader loader = new WorldLoader();
-
     private final SpriteBatch spriteBatch = new SpriteBatch();
     private final InventoryRendering inventoryRendering;
     private final CraftingRendering craftingRendering;
+    private RenderingSystem renderingSystem;
+    private InputSystem inputSystem;
+    private ChunkManagerSystem chunkManagerSystem;
+    private MoveSystem moveSystem;
+
+    private Player player;
+    private Map<Pair<Integer,Integer>,Ground> ground;
+    private Map<Pair<Integer,Integer>,Passive> passives;
+    private Collection<Mob> mobs;
 
     public GameScreen(MudlandsGame mudlandsGame) {
-        loader.createWorld(42, "testWorld");
 
-        WorldMap worldMap = new WorldMap(loader);
+        loader.createWorld(42, "testWorld");
 
         inventoryRendering = new InventoryRendering();
         craftingRendering = new CraftingRendering();
 
-        entityManager = new EntityManager();
-        entityManager.addSystem(new GroundRenderingSystem(worldMap, spriteBatch));
-        entityManager.addSystem(new RenderingSystem(spriteBatch));
-        entityManager.addSystem(new MovementSystem());
-        entityManager.addSystem(new InputSystem());
-        entityManager.addSystem(new DeathSystem());
+        player = new Player(0, 0, new Texture(Gdx.files.internal("assets/textures/Player.png")));
 
+        renderingSystem = new RenderingSystem(spriteBatch);
+        inputSystem = new InputSystem();
+        chunkManagerSystem = new ChunkManagerSystem(player,loader);
+        moveSystem = new MoveSystem();
 
-        Entity player = entityManager.createEntity();
-        player.add(new PlayerComponent());
-        player.add(new PositionComponent(0f, 0f));
-        player.add(new VelocityComponent());
-        player.add(new RenderComponent(50, new Texture(Gdx.files.internal("assets/textures/Player.png"))));
+        ground = new HashMap<>();
+        passives = new HashMap<>();
+        mobs = new ArrayList<>();
+        //ground.add(new Ground(0,0,new Texture(Gdx.files.internal("assets/textures/WATER.png")),0));
+
+        //entityManager.addSystem(new GroundRenderingSystem(worldMap, spriteBatch));
+        //entityManager.addSystem(new DeathSystem());
     }
 
     @Override
@@ -54,8 +64,15 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        float deltaTime = Gdx.graphics.getDeltaTime();
-        entityManager.update(deltaTime);
+        chunkManagerSystem.update(ground,passives,mobs);
+        System.err.println(" " + delta + "   " + passives.size());
+        inputSystem.update(player, delta);
+        mobs.add(player);
+        moveSystem.move(mobs, passives, ground,delta);;
+        mobs.remove(player);
+        renderingSystem.update(ground.values(), delta);
+        renderingSystem.update(passives.values(),delta);
+        renderingSystem.updatePlayer(player,delta);
         inventoryRendering.oneTick();
         craftingRendering.oneTick(); //TODO add one class that manages opening crafting and inventory or make systems for them
     }

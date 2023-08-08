@@ -8,10 +8,13 @@ import components.PlayerComponent;
 import components.PositionComponent;
 import components.RenderComponent;
 import entities.Entity;
+import entities.Player;
+import utils.Config;
 
+import java.util.Collection;
 import java.util.Set;
 
-public class RenderingSystem extends RepetitiveSystem {
+public class RenderingSystem {
 
     private final OrthographicCamera camera;
     private final SpriteBatch spriteBatch;
@@ -27,36 +30,34 @@ public class RenderingSystem extends RepetitiveSystem {
         camera.update();
     }
 
-
-    @Override
-    protected void begin() {
+    public void update(Collection<? extends Entity> entities, float deltaTime) {
+        if(entities == null)
+            return;
+        spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-    }
-
-    @Override
-    public void updateOne(Entity entity, float deltaTime) {
-        float tileSize = Gdx.graphics.getWidth() / 16f;
-        PositionComponent position = entity.get(PositionComponent.class);
-        RenderComponent render = entity.get(RenderComponent.class);
-
-        if(entity.has(PlayerComponent.class)) {
-            camera.position.set(position.getX() * tileSize, position.getY() * tileSize, 0);
-            camera.update();
-            spriteBatch.setProjectionMatrix(camera.combined);
+        for(Entity entity : entities) {
+            PositionComponent position = entity.positionComponent;
+            RenderComponent render = entity.renderComponent;
+            render.getSprite().setPosition(position.getX() * Config.TILE_SIZE, position.getY() * Config.TILE_SIZE);
+            render.getSprite().draw(spriteBatch);
         }
-
-        render.getSprite().setPosition(position.getX() * tileSize, position.getY() * tileSize);
-        render.getSprite().setSize(tileSize / 2, tileSize / 2);
-        render.getSprite().draw(spriteBatch);
-    }
-
-    @Override
-    protected void end() {
         spriteBatch.end();
     }
 
-    @Override
-    protected Set<Class<? extends Component>> requirements() {
-        return REQUIRED_COMPONENTS;
+    public void updatePlayer(Player player, float deltaTime) {
+        spriteBatch.begin();
+
+        PositionComponent position = player.positionComponent;
+        RenderComponent render = player.renderComponent;
+
+        camera.position.set(position.getX() * Config.TILE_SIZE, position.getY() * Config.TILE_SIZE, 0);
+        camera.update();
+        spriteBatch.setProjectionMatrix(camera.combined);
+
+        render.getSprite().setPosition(position.getX() * Config.TILE_SIZE, position.getY() * Config.TILE_SIZE);
+        render.getSprite().draw(spriteBatch);
+
+        spriteBatch.end();
     }
+
 }
