@@ -1,5 +1,6 @@
 package generator;
 
+import entities.Player;
 import utils.Config;
 import utils.Pair;
 import utils.SaveStruct;
@@ -13,11 +14,13 @@ public class WorldLoader {
     private Generator generator;
     private Map<Pair<Integer, Integer>, Set<SaveStruct>> changes;
     private String world_name;
+    private SaveStruct player;
 
     public WorldLoader() {
-        this.generator = null;
         this.changes = null;
         this.generator = null;
+        this.world_name = null;
+        this.player = null;
     }
 
     public void createWorld(Integer seed, String world_name) {
@@ -31,6 +34,7 @@ public class WorldLoader {
         this.generator = new Generator(seed);
         this.world_name = world_name;
         this.changes = new HashMap<>();
+        this.player = new SaveStruct(EntityTag.PLAYER,0,0,0,new HashMap<>());
     }
 
     public void loadWorld(String world_name) throws IOException, ClassNotFoundException {
@@ -50,6 +54,7 @@ public class WorldLoader {
         this.generator = new Generator(data.getSeed());
         this.world_name = world_name;
         this.changes = data.getChanges();
+        this.player = data.getPlayerSavestruct();
     }
 
     public void saveWorld() throws IOException {
@@ -60,32 +65,19 @@ public class WorldLoader {
             file.delete();
         file.createNewFile();
 
-        WorldData data = new WorldData(generator.getSeed(), changes);
+        WorldData data = new WorldData(generator.getSeed(), player, changes);
 
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
         objectOutputStream.writeObject(data);
         objectOutputStream.flush();
         objectOutputStream.close();
-
-        /*FileWriter fileWriter = new FileWriter(file);
-        fileWriter.write(String.valueOf(generator.getSeed()));
-        fileWriter.write("\n");
-
-        for(var chunk:changes.keySet()){
-            fileWriter.write("C\n"+String.valueOf(chunk.getFirst())+" "+String.valueOf(chunk.getSecond())+"\n");
-        }
-        fileWriter.close();*/
     }
 
     public Set<SaveStruct> loadChunk(Pair<Integer,Integer> chunk) {
-        return loadChunk(chunk.getFirst(),chunk.getSecond());
-    }
-
-    public Set<SaveStruct> loadChunk(int chunk_x, int chunk_y) {
         //generate chunk
-        var map = generator.generateChunk(chunk_x, chunk_y);
-        var diffs = changes.get(new Pair(chunk_x, chunk_y));
+        var map = generator.generateChunk(chunk);
+        var diffs = changes.get(chunk);
         Set<SaveStruct> answer = new HashSet<>();
         if(diffs != null) {
             //apply changes
@@ -93,7 +85,9 @@ public class WorldLoader {
                 if(saveStruct.entityTag == EntityTag.PASSIVE) {
                     Pair<Integer, Integer> coords = new Pair<>((int)Math.floor(saveStruct.x), (int) Math.floor(saveStruct.y));
                     map.get(coords).objectType = ObjectType.NONE;
-                    answer.add(saveStruct);
+                    if(saveStruct.type != -1){
+                        answer.add(saveStruct);
+                    }
                 }
                 else{
                     answer.add(saveStruct);
@@ -104,23 +98,27 @@ public class WorldLoader {
         return answer;
     }
 
-    public void saveChunk(Pair<Integer,Integer> chunk, Set<SaveStruct> passive) {
-        saveChunk(chunk.getFirst(),chunk.getSecond(),passive);
-    }
-    public void saveChunk(int chunk_x, int chunk_y, Set<SaveStruct> passive) {
+    public void saveChunk(Pair<Integer,Integer> chunk, Map<Pair<Integer,Integer>,SaveStruct> passives, Set<SaveStruct> mobs) {
         //generate chunk
-        //var generated = getSaveStructs(generator.generateChunk(chunk_x, chunk_y));
+        var generated = generator.generateChunk(chunk);
 
         //calculate differences between generation and state
-        /*Set<SaveStruct> diffs = new HashSet<>();
-        for(var entity : passive) {
-            if(entity) {
-                diffs.put(new Pair(key), new FieldStruct(state.get(key)));
+        Set<SaveStruct> diffs = new HashSet<>();
+        for(var key : generated.keySet()) {
+            if(passives.containsKey(key)) {
+                if(passives.get(key).type >= 0){
+                    diffs.add(passives.get(key));
+                }
             }
-        }*/
+            else {
+                diffs.add(new SaveStruct(EntityTag.PASSIVE,-1, key.getFirst(),key.getSecond(),new HashMap<>()));
+            }
+        }
+
+        diffs.addAll(mobs);
 
         //save differences
-        changes.put(new Pair(chunk_x, chunk_y), passive);
+        changes.put(chunk, diffs);
     }
 
     public Set<SaveStruct> getSaveStructs(Map<Pair<Integer,Integer>,FieldStruct> map){
@@ -140,15 +138,22 @@ public class WorldLoader {
 
             type = switch(fieldStruct.objectType){
                 case NONE -> -1;
-                case TREE -> 0;
-                case STONE -> 1;
-                default -> -1;
+                case TREE -> 1;
+                case STONE -> 2;
+                default -> 0;
             };
             if(type != -1){
-                set.add(new SaveStruct(EntityTag.PASSIVE,type, key.getFirst(), key.getSecond(), new HashMap<>()));
+                set.add(new SaveStruct(EntityTag.PASSIVE,-1*type, key.getFirst(), key.getSecond(), new HashMap<>()));
             }
         }
 
         return set;
+    }
+
+    public SaveStruct getPlayerSaveStruct() {
+        return player;
+    }
+    public void setPlayerSaveStruct(SaveStruct playerSaveStruct){
+        this.player = playerSaveStruct;
     }
 }

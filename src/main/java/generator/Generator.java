@@ -28,12 +28,12 @@ public class Generator {
         return seed;
     }
 
-    public Map<Pair<Integer, Integer>, FieldStruct> generateChunk(int chunk_x, int chunk_y) { //object is temporary and will be replaced be appropriate class
+    public Map<Pair<Integer, Integer>, FieldStruct> generateChunk(Pair<Integer,Integer> chunk) { //object is temporary and will be replaced be appropriate class
         var map = new HashMap<Pair<Integer, Integer>, FieldStruct>();
         for(int y = 0; y < Config.CHUNK_SIZE; y++) {
             for(int x = 0; x < Config.CHUNK_SIZE; x++) {
-                int rx = x + chunk_x * Config.CHUNK_SIZE;
-                int ry = y + chunk_y * Config.CHUNK_SIZE;
+                int rx = x + chunk.getFirst() * Config.CHUNK_SIZE;
+                int ry = y + chunk.getSecond() * Config.CHUNK_SIZE;
                 double height = height_noise.getNoise(rx, ry) + 0.2 * Math.abs(height_noise2.getNoise(rx, ry));
                 double humidity = humidity_noise.getNoise(rx, ry) + 0.2 * Math.abs(humidity_noise2.getNoise(rx, ry));
                 GroundType ground = getGroundType(height, humidity);
