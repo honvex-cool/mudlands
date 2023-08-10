@@ -117,7 +117,7 @@ public class ChunkManagerSystem{
     private void handleDestroyed(Map<Pair<Integer,Integer>, Passive> passives, Collection<Mob> mobs){
         Set<Pair<Integer,Integer>> passivesToDelete = new HashSet<>();
         for(var key:passives.keySet()) {
-            passives.get(key).react(ActionType.HIT,player);
+            //passives.get(key).react(ActionType.HIT,player);
             if(passives.get(key).isDestroyed()){
                 SaveStruct struct = passives.get(key).getSuccessor();
                 switch(struct.entityTag){

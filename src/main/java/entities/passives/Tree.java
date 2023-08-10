@@ -9,11 +9,6 @@ import java.util.HashMap;
 
 public class Tree extends Passive {
     @Override
-    protected String spriteName() {
-        return "DIRT";
-    }
-
-    @Override
     public void react(ActionType actionType, Mob actor) {
         super.react(actionType,actor);
         if(hp<=0){

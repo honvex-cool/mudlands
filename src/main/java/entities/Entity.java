@@ -40,7 +40,7 @@ public class Entity implements Savable, AssetUser {
         renderComponent = new RenderComponent(Config.TILE_SIZE, assetManager.getSprite(spriteName()));
     }
     protected String spriteName() {
-        return getClass().getSimpleName().toUpperCase();
+        return getClass().getSimpleName().toLowerCase();
     }
 
     public void react(ActionType actionType, Mob actor){

@@ -67,7 +67,7 @@ public class GameScreen implements Screen {
         ground = new HashMap<>();
         passives = new HashMap<>();
         mobs = new ArrayList<>();
-        //ground.add(new Ground(0,0,new Texture(Gdx.files.internal("assets/textures/WATER.png")),0));
+        //ground.add(new Ground(0,0,new Texture(Gdx.files.internal("assets/textures/water.png")),0));
 
         //entityManager.addSystem(new GroundRenderingSystem(worldMap, spriteBatch));
         //entityManager.addSystem(new DeathSystem());
