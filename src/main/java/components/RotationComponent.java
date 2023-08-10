@@ -1,4 +1,4 @@
-package components;
+ package components;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import utils.Pair;
@@ -11,7 +11,10 @@ public class RotationComponent extends Component{
     }
 
     public void setRotation(float rotation){
-        this.rotation = rotation;
+        this.rotation = rotation%360f;
+        if(this.rotation < 0){
+            this.rotation += 360f;
+        }
     }
 
     public void setRotationFromVector(Pair<Float,Float> vector){

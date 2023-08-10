@@ -8,6 +8,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RotationComponentTest {
     @Test
+    void testGettersSetters(){
+        RotationComponent rotationComponent = new RotationComponent();
+        assertEquals(90f,rotationComponent.getRotation(),Debug.TEST_DELTA);
+
+        rotationComponent.setRotation(20.5f);
+        assertEquals(20.5f,rotationComponent.getRotation(),Debug.TEST_DELTA);
+
+        rotationComponent.setRotation(-20.5f);
+        assertEquals(339.5f,rotationComponent.getRotation(),Debug.TEST_DELTA);
+    }
+    @Test
     void testRotationFromVector(){
         RotationComponent rotationComponent = new RotationComponent();
 
