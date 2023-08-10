@@ -15,18 +15,29 @@ public class MoveSystem {
     public void move(Collection<Mob> mobs, Map<Pair<Integer,Integer>,Passive> passives, Map<Pair<Integer,Integer>, Ground> grounds, float deltaTime) {
         for(var mob : mobs) {
             Pair<Float, Float> velocity = mob.velocityComponent.getAsPair();
+            mob.rotationComponent.setRotationFromVector(velocity);
             if(velocity == null || velocity.equals(new Pair<>(0,0)))
                 continue;
-            float modifier = grounds.get(mob.positionComponent.getAsPair()).getSpeedModifier();
-            float x = mob.positionComponent.getX();
-            float y = mob.positionComponent.getY();
-            float newX = x + velocity.getFirst() * deltaTime * modifier;
-            float newY = y + velocity.getSecond() * deltaTime * modifier;
-            Passive passive = passives.get(new Pair<>((int)Math.floor(newX),(int)Math.floor(newY)));
-            if(passive != null && passive.isActive())
-                continue;
-            mob.positionComponent.setX(newX);
-            mob.positionComponent.setY(newY);
+            if(!tryMove(mob,velocity,passives,grounds,deltaTime)){
+                if(!tryMove(mob,new Pair<>(velocity.getFirst(),0f),passives,grounds,deltaTime)){
+                    tryMove(mob,new Pair<>(0f,velocity.getSecond()),passives,grounds,deltaTime);
+                }
+            }
         }
+    }
+
+    //returns true on success
+    boolean tryMove(Mob mob, Pair<Float,Float> velocity, Map<Pair<Integer,Integer>,Passive> passives, Map<Pair<Integer,Integer>, Ground> grounds, float deltaTime){
+        float modifier = grounds.get(mob.positionComponent.getAsPair()).getSpeedModifier();
+        float x = mob.positionComponent.getX();
+        float y = mob.positionComponent.getY();
+        float newX = x + velocity.getFirst() * deltaTime * modifier;
+        float newY = y + velocity.getSecond() * deltaTime * modifier;
+        Passive passive = passives.get(new Pair<>((int)Math.floor(newX),(int)Math.floor(newY)));
+        if(passive != null && passive.isActive())
+            return false;
+        mob.positionComponent.setX(newX);
+        mob.positionComponent.setY(newY);
+        return true;
     }
 }

@@ -7,6 +7,7 @@ import components.Component;
 import components.PositionComponent;
 import components.RenderComponent;
 import entities.Entity;
+import entities.Mob;
 import entities.Player;
 import utils.Config;
 
@@ -37,7 +38,14 @@ public class RenderingSystem {
         for(Entity entity : entities) {
             PositionComponent position = entity.positionComponent;
             RenderComponent render = entity.renderComponent;
-            render.getSprite().setPosition(position.getX() * Config.TILE_SIZE, position.getY() * Config.TILE_SIZE);
+            float renderX = position.getX() * Config.TILE_SIZE;
+            float renderY = position.getY() * Config.TILE_SIZE;
+            if(entity.getClass().isInstance(Mob.class)){
+                render.getSprite().setRotation(-90f + ((Mob) entity).rotationComponent.getRotation());
+                renderX -= Config.TILE_SIZE/2;
+                renderY -= Config.TILE_SIZE/2;
+            }
+            render.getSprite().setPosition(renderX, renderY);
             render.getSprite().draw(spriteBatch);
         }
         spriteBatch.end();
@@ -53,7 +61,9 @@ public class RenderingSystem {
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
 
-        render.getSprite().setPosition(position.getX() * Config.TILE_SIZE, position.getY() * Config.TILE_SIZE);
+        System.err.println(Config.TILE_SIZE + " " + position.getY() * Config.TILE_SIZE);
+        render.getSprite().setPosition(position.getX() * Config.TILE_SIZE - Config.TILE_SIZE/2, position.getY() * Config.TILE_SIZE-Config.TILE_SIZE/2);
+        render.getSprite().setRotation(-90f + player.rotationComponent.getRotation());
         render.getSprite().draw(spriteBatch);
 
         spriteBatch.end();

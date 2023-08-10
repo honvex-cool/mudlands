@@ -14,6 +14,7 @@ public class Entity implements Savable, AssetUser {
     public int type;
     protected int hp;
     protected SaveStruct successor=null;
+    protected SaveStruct defaultSuccessor = new SaveStruct(EntityTag.NONE,0, 0, 0, new HashMap<>());
     public boolean isGenerated() {
         return false;
     }
@@ -47,7 +48,9 @@ public class Entity implements Savable, AssetUser {
         if(actionType == ActionType.HIT){
             hp -= actor.getAttackStrength();
             if(hp <=0 ){
-                successor = new SaveStruct(EntityTag.NONE,0, positionComponent.getX(), positionComponent.getY(), new HashMap<>());
+                defaultSuccessor.x = positionComponent.getX();
+                defaultSuccessor.y = positionComponent.getY();
+                successor = defaultSuccessor;
             }
         }
     }

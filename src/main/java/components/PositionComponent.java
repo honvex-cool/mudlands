@@ -26,7 +26,6 @@ public class PositionComponent extends Component {
     public float getY() {
         return y;
     }
-
     public void setY(float y) {
         this.y = y;
     }

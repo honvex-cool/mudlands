@@ -6,14 +6,12 @@ import entities.Mob;
 import utils.SaveStruct;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Tree extends Passive {
     @Override
-    public void react(ActionType actionType, Mob actor) {
-        super.react(actionType,actor);
-        if(hp<=0){
-            generated = false;
-            successor = new SaveStruct(EntityTag.NONE,2, positionComponent.getX(),positionComponent.getY(),new HashMap<>());
-        }
+    public void construct(Map<Integer, Integer> struct, boolean generated) {
+        super.construct(struct, generated);
+        this.defaultSuccessor = new SaveStruct(EntityTag.PASSIVE,101,0,0,new HashMap<>());
     }
 }
