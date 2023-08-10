@@ -28,7 +28,7 @@ public class MoveSystem {
 
     //returns true on success
     boolean tryMove(Mob mob, Pair<Float,Float> velocity, Map<Pair<Integer,Integer>,Passive> passives, Map<Pair<Integer,Integer>, Ground> grounds, float deltaTime){
-        float modifier = grounds.get(mob.positionComponent.getAsPair()).getSpeedModifier();
+        float modifier = grounds.get(mob.positionComponent.getFieldAsPair()).getSpeedModifier();
         float x = mob.positionComponent.getX();
         float y = mob.positionComponent.getY();
         float newX = x + velocity.getFirst() * deltaTime * modifier;

@@ -27,6 +27,7 @@ public class GameScreen implements Screen {
     private InputSystem inputSystem;
     private ChunkManagerSystem chunkManagerSystem;
     private MoveSystem moveSystem;
+    private ActionManagerSystem actionManagerSystem;
 
     private Player player;
     private Map<Pair<Integer,Integer>, Ground> ground;
@@ -62,6 +63,7 @@ public class GameScreen implements Screen {
 
         chunkManagerSystem = new ChunkManagerSystem(player,loader,entityLoader);
         moveSystem = new MoveSystem();
+        actionManagerSystem = new ActionManagerSystem();
 
 
         ground = new HashMap<>();
@@ -84,6 +86,7 @@ public class GameScreen implements Screen {
         chunkManagerSystem.update(ground,passives,mobs);
         Debug.log(delta, passives.size());
         inputSystem.update(player, delta);
+        actionManagerSystem.update(player,passives,mobs);
         mobs.add(player);
         moveSystem.move(mobs, passives, ground,delta);;
         mobs.remove(player);

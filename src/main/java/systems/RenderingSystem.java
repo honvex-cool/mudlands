@@ -61,7 +61,6 @@ public class RenderingSystem {
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
 
-        System.err.println(Config.TILE_SIZE + " " + position.getY() * Config.TILE_SIZE);
         render.getSprite().setPosition(position.getX() * Config.TILE_SIZE - Config.TILE_SIZE/2, position.getY() * Config.TILE_SIZE-Config.TILE_SIZE/2);
         render.getSprite().setRotation(-90f + player.rotationComponent.getRotation());
         render.getSprite().draw(spriteBatch);

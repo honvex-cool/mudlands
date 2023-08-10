@@ -1,9 +1,11 @@
 package systems;
 
+import actions.ActionType;
 import components.VelocityComponent;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import entities.Player;
+import utils.Debug;
 
 public class InputSystem {
 
@@ -26,6 +28,10 @@ public class InputSystem {
             velocity.setY(-speed);
         } else {
             velocity.setY(0);
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
+            player.nextAction = ActionType.HIT;
         }
     }
 }
