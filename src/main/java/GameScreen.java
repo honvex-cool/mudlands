@@ -28,6 +28,7 @@ public class GameScreen implements Screen {
     private ChunkManagerSystem chunkManagerSystem;
     private MoveSystem moveSystem;
     private ActionManagerSystem actionManagerSystem;
+    private UpdateSystem updateSystem;
 
     private Player player;
     private Map<Pair<Integer,Integer>, Ground> ground;
@@ -69,6 +70,13 @@ public class GameScreen implements Screen {
         ground = new HashMap<>();
         passives = new HashMap<>();
         mobs = new ArrayList<>();
+
+        updateSystem = new UpdateSystem(
+            player,
+            Collections.unmodifiableCollection(ground.values()),
+            Collections.unmodifiableCollection(passives.values()),
+            Collections.unmodifiableCollection(mobs)
+        );
         //ground.add(new Ground(0,0,new Texture(Gdx.files.internal("assets/textures/water.png")),0));
 
         //entityManager.addSystem(new GroundRenderingSystem(worldMap, spriteBatch));
@@ -83,12 +91,13 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        updateSystem.update(delta);
         chunkManagerSystem.update(ground,passives,mobs);
         Debug.log(delta, passives.size());
         inputSystem.update(player, delta);
         actionManagerSystem.update(player,passives,mobs);
         mobs.add(player);
-        moveSystem.move(mobs, passives, ground,delta);;
+        moveSystem.move(mobs, passives, ground,delta);
         mobs.remove(player);
         renderingSystem.update(ground.values(), delta);
         renderingSystem.update(passives.values(),delta);

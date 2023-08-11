@@ -30,8 +30,7 @@ public class InputSystem {
             velocity.setY(0);
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
-            player.nextAction = ActionType.HIT;
-        }
+        if(Gdx.input.isKeyPressed(Input.Keys.ENTER))
+            player.requestAction(ActionType.HIT);
     }
 }

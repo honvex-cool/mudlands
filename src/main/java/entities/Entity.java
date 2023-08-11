@@ -55,6 +55,9 @@ public class Entity implements Savable, AssetUser {
         }
     }
 
+    public void update(float deltaTime) {
+    }
+
     public boolean isDestroyed(){
         return (successor != null);
     }
