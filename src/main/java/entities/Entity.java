@@ -11,16 +11,11 @@ import java.util.Map;
 public class Entity implements Savable, AssetUser {
     public PositionComponent positionComponent = new PositionComponent(0, 0);
     public RenderComponent renderComponent;
-    public int type;
     protected int hp;
     protected SaveStruct successor=null;
     protected SaveStruct defaultSuccessor = new SaveStruct(EntityTag.NONE,0, 0, 0, new HashMap<>());
     public boolean isGenerated() {
         return false;
-    }
-
-    public Map<Integer,Integer> getSaveMap(){
-        return new HashMap<>();
     }
 
     @Override
