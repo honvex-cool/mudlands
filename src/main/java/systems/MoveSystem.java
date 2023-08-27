@@ -1,5 +1,6 @@
 package systems;
 
+import components.PositionComponent;
 import entities.grounds.Ground;
 import entities.Mob;
 import entities.passives.Passive;
@@ -28,16 +29,16 @@ public class MoveSystem {
 
     //returns true on success
     boolean tryMove(Mob mob, Pair<Float,Float> velocity, Map<Pair<Integer,Integer>,Passive> passives, Map<Pair<Integer,Integer>, Ground> grounds, float deltaTime){
-        float modifier = grounds.get(mob.positionComponent.getFieldAsPair()).getSpeedModifier();
-        float x = mob.positionComponent.getX();
-        float y = mob.positionComponent.getY();
+        float modifier = grounds.get(PositionComponent.getFieldAsPair(mob.mutablePositionComponent)).getSpeedModifier();
+        float x = mob.mutablePositionComponent.getX();
+        float y = mob.mutablePositionComponent.getY();
         float newX = x + velocity.getFirst() * deltaTime * modifier;
         float newY = y + velocity.getSecond() * deltaTime * modifier;
         Passive passive = passives.get(new Pair<>((int)Math.floor(newX),(int)Math.floor(newY)));
         if(passive != null && passive.isActive())
             return false;
-        mob.positionComponent.setX(newX);
-        mob.positionComponent.setY(newY);
+        mob.mutablePositionComponent.setX(newX);
+        mob.mutablePositionComponent.setY(newY);
         return true;
     }
 }

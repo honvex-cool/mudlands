@@ -1,6 +1,6 @@
 package systems;
 
-import actions.ActionType;
+import components.MutablePositionComponent;
 import components.PositionComponent;
 import entities.*;
 import entities.grounds.Ground;
@@ -9,7 +9,6 @@ import generator.WorldLoader;
 import utils.Config;
 import utils.Pair;
 import utils.SaveStruct;
-import entities.EntityTag;
 
 import java.util.*;
 
@@ -18,14 +17,14 @@ public class ChunkManagerSystem{
     private UniversalLoader entityLoader;
     private Pair<Integer, Integer> central_chunk_coordinates; //central chunk coordinates
     private Player player;
-    private PositionComponent player_position;
+    private MutablePositionComponent player_position;
     private Set<Pair<Integer,Integer>> loaded;
 
     public ChunkManagerSystem(Player player,WorldLoader worldLoader, UniversalLoader entityLoader){
         this.player = player;
-        this.player_position = player.positionComponent;
+        this.player_position = player.mutablePositionComponent;
         //in unloaded world player chunk won't match central_chunk_coordinates, used instead of initial loading
-        central_chunk_coordinates = new Pair<>(player_position.getChunkX()+1,player_position.getChunkY());
+        central_chunk_coordinates = new Pair<>(PositionComponent.getChunkX(player_position)+1, PositionComponent.getChunkY(player_position));
         this.worldLoader = worldLoader;
         this.entityLoader = entityLoader;
         loaded = new HashSet<>();
@@ -50,7 +49,7 @@ public class ChunkManagerSystem{
             }
 
             for(Mob mob:mobs) {
-                if(mob.positionComponent.getChunk().equals(pair)){
+                if(PositionComponent.getChunk(mob.mutablePositionComponent).equals(pair)){
                     to_remove.add(mob);
                     SaveStruct struct = entityLoader.saveMob(mob);
                     mobsToSave.add(struct);
@@ -79,7 +78,7 @@ public class ChunkManagerSystem{
 
         handleDestroyed(passives,mobs);
 
-        var curr_chunk = player_position.getChunk();
+        var curr_chunk = PositionComponent.getChunk(player_position);
         if(curr_chunk.equals(central_chunk_coordinates)) {
             return;
         }

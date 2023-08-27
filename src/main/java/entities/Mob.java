@@ -1,16 +1,16 @@
 package entities;
 
 import actions.ActionType;
-import com.badlogic.gdx.graphics.Texture;
-import components.PositionComponent;
-import components.RotationComponent;
+import components.Component;
+import components.MutablePositionComponent;
+import components.MutableRotationComponent;
 import components.VelocityComponent;
-import utils.Config;
-import utils.Pair;
+
+import java.util.Set;
 
 public class Mob extends Entity implements Hitbox {
     public VelocityComponent velocityComponent;
-    public RotationComponent rotationComponent;
+    public MutableRotationComponent rotationComponent;
     public ActionType nextAction = null;
     private float moveSpeed;
     public int attackStrength = 6;
@@ -20,9 +20,9 @@ public class Mob extends Entity implements Hitbox {
     }
 
     public Mob(float x, float y){
-        positionComponent = new PositionComponent(x, y);
+        mutablePositionComponent = new MutablePositionComponent(x, y);
         velocityComponent = new VelocityComponent();
-        rotationComponent = new RotationComponent();
+        rotationComponent = new MutableRotationComponent();
     }
 
     public void updateVelocity() {
@@ -32,5 +32,10 @@ public class Mob extends Entity implements Hitbox {
     }
     public ActionType getNextAction(){
         return nextAction;
+    }
+
+    @Override
+    public Set<Component> viewComponents() {
+        return Set.of(mutablePositionComponent, rotationComponent);
     }
 }

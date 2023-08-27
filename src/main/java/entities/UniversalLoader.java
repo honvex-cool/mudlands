@@ -2,7 +2,6 @@ package entities;
 
 import entities.grounds.Ground;
 import entities.passives.Passive;
-import utils.AssetManager;
 import utils.SaveStruct;
 
 import java.util.Map;
@@ -16,13 +15,12 @@ public class UniversalLoader {
     public UniversalLoader(
         Map<Integer, Class<? extends Ground>> groundMap,
         Map<Integer, Class<? extends Passive>> passiveMap,
-        Map<Integer, Class<? extends Mob>> mobMap,
-        AssetManager assetManager
+        Map<Integer, Class<? extends Mob>> mobMap
     ) {
-        groundLoader = new EntityLoader<>(groundMap, assetManager);
-        passiveLoader = new EntityLoader<>(passiveMap, assetManager);
-        mobLoader = new EntityLoader<>(mobMap, assetManager);
-        playerLoader = new EntityLoader<>(Map.of(0, Player.class), assetManager);
+        groundLoader = new EntityLoader<>(groundMap);
+        passiveLoader = new EntityLoader<>(passiveMap);
+        mobLoader = new EntityLoader<>(mobMap);
+        playerLoader = new EntityLoader<>(Map.of(0, Player.class));
     }
 
     public Ground loadGround(SaveStruct struct) {

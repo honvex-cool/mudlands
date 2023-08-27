@@ -1,5 +1,5 @@
 package components;
 
-public abstract class Component {
-
+public interface Component {
+    void accept(ComponentVisitor visitor);
 }

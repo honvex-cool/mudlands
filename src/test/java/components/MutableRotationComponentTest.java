@@ -6,10 +6,10 @@ import utils.Pair;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RotationComponentTest {
+class MutableRotationComponentTest {
     @Test
     void testGettersSetters(){
-        RotationComponent rotationComponent = new RotationComponent();
+        MutableRotationComponent rotationComponent = new MutableRotationComponent();
         assertEquals(90f,rotationComponent.getRotation(),Debug.TEST_DELTA);
 
         rotationComponent.setRotation(20.5f);
@@ -20,7 +20,7 @@ class RotationComponentTest {
     }
     @Test
     void testRotationFromVector(){
-        RotationComponent rotationComponent = new RotationComponent();
+        MutableRotationComponent rotationComponent = new MutableRotationComponent();
 
         rotationComponent.setRotationFromVector(new Pair<>(1f,0f));
         assertEquals(0,rotationComponent.getRotation(), Debug.TEST_DELTA);

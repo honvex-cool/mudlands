@@ -3,33 +3,29 @@ package components;
 import utils.Config;
 import utils.Pair;
 
-public class PositionComponent extends Component {
-    private float x;
-    private float y;
+public interface PositionComponent extends Component {
+    float getX();
 
-    public PositionComponent(float x, float y) {
-        this.x = x;
-        this.y = y;
+    float getY();
+
+    static int getChunkX(PositionComponent positionComponent) {
+        return (int)Math.floor(positionComponent.getX() / Config.CHUNK_SIZE);
     }
 
-    public float getX() {
-        return x;
+    static int getChunkY(PositionComponent positionComponent) {
+        return (int)Math.floor(positionComponent.getY() / Config.CHUNK_SIZE);
     }
 
-    public void setX(float x) {
-        this.x = x;
+    static Pair<Integer, Integer> getChunk(PositionComponent positionComponent) {
+        return new Pair<>(getChunkX(positionComponent), getChunkY(positionComponent));
     }
 
-    public float getY() {
-        return y;
-    }
-    public void setY(float y) {
-        this.y = y;
+    static Pair<Integer, Integer> getFieldAsPair(PositionComponent positionComponent) {
+        return new Pair<>((int)Math.floor(positionComponent.getX()), (int)Math.floor(positionComponent.getY()));
     }
 
-    public int getChunkX(){return (int)Math.floor(x/ Config.CHUNK_SIZE);}
-    public int getChunkY(){return (int)Math.floor(y/ Config.CHUNK_SIZE);}
-
-    public Pair<Integer,Integer> getChunk(){return new Pair<>(getChunkX(),getChunkY());}
-    public Pair<Integer,Integer> getFieldAsPair(){return new Pair<>((int)Math.floor(getX()),(int)Math.floor(getY()));}
+    @Override
+    default void accept(ComponentVisitor visitor) {
+        visitor.visit(this);
+    }
 }

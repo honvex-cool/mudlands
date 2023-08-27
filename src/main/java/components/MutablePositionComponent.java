@@ -1,16 +1,15 @@
 package components;
 
-import utils.Pair;
-
-public class VelocityComponent {
+public class MutablePositionComponent implements PositionComponent {
     private float x;
     private float y;
 
-    public VelocityComponent() {
-        x = 0;
-        y = 0;
+    public MutablePositionComponent(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 
+    @Override
     public float getX() {
         return x;
     }
@@ -19,19 +18,11 @@ public class VelocityComponent {
         this.x = x;
     }
 
+    @Override
     public float getY() {
         return y;
     }
-
     public void setY(float y) {
         this.y = y;
-    }
-
-    public Pair<Float, Float> getAsPair() {
-        return new Pair<>(x, y);
-    }
-
-    public void clear() {
-        x = y = 0f;
     }
 }

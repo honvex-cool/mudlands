@@ -1,12 +1,12 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entities.*;
 import entities.grounds.Ground;
 import entities.passives.Passive;
 import generator.WorldLoader;
+import graphics.SpritePresenter;
 import inventory.InventoryRendering;
 import systems.*;
 import utils.AssetManager;
@@ -39,8 +39,7 @@ public class GameScreen implements Screen {
         entityLoader = new UniversalLoader(
             EntityMappings.GROUND_MAP,
             EntityMappings.PASSIVE_MAP,
-            EntityMappings.MOB_MAP,
-            assetManager
+            EntityMappings.MOB_MAP
         );
 
         if(Debug.LOAD_WORLD) {
@@ -52,13 +51,13 @@ public class GameScreen implements Screen {
             }
         } else {
             loader.createWorld(42, "testWorld");
-            player = new Player(assetManager);
+            player = new Player();
         }
 
         inventoryRendering = new InventoryRendering();
         craftingRendering = new CraftingRendering();
 
-        renderingSystem = new RenderingSystem(spriteBatch);
+        renderingSystem = new RenderingSystem(spriteBatch, new SpritePresenter(assetManager));
         inputSystem = new InputSystem();
 
 
@@ -99,9 +98,10 @@ public class GameScreen implements Screen {
         mobs.add(player);
         moveSystem.move(mobs, passives, ground,delta);
         mobs.remove(player);
+        renderingSystem.updatePlayer(player,delta);
         renderingSystem.update(ground.values(), delta);
         renderingSystem.update(passives.values(),delta);
-        renderingSystem.updatePlayer(player,delta);
+        renderingSystem.update(Set.of(player), delta);
         inventoryRendering.oneTick();
         craftingRendering.oneTick(); //TODO add one class that manages opening crafting and inventory or make systems for them
     }

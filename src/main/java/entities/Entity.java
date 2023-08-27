@@ -1,16 +1,17 @@
 package entities;
 
 import actions.ActionType;
-import components.PositionComponent;
-import components.RenderComponent;
+import components.Component;
+import components.ComponentHolder;
+import components.MutablePositionComponent;
 import utils.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-public class Entity implements Savable, AssetUser {
-    public PositionComponent positionComponent = new PositionComponent(0, 0);
-    public RenderComponent renderComponent;
+public class Entity implements Savable, ComponentHolder {
+    public MutablePositionComponent mutablePositionComponent = new MutablePositionComponent(0, 0);
     protected int hp;
     protected SaveStruct successor=null;
     protected SaveStruct defaultSuccessor = new SaveStruct(EntityTag.NONE,0, 0, 0, new HashMap<>());
@@ -31,20 +32,12 @@ public class Entity implements Savable, AssetUser {
         }
     }
 
-    @Override
-    public void loadAssets(AssetManager assetManager) {
-        renderComponent = new RenderComponent(Config.TILE_SIZE, assetManager.getSprite(spriteName()));
-    }
-    protected String spriteName() {
-        return getClass().getSimpleName().toLowerCase();
-    }
-
     public void react(ActionType actionType, Mob actor){
         if(actionType == ActionType.HIT){
             hp -= actor.getAttackStrength();
             if(hp <=0 ){
-                defaultSuccessor.x = positionComponent.getX();
-                defaultSuccessor.y = positionComponent.getY();
+                defaultSuccessor.x = mutablePositionComponent.getX();
+                defaultSuccessor.y = mutablePositionComponent.getY();
                 successor = defaultSuccessor;
             }
         }
@@ -58,5 +51,10 @@ public class Entity implements Savable, AssetUser {
     }
     public SaveStruct getSuccessor(){
         return successor;
+    }
+
+    @Override
+    public Set<Component> viewComponents() {
+        return Set.of(mutablePositionComponent);
     }
 }
