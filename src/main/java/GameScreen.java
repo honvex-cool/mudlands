@@ -6,10 +6,13 @@ import entities.*;
 import entities.grounds.Ground;
 import entities.passives.Passive;
 import generator.WorldLoader;
-import graphics.SpritePresenter;
+import graphics.GraphicsContext;
+import graphics.GraphicsContextImpl;
+import graphics.DrawablePresenter;
 import inventory.InventoryRendering;
 import systems.*;
 import utils.AssetManager;
+import utils.Config;
 import utils.Debug;
 import utils.Pair;
 
@@ -57,7 +60,9 @@ public class GameScreen implements Screen {
         inventoryRendering = new InventoryRendering();
         craftingRendering = new CraftingRendering();
 
-        renderingSystem = new RenderingSystem(spriteBatch, new SpritePresenter(assetManager));
+        GraphicsContext graphicsContext = new GraphicsContextImpl(spriteBatch, Config.TILES_ON_SCREEN);
+
+        renderingSystem = new RenderingSystem(graphicsContext, new DrawablePresenter(assetManager));
         inputSystem = new InputSystem();
 
 
