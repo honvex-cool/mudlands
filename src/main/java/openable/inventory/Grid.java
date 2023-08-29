@@ -1,4 +1,4 @@
-package inventory;
+package openable.inventory;
 
 import java.util.ArrayList;
 

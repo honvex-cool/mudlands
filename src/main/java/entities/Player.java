@@ -2,8 +2,11 @@ package entities;
 
 import actions.ActionType;
 import actions.Cooldown;
+import openable.inventory.Inventory;
 
 public class Player extends Mob{
+
+    private Inventory inventory = new Inventory();
     private final Cooldown hitCooldown = new Cooldown(0.2f);
 
     @Override
@@ -20,4 +23,8 @@ public class Player extends Mob{
         if(actionType == ActionType.HIT && hitCooldown.use())
             nextAction = actionType;
     }
+    public Inventory getInventory() {
+        return inventory;
+    }
+
 }

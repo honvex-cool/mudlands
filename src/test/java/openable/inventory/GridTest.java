@@ -1,5 +1,6 @@
-package inventory;
+package openable.inventory;
 
+import openable.inventory.Grid;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

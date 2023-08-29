@@ -1,5 +1,8 @@
-package inventory;
+package openable.inventory;
 
+import openable.inventory.Inventory;
+import openable.inventory.InventoryField;
+import openable.inventory.InventoryFieldType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

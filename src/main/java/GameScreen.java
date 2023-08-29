@@ -9,7 +9,9 @@ import generator.WorldLoader;
 import graphics.GraphicsContext;
 import graphics.GraphicsContextImpl;
 import graphics.DrawablePresenter;
-import inventory.InventoryRendering;
+import openable.OpenableManager;
+import openable.inventory.InventoryRendering;
+import openable.crafting.CraftingRendering;
 import systems.*;
 import utils.AssetManager;
 import utils.Config;
@@ -24,8 +26,6 @@ public class GameScreen implements Screen {
     private final SpriteBatch spriteBatch = new SpriteBatch();
     private final AssetManager assetManager = new AssetManager("assets");
     private final UniversalLoader entityLoader;
-    private final InventoryRendering inventoryRendering;
-    private final CraftingRendering craftingRendering;
     private RenderingSystem renderingSystem;
     private InputSystem inputSystem;
     private ChunkManagerSystem chunkManagerSystem;
@@ -33,6 +33,7 @@ public class GameScreen implements Screen {
     private ActionManagerSystem actionManagerSystem;
     private UpdateSystem updateSystem;
 
+    private OpenableManager openableManager;
     private Player player;
     private Map<Pair<Integer,Integer>, Ground> ground;
     private Map<Pair<Integer,Integer>, Passive> passives;
@@ -57,8 +58,7 @@ public class GameScreen implements Screen {
             player = new Player();
         }
 
-        inventoryRendering = new InventoryRendering();
-        craftingRendering = new CraftingRendering();
+
 
         inputSystem = new InputSystem();
 
@@ -93,10 +93,8 @@ public class GameScreen implements Screen {
             passivesView,
             mobsView
         );
-        //ground.add(new Ground(0,0,new Texture(Gdx.files.internal("assets/textures/water.png")),0));
 
-        //entityManager.addSystem(new GroundRenderingSystem(worldMap, spriteBatch));
-        //entityManager.addSystem(new DeathSystem());
+        openableManager = new OpenableManager(player);
     }
 
     @Override
@@ -116,8 +114,7 @@ public class GameScreen implements Screen {
         moveSystem.move(mobs, passives, ground,delta);
         mobs.remove(player);
         renderingSystem.update();
-        inventoryRendering.oneTick();
-        craftingRendering.oneTick(); //TODO add one class that manages opening crafting and inventory or make systems for them
+        openableManager.update();
     }
 
     @Override

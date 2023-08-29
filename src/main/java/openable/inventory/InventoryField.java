@@ -1,4 +1,4 @@
-package inventory;
+package openable.inventory;
 
 public class InventoryField {
     private InventoryFieldType item;

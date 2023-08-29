@@ -1,4 +1,4 @@
-package inventory;
+package openable.inventory;
 
 import static utils.Config.INVENTORY_HEIGHT;
 import static utils.Config.INVENTORY_WIDTH;

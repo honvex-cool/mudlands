@@ -55,4 +55,8 @@ public class Entity implements Savable, ComponentHolder {
     public Set<Component> viewComponents() {
         return Set.of(mutablePositionComponent);
     }
+
+    public MutableHealthComponent getHp() {
+        return hp;
+    }
 }
