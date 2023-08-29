@@ -1,6 +1,6 @@
 package openable.inventory;
 
-import openable.items.Stick;
+import openable.items.StickItem;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,8 +18,7 @@ class InventoryTest {
     @Test
     void testAddItem() {
         Inventory inventory = new Inventory();
-        InventoryField field = new InventoryField(new Stick(), 20);
-        inventory.addItem(field, 0, 0);
+        inventory.addItem(new StickItem(), 20);
         assertEquals("Stick", inventory.get(0, 0).getItem().toString());
         assertEquals(20, inventory.get(0, 0).getNumber());
         assertTrue(inventory.get(0, 0).getItem().isStackable());
@@ -29,8 +28,7 @@ class InventoryTest {
     @Test
     void testRemoveItem() {
         Inventory inventory = new Inventory();
-        InventoryField field = new InventoryField(new Stick(), 20);
-        inventory.addItem(field, 0, 0);
+        inventory.addItem(new StickItem(), 20);
         assertEquals("Stick", inventory.get(0, 0).getItem().toString());
         assertEquals(20, inventory.get(0, 0).getNumber());
         assertTrue(inventory.get(0, 0).getItem().isStackable());

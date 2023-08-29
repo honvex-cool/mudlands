@@ -37,6 +37,7 @@ public class OpenableManager {
     public void update(){
         if(Gdx.input.isKeyPressed(Input.Keys.E)) {
             setBooleans(true ,false, false);
+            inventoryRendering.updateInventory();
             Gdx.input.setInputProcessor(inventoryRendering.getStage());
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)) {

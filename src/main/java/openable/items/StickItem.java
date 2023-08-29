@@ -1,8 +1,8 @@
 package openable.items;
 
-public class Stick extends Item{
+public class StickItem extends Item{
     String name = "Stick";
-    public Stick(){
+    public StickItem(){
         stackable = true;
         craftable = false;
         edible = false;

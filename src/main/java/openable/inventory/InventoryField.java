@@ -1,14 +1,14 @@
 package openable.inventory;
 
 import openable.items.Item;
-import openable.items.None;
+import openable.items.NoneItem;
 
 public class InventoryField {
     private Item item;
     private int number;
 
     InventoryField() {
-        this(new None(), 0);
+        this(new NoneItem(), 0);
     }
 
     InventoryField(Item item, int number) {
@@ -27,7 +27,7 @@ public class InventoryField {
 
 
     public void clearField() {
-        item = new None();
+        item = new NoneItem();
         number = 0;
     }
 

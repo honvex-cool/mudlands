@@ -1,8 +1,8 @@
 package openable.items;
 
-public class None extends Item {
+public class NoneItem extends Item {
     String name = "None";
-    public None() {
+    public NoneItem() {
         stackable = false;
         craftable = false;
         edible = false;
