@@ -2,8 +2,8 @@ package entities.passives;
 
 import components.MutablePositionComponent;
 
-public class Sticks extends Drop {
-    Sticks(MutablePositionComponent mutablePositionComponent) {
+public class Stones extends Drop {
+    Stones(MutablePositionComponent mutablePositionComponent) {
         super(mutablePositionComponent);
     }
 }

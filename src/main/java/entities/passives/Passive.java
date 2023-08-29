@@ -2,6 +2,7 @@ package entities.passives;
 
 import actions.ActionType;
 import components.Component;
+import components.MutablePositionComponent;
 import entities.Entity;
 import entities.Hitbox;
 import entities.Mob;
@@ -11,6 +12,14 @@ import java.util.Set;
 
 public class Passive extends Entity implements Hitbox {
     protected boolean generated;
+
+    public Passive() {
+    }
+
+    protected Passive(MutablePositionComponent mutablePositionComponent) {
+        super(mutablePositionComponent);
+    }
+
     @Override
     public void construct(Map<Integer, Integer> struct, boolean generated) {
         super.construct(struct, generated);
