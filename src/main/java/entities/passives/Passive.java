@@ -1,15 +1,13 @@
 package entities.passives;
 
 import actions.ActionType;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import components.Component;
 import entities.Entity;
 import entities.Hitbox;
 import entities.Mob;
-import utils.Config;
-import utils.SaveStruct;
 
 import java.util.Map;
+import java.util.Set;
 
 public class Passive extends Entity implements Hitbox {
     protected boolean generated;
@@ -28,5 +26,10 @@ public class Passive extends Entity implements Hitbox {
     public void react(ActionType actionType, Mob actor) {
         super.react(actionType, actor);
         generated = false;
+    }
+
+    @Override
+    public Set<Component> viewComponents() {
+        return Set.of(mutablePositionComponent, hp);
     }
 }

@@ -1,9 +1,7 @@
 package entities;
 
 import actions.ActionType;
-import components.Component;
-import components.ComponentHolder;
-import components.MutablePositionComponent;
+import components.*;
 import utils.*;
 
 import java.util.HashMap;
@@ -12,7 +10,7 @@ import java.util.Set;
 
 public class Entity implements Savable, ComponentHolder {
     public MutablePositionComponent mutablePositionComponent = new MutablePositionComponent(0, 0);
-    protected int hp;
+    protected MutableHealthComponent hp;
     protected SaveStruct successor=null;
     protected SaveStruct defaultSuccessor = new SaveStruct(EntityTag.NONE,0, 0, 0, new HashMap<>());
     public boolean isGenerated() {
@@ -21,21 +19,21 @@ public class Entity implements Savable, ComponentHolder {
 
     @Override
     public Map<Integer, Integer> saveData() {
-        return Map.of(0,hp);
+        return Map.of(0,hp.getCurrentPoints());
     }
 
     @Override
     public void construct(Map<Integer, Integer> struct, boolean generated) {
-        hp = 100;
+        hp = new MutableHealthComponent(100);
         if(!struct.isEmpty()){
-            hp = struct.get(0);
+            hp.damage(hp.getMaxPoints() - struct.get(0));
         }
     }
 
     public void react(ActionType actionType, Mob actor){
         if(actionType == ActionType.HIT){
-            hp -= actor.getAttackStrength();
-            if(hp <=0 ){
+            hp.damage(actor.getAttackStrength());
+            if(Vital.isDrained(hp)){
                 defaultSuccessor.x = mutablePositionComponent.getX();
                 defaultSuccessor.y = mutablePositionComponent.getY();
                 successor = defaultSuccessor;

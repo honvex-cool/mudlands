@@ -2,31 +2,26 @@ package graphics.drawable;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import graphics.GraphicsContext;
-import org.jetbrains.annotations.NotNull;
 
-public class LocalizedSprite implements Drawable {
+public class LocalizedSprite extends PlaceholderDrawable {
     private final Sprite sprite;
-    private Transform transform;
     private final float rotation;
+    private final int layer;
 
-    public LocalizedSprite(Sprite sprite, @NotNull Transform transform, float rotation) {
+    public LocalizedSprite(Transform transform, Sprite sprite, int layer) {
+        this(transform, sprite, layer, 0);
+    }
+
+    public LocalizedSprite(Transform transform, Sprite sprite, int layer, float rotation) {
+        super(transform);
         this.sprite = sprite;
-        this.transform = transform;
+        setTransform(transform);
+        this.layer = layer;
         this.rotation = rotation;
     }
 
     @Override
     public void draw(GraphicsContext graphicsContext) {
-        graphicsContext.drawSprite(sprite, getTransform(), rotation);
-    }
-
-    @Override
-    public Transform getTransform() {
-        return transform;
-    }
-
-    @Override
-    public void setTransform(@NotNull Transform transform) {
-        this.transform = transform;
+        graphicsContext.drawSprite(sprite, getTransform(), rotation, layer);
     }
 }

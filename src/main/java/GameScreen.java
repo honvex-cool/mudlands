@@ -60,9 +60,6 @@ public class GameScreen implements Screen {
         inventoryRendering = new InventoryRendering();
         craftingRendering = new CraftingRendering();
 
-        GraphicsContext graphicsContext = new GraphicsContextImpl(spriteBatch, Config.TILES_ON_SCREEN);
-
-        renderingSystem = new RenderingSystem(graphicsContext, new DrawablePresenter(assetManager));
         inputSystem = new InputSystem();
 
 
@@ -75,11 +72,26 @@ public class GameScreen implements Screen {
         passives = new HashMap<>();
         mobs = new ArrayList<>();
 
+        Collection<Ground> groundsView = Collections.unmodifiableCollection(ground.values());
+        Collection<Passive> passivesView = Collections.unmodifiableCollection(passives.values());
+        Collection<Mob> mobsView = Collections.unmodifiableCollection(mobs);
+
         updateSystem = new UpdateSystem(
             player,
-            Collections.unmodifiableCollection(ground.values()),
-            Collections.unmodifiableCollection(passives.values()),
-            Collections.unmodifiableCollection(mobs)
+            groundsView,
+            passivesView,
+            mobsView
+        );
+
+        GraphicsContext graphicsContext = new GraphicsContextImpl(spriteBatch, Config.TILES_ON_SCREEN);
+
+        renderingSystem = new RenderingSystem(
+            graphicsContext,
+            new DrawablePresenter(assetManager),
+            player,
+            groundsView,
+            passivesView,
+            mobsView
         );
         //ground.add(new Ground(0,0,new Texture(Gdx.files.internal("assets/textures/water.png")),0));
 
@@ -103,10 +115,7 @@ public class GameScreen implements Screen {
         mobs.add(player);
         moveSystem.move(mobs, passives, ground,delta);
         mobs.remove(player);
-        renderingSystem.updatePlayer(player,delta);
-        renderingSystem.update(ground.values(), delta);
-        renderingSystem.update(passives.values(),delta);
-        renderingSystem.update(Set.of(player), delta);
+        renderingSystem.update();
         inventoryRendering.oneTick();
         craftingRendering.oneTick(); //TODO add one class that manages opening crafting and inventory or make systems for them
     }

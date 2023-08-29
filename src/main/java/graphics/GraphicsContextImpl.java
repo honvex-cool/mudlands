@@ -6,10 +6,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import graphics.drawable.Transform;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GraphicsContextImpl implements GraphicsContext {
     private final SpriteBatch spriteBatch;
     private final OrthographicCamera camera;
     private final float tileSize;
+    private final List<List<Sprite>> layers = new ArrayList<>();
 
     public GraphicsContextImpl(SpriteBatch spriteBatch, int tilesOnScreen) {
         this.spriteBatch = spriteBatch;
@@ -19,18 +23,21 @@ public class GraphicsContextImpl implements GraphicsContext {
         camera.setToOrtho(false, width, height);
         camera.update();
         tileSize = width / tilesOnScreen;
+        for(int i = 0; i < 10; i++)
+            layers.add(new ArrayList<>());
     }
 
     @Override
-    public void drawSprite(Sprite sprite, Transform transform, float rotation) {
+    public void drawSprite(Sprite sprite, Transform transform, float rotation, int layer) {
+        Sprite toDraw = new Sprite(sprite);
         float x = transform.x() * tileSize;
         float y = transform.y() * tileSize;
-        sprite.setPosition(x, y);
+        toDraw.setPosition(x, y);
         float width = transform.width() * tileSize;
         float height = transform.height() * tileSize;
-        sprite.setSize(width, height);
-        sprite.setRotation(rotation);
-        sprite.draw(spriteBatch);
+        toDraw.setSize(width, height);
+        toDraw.setRotation(rotation);
+        layers.get(layer).add(toDraw);
     }
 
     @Override
@@ -41,12 +48,13 @@ public class GraphicsContextImpl implements GraphicsContext {
     }
 
     @Override
-    public void begin() {
-        spriteBatch.begin();
-    }
-
-    @Override
     public void end() {
+        spriteBatch.begin();
+        for(List<Sprite> layer : layers) {
+            for(Sprite sprite : layer)
+                sprite.draw(spriteBatch);
+            layer.clear();
+        }
         spriteBatch.end();
     }
 }
