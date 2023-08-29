@@ -34,9 +34,9 @@ public class Inventory {
 
     public void addItem(Item item, int number) {
         Pair<Integer, Integer> pair = searchItem(item);
-        if(pair == null){
+        if(pair == null) {
             pair = searchItem(new NoneItem());
-            if(pair == null){
+            if(pair == null) {
                 return;
             }
         }
@@ -45,13 +45,13 @@ public class Inventory {
         field.setNumber(field.getNumber() + number);
     }
 
-    public Pair<Integer, Integer> searchItem(Item item){
+    public Pair<Integer, Integer> searchItem(Item item) {
         for(int i = 0; i < fields.getHeight(); i++) {
             for(int j = 0; j < fields.getWidth(); j++) {
-                if(!item.isStackable() && fields.get(i).get(j).getItem().toString().equals("None")){
+                if(!item.isStackable() && fields.get(i).get(j).getItem().toString().equals("None")) {
                     return new Pair<>(i, j);
                 }
-                if(fields.get(i).get(j).getItem().toString().equals(item.toString())){
+                if(item.isStackable() && fields.get(i).get(j).getItem().toString().equals(item.toString())) {
                     return new Pair<>(i, j);
                 }
             }
@@ -59,7 +59,14 @@ public class Inventory {
         return null;
     }
 
-
+    public void removeItem(int i, int j, int number) {
+        InventoryField field = fields.get(i).get(j);
+        if(field.getNumber() - number == 0) {
+            removeItem(i, j);
+            return;
+        }
+        field.setNumber(field.getNumber() - number);
+    }
 
     public void removeItem(int i, int j) {
         InventoryField field = fields.get(i).get(j);

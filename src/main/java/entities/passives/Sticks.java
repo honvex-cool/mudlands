@@ -14,7 +14,7 @@ public class Sticks extends Drop {
     @Override
     public void react(ActionType actionType, Mob actor) {
         super.react(actionType, actor);
-        if(actor instanceof Player){
+        if(actor instanceof Player) {
             ((Player)actor).getInventory().addItem(new StickItem(), 1);
         }
     }

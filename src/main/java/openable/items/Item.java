@@ -1,5 +1,8 @@
 package openable.items;
 
+import entities.Player;
+import openable.inventory.Inventory;
+
 public class Item {
 
     boolean stackable;
@@ -8,7 +11,7 @@ public class Item {
     boolean equipable;
     boolean craftable;
 
-    void craft() {
+    public void craft(Inventory inventory) {
 
     }
 
