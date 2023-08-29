@@ -1,6 +1,7 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entities.*;
 import entities.grounds.Ground;
@@ -9,6 +10,7 @@ import generator.WorldLoader;
 import graphics.GraphicsContext;
 import graphics.GraphicsContextImpl;
 import graphics.DrawablePresenter;
+import graphics.ResolutionProvider;
 import inventory.InventoryRendering;
 import systems.*;
 import utils.AssetManager;
@@ -83,7 +85,12 @@ public class GameScreen implements Screen {
             mobsView
         );
 
-        GraphicsContext graphicsContext = new GraphicsContextImpl(spriteBatch, Config.TILES_ON_SCREEN);
+        GraphicsContext graphicsContext = new GraphicsContextImpl(
+            spriteBatch,
+            new OrthographicCamera(),
+            new ResolutionProvider(),
+            Config.TILES_ON_SCREEN
+        );
 
         renderingSystem = new RenderingSystem(
             graphicsContext,
