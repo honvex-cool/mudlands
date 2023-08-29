@@ -18,7 +18,7 @@ public class Inventory {
     public void printInventory() {
         for(int i = 0; i < fields.getHeight(); i++) {
             for(int j = 0; j < fields.getWidth(); j++) {
-                System.out.print(fields.get(i).get(j).getItemType() + " " + fields.get(i).get(j).getNumber() + " | ");
+                System.out.print(fields.get(i).get(j).getItem() + " " + fields.get(i).get(j).getNumber() + " | ");
             }
             System.out.println();
         }

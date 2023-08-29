@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import entities.Player;
+import openable.items.Item;
 import utils.Pair;
 
 import java.util.HashMap;
@@ -135,7 +136,7 @@ public class InventoryRendering {
         inventoryTable = new Table();
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
             for(int col = 0; col < INVENTORY_WIDTH; col++) {
-                ImageButton inventorySlot = createInventorySlot(inventory.get(row, col).getItemType());
+                ImageButton inventorySlot = createInventorySlot(inventory.get(row, col).getItem());
                 inventoryTable.add(inventorySlot).size(64).pad(5);
                 imageButtonMap.put(new Pair<>(row, col), inventorySlot);
                 int finalRow = row;
@@ -167,9 +168,9 @@ public class InventoryRendering {
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
         if(lastClickedI != -1) {
-            objectLabel.setText("Name: " + inventory.get(lastClickedI, lastClickedJ).getItemType().name());
-            edible.setText("Edible: " + inventory.get(lastClickedI, lastClickedJ).isEdible());
-            equippable.setText("Can Equip: " + inventory.get(lastClickedI, lastClickedJ).isEquippable());
+            objectLabel.setText("Name: " + inventory.get(lastClickedI, lastClickedJ).getItem());
+            edible.setText("Edible: " + inventory.get(lastClickedI, lastClickedJ).getItem().isEdible());
+            equippable.setText("Can Equip: " + inventory.get(lastClickedI, lastClickedJ).getItem().isEquipable());
             number.setText("Number: " + inventory.get(lastClickedI, lastClickedJ).getNumber());
         } else {
             objectLabel.setText("Name: ");
@@ -202,7 +203,7 @@ public class InventoryRendering {
     }
 
     private void addTexture(InventoryField from, ImageButton fromImage) {
-        Texture upTexture = new Texture("assets/inventory/" + from.getItemType().name() + ".png");
+        Texture upTexture = new Texture("assets/inventory/" + from.getItem() + ".png");
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         Texture downTexture = new Texture("assets/inventory/NONE.png");
         style.up = new TextureRegionDrawable(upTexture);
@@ -210,8 +211,8 @@ public class InventoryRendering {
         fromImage.setStyle(style);
     }
 
-    private ImageButton createInventorySlot(InventoryFieldType fieldType) {
-        Texture upTexture = new Texture("assets/inventory/" + fieldType.name() + ".png");
+    private ImageButton createInventorySlot(Item item) {
+        Texture upTexture = new Texture("assets/inventory/" + item + ".png");
         Texture downTexture = new Texture("assets/inventory/NONE.png");
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = new TextureRegionDrawable(upTexture);

@@ -1,7 +1,7 @@
 package openable.inventory;
 
 import openable.inventory.InventoryField;
-import openable.inventory.InventoryFieldType;
+import openable.items.Stick;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,35 +9,35 @@ import static org.junit.jupiter.api.Assertions.*;
 class InventoryFieldTest {
     @Test
     void testConstructor(){
-        InventoryField field = new InventoryField(InventoryFieldType.APPLE, 20, true, false);
-        assertEquals(InventoryFieldType.APPLE, field.getItemType());
+        InventoryField field = new InventoryField(new Stick(), 20);
+        assertEquals("Stick", field.getItem().toString());
         assertEquals(20, field.getNumber());
-        assertTrue(field.isEdible());
-        assertFalse(field.isEquippable());
+        assertTrue(field.getItem().isStackable());
+        assertFalse(field.getItem().isEdible());
     }
 
     @Test
     void testClearField(){
-        InventoryField field = new InventoryField(InventoryFieldType.APPLE, 20, true, false);
+        InventoryField field = new InventoryField(new Stick(), 20);
         field.clearField();
-        assertEquals(InventoryFieldType.NONE, field.getItemType());
+        assertEquals("None", field.getItem().toString());
         assertEquals(0, field.getNumber());
-        assertFalse(field.isEdible());
-        assertFalse(field.isEquippable());
+        assertFalse(field.getItem().isStackable());
+        assertFalse(field.getItem().isEdible());
     }
 
     @Test
     void testSetField(){
-        InventoryField field = new InventoryField(InventoryFieldType.APPLE, 20, true, false);
+        InventoryField field = new InventoryField(new Stick(), 20);
         InventoryField field2 = new InventoryField();
-        assertEquals(InventoryFieldType.NONE, field2.getItemType());
+        assertEquals("None", field2.getItem().toString());
         assertEquals(0, field2.getNumber());
-        assertFalse(field2.isEdible());
-        assertFalse(field2.isEquippable());
+        assertFalse(field2.getItem().isStackable());
+        assertFalse(field2.getItem().isEdible());
         field2.setField(field);
-        assertEquals(InventoryFieldType.APPLE, field2.getItemType());
+        assertEquals("Stick", field2.getItem().toString());
         assertEquals(20, field2.getNumber());
-        assertTrue(field2.isEdible());
-        assertFalse(field2.isEquippable());
+        assertTrue(field2.getItem().isStackable());
+        assertFalse(field2.getItem().isEdible());
     }
 }

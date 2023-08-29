@@ -1,8 +1,6 @@
 package openable.inventory;
 
-import openable.inventory.Inventory;
-import openable.inventory.InventoryField;
-import openable.inventory.InventoryFieldType;
+import openable.items.Stick;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,28 +18,28 @@ class InventoryTest {
     @Test
     void testAddItem() {
         Inventory inventory = new Inventory();
-        InventoryField field = new InventoryField(InventoryFieldType.APPLE, 20, true, false);
+        InventoryField field = new InventoryField(new Stick(), 20);
         inventory.addItem(field, 0, 0);
-        assertEquals(InventoryFieldType.APPLE, inventory.get(0, 0).getItemType());
+        assertEquals("Stick", inventory.get(0, 0).getItem().toString());
         assertEquals(20, inventory.get(0, 0).getNumber());
-        assertTrue(inventory.get(0, 0).isEdible());
-        assertFalse(inventory.get(0, 0).isEquippable());
+        assertTrue(inventory.get(0, 0).getItem().isStackable());
+        assertFalse(inventory.get(0, 0).getItem().isEdible());
     }
 
     @Test
     void testRemoveItem() {
         Inventory inventory = new Inventory();
-        InventoryField field = new InventoryField(InventoryFieldType.APPLE, 20, true, false);
+        InventoryField field = new InventoryField(new Stick(), 20);
         inventory.addItem(field, 0, 0);
-        assertEquals(InventoryFieldType.APPLE, inventory.get(0, 0).getItemType());
+        assertEquals("Stick", inventory.get(0, 0).getItem().toString());
         assertEquals(20, inventory.get(0, 0).getNumber());
-        assertTrue(inventory.get(0, 0).isEdible());
-        assertFalse(inventory.get(0, 0).isEquippable());
+        assertTrue(inventory.get(0, 0).getItem().isStackable());
+        assertFalse(inventory.get(0, 0).getItem().isEdible());
         inventory.removeItem(0, 0);
-        assertEquals(InventoryFieldType.NONE, inventory.get(0, 0).getItemType());
+        assertEquals("None", inventory.get(0, 0).getItem().toString());
         assertEquals(0, inventory.get(0, 0).getNumber());
-        assertFalse(inventory.get(0, 0).isEdible());
-        assertFalse(inventory.get(0, 0).isEquippable());
+        assertFalse(inventory.get(0, 0).getItem().isStackable());
+        assertFalse(inventory.get(0, 0).getItem().isEdible());
 
     }
 }

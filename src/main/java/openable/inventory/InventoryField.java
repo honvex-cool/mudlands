@@ -1,25 +1,22 @@
 package openable.inventory;
 
+import openable.items.Item;
+import openable.items.None;
+
 public class InventoryField {
-    private InventoryFieldType item;
+    private Item item;
     private int number;
 
-    private boolean edible;
-
-    private boolean equippable;
-
     InventoryField() {
-        this(InventoryFieldType.NONE, 0, false, false);
+        this(new None(), 0);
     }
 
-    InventoryField(InventoryFieldType fieldType, int number, boolean edible, boolean equippable) {
-        this.item = fieldType;
+    InventoryField(Item item, int number) {
+        this.item = item;
         this.number = number;
-        this.edible = edible;
-        this.equippable = equippable;
     }
 
-    public InventoryFieldType getItemType() {
+    public Item getItem() {
         return item;
     }
 
@@ -27,22 +24,14 @@ public class InventoryField {
         return number;
     }
 
-    public boolean isEquippable() {
-        return equippable;
-    }
 
-    public boolean isEdible() {
-        return edible;
-    }
 
     public void clearField() {
-        item = InventoryFieldType.NONE;
+        item = new None();
         number = 0;
-        edible = false;
-        equippable = false;
     }
 
-    public void setItem(InventoryFieldType item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 
@@ -50,18 +39,8 @@ public class InventoryField {
         this.number = number;
     }
 
-    public void setEdible(boolean edible) {
-        this.edible = edible;
-    }
-
-    public void setEquippable(boolean equippable) {
-        this.equippable = equippable;
-    }
-
     public void setField(InventoryField field) {
         this.number = field.getNumber();
-        this.equippable = field.isEquippable();
-        this.edible = field.isEdible();
-        this.item = field.getItemType();
+        this.item = field.getItem();
     }
 }
