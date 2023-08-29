@@ -118,14 +118,13 @@ public class ChunkManagerSystem{
         for(var key:passives.keySet()) {
             //passives.get(key).react(ActionType.HIT,player);
             if(passives.get(key).isDestroyed()){
-                SaveStruct struct = passives.get(key).getSuccessor();
-                switch(struct.entityTag){
-                    case PASSIVE -> {
-                        passives.put(key,entityLoader.loadPassive(struct));
-                        continue;
-                    }
-                    case MOB -> mobs.add(entityLoader.loadMob(struct));
+                Entity successor = passives.get(key).getSuccessor();
+                if(successor instanceof Passive passive) {
+                    passives.put(key, passive);
+                    continue;
                 }
+                if(successor instanceof Mob mob)
+                    mobs.add(mob);
                 passivesToDelete.add(key);
             }
         }

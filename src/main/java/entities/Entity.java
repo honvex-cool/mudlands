@@ -4,17 +4,21 @@ import actions.ActionType;
 import components.*;
 import utils.*;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class Entity implements Savable, ComponentHolder {
     public MutablePositionComponent mutablePositionComponent = new MutablePositionComponent(0, 0);
     protected MutableHealthComponent hp;
-    protected SaveStruct successor=null;
-    protected SaveStruct defaultSuccessor = new SaveStruct(EntityTag.NONE,0, 0, 0, new HashMap<>());
     public boolean isGenerated() {
         return false;
+    }
+
+    public Entity() {
+    }
+
+    protected Entity(MutablePositionComponent mutablePositionComponent) {
+        this.mutablePositionComponent = mutablePositionComponent;
     }
 
     @Override
@@ -31,24 +35,19 @@ public class Entity implements Savable, ComponentHolder {
     }
 
     public void react(ActionType actionType, Mob actor){
-        if(actionType == ActionType.HIT){
+        if(actionType == ActionType.HIT)
             hp.damage(actor.getAttackStrength());
-            if(Vital.isDrained(hp)){
-                defaultSuccessor.x = mutablePositionComponent.getX();
-                defaultSuccessor.y = mutablePositionComponent.getY();
-                successor = defaultSuccessor;
-            }
-        }
     }
 
     public void update(float deltaTime) {
     }
 
     public boolean isDestroyed(){
-        return (successor != null);
+        return Vital.isDrained(hp);
     }
-    public SaveStruct getSuccessor(){
-        return successor;
+
+    public Entity getSuccessor(){
+        return null;
     }
 
     @Override
