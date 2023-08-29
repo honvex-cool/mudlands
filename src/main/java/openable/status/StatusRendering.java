@@ -45,7 +45,7 @@ public class StatusRendering {
         mainTable = new Table();
         mainTable.setFillParent(true);
 
-        hp = new Label("HP: " + 100, skin);
+        hp = new Label("HP: " + this.player.getHp().getCurrentPoints(), skin);
         image = new Image(noneTexture);
 
         mainTable.add(hp);

@@ -14,15 +14,12 @@ public class OpenableManager {
     private StatusRendering statusRendering;
     private Player player;
 
-    private Stage stage;
-
     private boolean inventoryOpen;
     private boolean craftingOpen;
 
     private boolean statusOpen;
     public OpenableManager(Player player){
         this.player = player;
-        stage = new Stage();
         craftingRendering = new CraftingRendering(player);
         inventoryRendering = new InventoryRendering(player);
         statusRendering = new StatusRendering(player);

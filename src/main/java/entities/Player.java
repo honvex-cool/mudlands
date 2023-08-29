@@ -2,12 +2,18 @@ package entities;
 
 import actions.ActionType;
 import actions.Cooldown;
+import components.MutableHealthComponent;
 import openable.inventory.Inventory;
 
 public class Player extends Mob{
 
     private Inventory inventory = new Inventory();
     private final Cooldown hitCooldown = new Cooldown(0.2f);
+
+    public Player(){
+        super();
+        hp = new MutableHealthComponent(100);
+    }
 
     @Override
     public void update(float deltaTime) {

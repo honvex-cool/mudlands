@@ -10,8 +10,6 @@ import graphics.GraphicsContext;
 import graphics.GraphicsContextImpl;
 import graphics.DrawablePresenter;
 import openable.OpenableManager;
-import openable.inventory.InventoryRendering;
-import openable.crafting.CraftingRendering;
 import systems.*;
 import utils.AssetManager;
 import utils.Config;
@@ -57,7 +55,6 @@ public class GameScreen implements Screen {
             loader.createWorld(42, "testWorld");
             player = new Player();
         }
-
 
 
         inputSystem = new InputSystem();
