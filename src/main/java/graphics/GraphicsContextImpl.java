@@ -1,6 +1,5 @@
 package graphics;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,15 +12,20 @@ public class GraphicsContextImpl implements GraphicsContext {
     private final SpriteBatch spriteBatch;
     private final OrthographicCamera camera;
     private final float tileSize;
-    private final List<List<Sprite>> layers = new ArrayList<>();
+    private final List<List<Runnable>> layers = new ArrayList<>();
 
-    public GraphicsContextImpl(SpriteBatch spriteBatch, int tilesOnScreen) {
+    public GraphicsContextImpl(
+        SpriteBatch spriteBatch,
+        OrthographicCamera camera,
+        ResolutionProvider resolutionProvider,
+        int tilesOnScreen
+    ) {
         this.spriteBatch = spriteBatch;
-        camera = new OrthographicCamera();
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
-        camera.setToOrtho(false, width, height);
-        camera.update();
+        this.camera = camera;
+        float width = resolutionProvider.getWidth();
+        float height = resolutionProvider.getHeight();
+        this.camera.setToOrtho(false, width, height);
+        this.camera.update();
         tileSize = width / tilesOnScreen;
         for(int i = 0; i < 10; i++)
             layers.add(new ArrayList<>());
@@ -29,15 +33,17 @@ public class GraphicsContextImpl implements GraphicsContext {
 
     @Override
     public void drawSprite(Sprite sprite, Transform transform, float rotation, int layer) {
-        Sprite toDraw = new Sprite(sprite);
         float x = transform.x() * tileSize;
         float y = transform.y() * tileSize;
-        toDraw.setPosition(x, y);
         float width = transform.width() * tileSize;
         float height = transform.height() * tileSize;
-        toDraw.setSize(width, height);
-        toDraw.setRotation(rotation);
-        layers.get(layer).add(toDraw);
+        Runnable drawing = () -> {
+            sprite.setPosition(x, y);
+            sprite.setSize(width, height);
+            sprite.setRotation(rotation);
+            sprite.draw(spriteBatch);
+        };
+        layers.get(layer).add(drawing);
     }
 
     @Override
@@ -50,9 +56,9 @@ public class GraphicsContextImpl implements GraphicsContext {
     @Override
     public void end() {
         spriteBatch.begin();
-        for(List<Sprite> layer : layers) {
-            for(Sprite sprite : layer)
-                sprite.draw(spriteBatch);
+        for(List<Runnable> layer : layers) {
+            for(Runnable drawing : layer)
+                drawing.run();
             layer.clear();
         }
         spriteBatch.end();
