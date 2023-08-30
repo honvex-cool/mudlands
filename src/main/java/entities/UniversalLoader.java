@@ -1,6 +1,7 @@
 package entities;
 
 import entities.grounds.Ground;
+import entities.mobs.Mob;
 import entities.passives.Passive;
 import utils.SaveStruct;
 

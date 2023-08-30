@@ -2,7 +2,7 @@ package entities.grounds;
 
 import actions.ActionType;
 import entities.Entity;
-import entities.Mob;
+import entities.mobs.Mob;
 
 public abstract class Ground extends Entity {
     private float speedModifier = 1f;

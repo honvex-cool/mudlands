@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entities.*;
+import entities.controllers.HuntingMovementController;
 import entities.grounds.Ground;
+import entities.mobs.Mob;
 import entities.passives.Passive;
 import generator.WorldLoader;
 import graphics.GraphicsContext;
@@ -28,6 +30,7 @@ public class GameScreen implements Screen {
     private final UniversalLoader entityLoader;
     private RenderingSystem renderingSystem;
     private InputSystem inputSystem;
+    private final SpawnSystem spawnSystem;
     private ChunkManagerSystem chunkManagerSystem;
     private MoveSystem moveSystem;
     private ActionManagerSystem actionManagerSystem;
@@ -71,6 +74,13 @@ public class GameScreen implements Screen {
         passives = new HashMap<>();
         mobs = new ArrayList<>();
 
+        HuntingMovementController controller = new HuntingMovementController(
+            Collections.unmodifiableSet(passives.keySet()),
+            player.mutablePositionComponent,
+            30
+        );
+        spawnSystem = new SpawnSystem(mobs, controller);
+
         Collection<Ground> groundsView = Collections.unmodifiableCollection(ground.values());
         Collection<Passive> passivesView = Collections.unmodifiableCollection(passives.values());
         Collection<Mob> mobsView = Collections.unmodifiableCollection(mobs);
@@ -111,8 +121,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         updateSystem.update(delta);
         chunkManagerSystem.update(ground,passives,mobs);
-        Debug.log(delta, passives.size());
         inputSystem.update(player, delta);
+        spawnSystem.update(delta);
         actionManagerSystem.update(player,passives,mobs);
         mobs.add(player);
         moveSystem.move(mobs, passives, ground,delta);

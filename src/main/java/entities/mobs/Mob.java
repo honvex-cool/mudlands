@@ -1,10 +1,12 @@
-package entities;
+package entities.mobs;
 
 import actions.ActionType;
 import components.Component;
 import components.MutablePositionComponent;
 import components.MutableRotationComponent;
 import components.VelocityComponent;
+import entities.Entity;
+import entities.Hitbox;
 
 import java.util.Set;
 
@@ -23,6 +25,12 @@ public class Mob extends Entity implements Hitbox {
         mutablePositionComponent = new MutablePositionComponent(x, y);
         velocityComponent = new VelocityComponent();
         rotationComponent = new MutableRotationComponent();
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+        updateVelocity();
     }
 
     public void updateVelocity() {

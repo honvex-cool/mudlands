@@ -4,6 +4,7 @@ import components.MutablePositionComponent;
 import components.PositionComponent;
 import entities.*;
 import entities.grounds.Ground;
+import entities.mobs.Mob;
 import entities.passives.Passive;
 import generator.WorldLoader;
 import utils.Config;

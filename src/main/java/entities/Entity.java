@@ -2,6 +2,7 @@ package entities;
 
 import actions.ActionType;
 import components.*;
+import entities.mobs.Mob;
 import utils.*;
 
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.Set;
 
 public class Entity implements Savable, ComponentHolder {
     public MutablePositionComponent mutablePositionComponent = new MutablePositionComponent(0, 0);
-    protected MutableHealthComponent hp;
+    protected MutableHealthComponent hp = new MutableHealthComponent(100);
     public boolean isGenerated() {
         return false;
     }

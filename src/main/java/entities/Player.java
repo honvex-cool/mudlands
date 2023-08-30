@@ -3,12 +3,13 @@ package entities;
 import actions.ActionType;
 import actions.Cooldown;
 import components.MutableHealthComponent;
+import entities.mobs.Mob;
 import openable.inventory.Inventory;
 
-public class Player extends Mob{
+public class Player extends Mob {
 
     private Inventory inventory = new Inventory();
-    private final Cooldown hitCooldown = new Cooldown(0.2f);
+    private final Cooldown hitCooldown = Cooldown.readyToUse(0.2f);
 
     public Player(){
         super();
