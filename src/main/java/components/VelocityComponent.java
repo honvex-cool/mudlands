@@ -11,6 +11,11 @@ public class VelocityComponent {
         y = 0;
     }
 
+    public VelocityComponent(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public float getX() {
         return x;
     }

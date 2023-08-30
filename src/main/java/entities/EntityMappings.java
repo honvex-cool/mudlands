@@ -1,6 +1,7 @@
 package entities;
 
 import entities.grounds.*;
+import entities.mobs.Mob;
 import entities.passives.*;
 
 import java.util.Map;

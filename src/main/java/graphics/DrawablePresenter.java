@@ -3,7 +3,7 @@ package graphics;
 import components.Component;
 import components.ComponentHolder;
 import components.HealthComponent;
-import entities.Mob;
+import entities.mobs.Mob;
 import entities.Player;
 import entities.grounds.Ground;
 import entities.passives.Passive;

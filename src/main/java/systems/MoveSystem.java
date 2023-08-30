@@ -2,7 +2,7 @@ package systems;
 
 import components.PositionComponent;
 import entities.grounds.Ground;
-import entities.Mob;
+import entities.mobs.Mob;
 import entities.passives.Passive;
 import utils.Pair;
 

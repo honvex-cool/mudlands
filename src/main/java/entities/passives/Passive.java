@@ -5,7 +5,7 @@ import components.Component;
 import components.MutablePositionComponent;
 import entities.Entity;
 import entities.Hitbox;
-import entities.Mob;
+import entities.mobs.Mob;
 
 import java.util.Map;
 import java.util.Set;
