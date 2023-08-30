@@ -15,7 +15,7 @@ public class Item {
 
     }
 
-    void use() {
+    public void use(Player player) {
 
     }
 

@@ -59,6 +59,7 @@ public class StatusRendering {
     }
 
 
+
     public void update() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -67,6 +68,7 @@ public class StatusRendering {
         shapeRenderer.rect(10f, 10f, Gdx.graphics.getWidth() - 20f, Gdx.graphics.getHeight() - 20f);
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
+        hp.setText("HP: " + this.player.getHp().getCurrentPoints());
         stage.act();
         stage.draw();
     }

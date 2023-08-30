@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import entities.Player;
+import openable.items.AppleItem;
 import openable.items.Item;
 import utils.AssetManager;
 import utils.Pair;
@@ -106,6 +107,14 @@ public class InventoryRendering {
         leftTable.defaults().size(200f, 50f);
 
         leftTable.add(useButton).row();
+        useButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                handleUseButton();
+                return true;
+            }
+        });
+
         leftTable.add(destroyButton).row();
         destroyButton.addListener(new InputListener() {
             @Override
@@ -159,6 +168,7 @@ public class InventoryRendering {
         }
         mainTable.add(inventoryTable).expand().fill().width(80f);
         stage.addActor(mainTable);
+        inventory.addItem(new AppleItem(), 2);
     }
 
     public void updateInventory() {
@@ -236,6 +246,18 @@ public class InventoryRendering {
     private void handleClick(int row, int col) {
         lastClickedI = row;
         lastClickedJ = col;
+    }
+
+
+    private void handleUseButton() {
+        if(lastClickedI == -1){
+            return;
+        }
+        Item item = inventory.get(lastClickedI, lastClickedJ).getItem();
+        if(item.isUsable()){
+            item.use(player);
+            inventory.removeItem(lastClickedI, lastClickedJ, 1);
+        }
     }
 
     private void handleDestroyButton() {
