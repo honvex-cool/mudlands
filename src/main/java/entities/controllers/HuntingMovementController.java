@@ -6,13 +6,13 @@ import utils.Pair;
 
 import java.util.*;
 
-public class HuntingController {
+public class HuntingMovementController {
     private final Set<Pair<Integer, Integer>> occupied;
     private final Map<Pair<Integer, Integer>, Pair<Integer, Integer>> predecessor = new HashMap<>();
     private final PositionComponent hunted;
     private final int distance;
 
-    public HuntingController(Set<Pair<Integer, Integer>> occupied, PositionComponent hunted, int distance) {
+    public HuntingMovementController(Set<Pair<Integer, Integer>> occupied, PositionComponent hunted, int distance) {
         this.occupied = occupied;
         this.hunted = hunted;
         this.distance = distance;

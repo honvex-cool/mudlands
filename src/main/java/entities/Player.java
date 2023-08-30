@@ -9,7 +9,7 @@ import openable.inventory.Inventory;
 public class Player extends Mob {
 
     private Inventory inventory = new Inventory();
-    private final Cooldown hitCooldown = new Cooldown(0.2f);
+    private final Cooldown hitCooldown = Cooldown.readyToUse(0.2f);
 
     public Player(){
         super();

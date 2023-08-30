@@ -1,11 +1,11 @@
 package entities.mobs;
 
-import entities.controllers.HuntingController;
+import entities.controllers.HuntingMovementController;
 
 public class Zombie extends Mob {
-    private final HuntingController controller;
+    private final HuntingMovementController controller;
 
-    public Zombie(HuntingController controller) {
+    public Zombie(HuntingMovementController controller) {
         this.controller = controller;
     }
 

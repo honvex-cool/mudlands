@@ -5,7 +5,7 @@ public class Cooldown {
 
     private float remaining = 0.0f;
 
-    public Cooldown(float duration) {
+    private Cooldown(float duration) {
         this.duration = duration;
     }
 
@@ -26,5 +26,20 @@ public class Cooldown {
             return false;
         reset();
         return true;
+    }
+
+    public boolean use(float time) {
+        advance(time);
+        return use();
+    }
+
+    public static Cooldown readyToUse(float duration) {
+        return new Cooldown(duration);
+    }
+
+    public static Cooldown notReadyToUse(float duration) {
+        Cooldown cooldown = readyToUse(duration);
+        cooldown.reset();
+        return cooldown;
     }
 }

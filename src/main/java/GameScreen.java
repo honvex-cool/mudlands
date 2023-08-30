@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entities.*;
-import entities.controllers.HuntingController;
+import entities.controllers.HuntingMovementController;
 import entities.grounds.Ground;
 import entities.mobs.Mob;
 import entities.passives.Passive;
@@ -74,7 +74,7 @@ public class GameScreen implements Screen {
         passives = new HashMap<>();
         mobs = new ArrayList<>();
 
-        HuntingController controller = new HuntingController(
+        HuntingMovementController controller = new HuntingMovementController(
             Collections.unmodifiableSet(passives.keySet()),
             player.mutablePositionComponent,
             30
