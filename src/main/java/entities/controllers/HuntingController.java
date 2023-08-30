@@ -29,7 +29,6 @@ public class HuntingController {
     public void update() {
         predecessor.clear();
         var huntedField = PositionComponent.getFieldAsPair(hunted);
-        System.err.println(huntedField.getFirst() + " " + huntedField.getSecond());
         predecessor.put(huntedField, null);
         Queue<Pair<Integer, Integer>> pending = new ArrayDeque<>();
         pending.add(PositionComponent.getFieldAsPair(hunted));

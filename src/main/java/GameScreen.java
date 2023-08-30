@@ -121,7 +121,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         updateSystem.update(delta);
         chunkManagerSystem.update(ground,passives,mobs);
-        Debug.log(delta, passives.size());
         inputSystem.update(player, delta);
         spawnSystem.update(delta);
         actionManagerSystem.update(player,passives,mobs);

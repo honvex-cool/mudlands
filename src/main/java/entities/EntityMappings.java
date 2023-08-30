@@ -2,6 +2,7 @@ package entities;
 
 import entities.grounds.*;
 import entities.mobs.Mob;
+import entities.mobs.Zombie;
 import entities.passives.*;
 
 import java.util.Map;
@@ -26,5 +27,7 @@ public final class EntityMappings {
         102, Stones.class
     );
 
-    public static final Map<Integer, Class<? extends Mob>> MOB_MAP = Map.of();
+    public static final Map<Integer, Class<? extends Mob>> MOB_MAP = Map.of(
+        201, Zombie.class
+    );
 }
