@@ -125,6 +125,14 @@ public class InventoryRendering {
             }
         });
         leftTable.add(equipButton).row();
+
+        equipButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                handleEquipButton();
+                return true;
+            }
+        });
         leftTable.add(moveButton).row();
 
         moveButton.addListener(new InputListener() {
@@ -248,15 +256,27 @@ public class InventoryRendering {
         lastClickedJ = col;
     }
 
-
-    private void handleUseButton() {
-        if(lastClickedI == -1){
+    private void handleEquipButton() {
+        if(lastClickedI == -1) {
             return;
         }
         Item item = inventory.get(lastClickedI, lastClickedJ).getItem();
-        if(item.isUsable()){
+        if(item.isEquipable()) {
+            inventory.equipItem(lastClickedI, lastClickedJ);
+            player.setAttackStrength(item.getAttackStrength());
+            updateInventory();
+        }
+    }
+
+    private void handleUseButton() {
+        if(lastClickedI == -1) {
+            return;
+        }
+        Item item = inventory.get(lastClickedI, lastClickedJ).getItem();
+        if(item.isUsable()) {
             item.use(player);
             inventory.removeItem(lastClickedI, lastClickedJ, 1);
+            updateInventory();
         }
     }
 

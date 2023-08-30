@@ -7,7 +7,7 @@ public class StoneItem extends Item {
         stackable = true;
         craftable = false;
         edible = false;
-        equipable = true;
+        equipable = false;
         usable = false;
     }
 
