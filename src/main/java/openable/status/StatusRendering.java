@@ -10,7 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import entities.Player;
+import openable.inventory.Inventory;
 import utils.AssetManager;
 
 import static utils.Config.UISKIN;
@@ -39,10 +41,12 @@ public class StatusRendering {
 
     private AssetManager assetManager;
 
+    private Inventory inventory;
     public StatusRendering(Player player, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
         this.stage = new Stage();
         this.player = player;
+        this.inventory = player.getInventory();
         this.assetManager = assetManager;
         noneTexture = assetManager.getInventoryTexture("None");
 
@@ -59,7 +63,6 @@ public class StatusRendering {
     }
 
 
-
     public void update() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -69,6 +72,7 @@ public class StatusRendering {
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
         hp.setText("HP: " + this.player.getHp().getCurrentPoints());
+        image.setDrawable(new TextureRegionDrawable(assetManager.getInventoryTexture(inventory.getRightHand().toString())));
         stage.act();
         stage.draw();
     }

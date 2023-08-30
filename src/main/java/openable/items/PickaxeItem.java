@@ -18,6 +18,7 @@ public class PickaxeItem extends Item {
         edible = false;
         equipable = true;
         usable = false;
+        attackStrength = 20;
     }
 
     @Override

@@ -7,7 +7,7 @@ public class StickItem extends Item{
         stackable = true;
         craftable = false;
         edible = false;
-        equipable = true;
+        equipable = false;
         usable = false;
     }
 

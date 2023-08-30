@@ -8,6 +8,8 @@ import static utils.Config.INVENTORY_HEIGHT;
 import static utils.Config.INVENTORY_WIDTH;
 
 public class Inventory {
+
+    private Item rightHand;
     public Grid getFields() {
         return fields;
     }
@@ -16,6 +18,7 @@ public class Inventory {
 
     public Inventory() {
         fields = new Grid(INVENTORY_WIDTH, INVENTORY_HEIGHT);
+        rightHand = new NoneItem();
         printInventory();
     }
 
@@ -71,5 +74,14 @@ public class Inventory {
     public void removeItem(int i, int j) {
         InventoryField field = fields.get(i).get(j);
         field.clearField();
+    }
+
+    public void equipItem(int i, int j) {
+        rightHand = get(i, j).getItem();
+        removeItem(i, j);
+    }
+
+    public Item getRightHand() {
+        return rightHand;
     }
 }

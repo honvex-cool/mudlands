@@ -15,6 +15,8 @@ public class Mob extends Entity implements Hitbox {
     public MutableRotationComponent rotationComponent;
     public ActionType nextAction = null;
     private float moveSpeed;
+
+    public int basicAttackStrength = 6;
     public int attackStrength = 6;
 
     public Mob() {
@@ -34,6 +36,10 @@ public class Mob extends Entity implements Hitbox {
     }
 
     public void updateVelocity() {
+    }
+
+    public void setAttackStrength(int number) {
+        attackStrength = basicAttackStrength + number;
     }
     public int getAttackStrength(){
         return attackStrength;

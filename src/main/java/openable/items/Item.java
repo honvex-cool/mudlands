@@ -11,6 +11,12 @@ public class Item {
     boolean equipable;
     boolean craftable;
 
+    public int getAttackStrength() {
+        return attackStrength;
+    }
+
+    int attackStrength = 0;
+
     public void craft(Inventory inventory) {
 
     }
