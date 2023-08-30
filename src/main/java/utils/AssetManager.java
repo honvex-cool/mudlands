@@ -12,6 +12,8 @@ public class AssetManager {
 
     private final Map<String, Sprite> sprites = new HashMap<>();
 
+    private final Map<String, Texture> inventoryTextures = new HashMap<>();
+
     public AssetManager(String assetDirectoryName) {
         this.assetDirectoryName = assetDirectoryName;
     }
@@ -24,13 +26,26 @@ public class AssetManager {
         return sprite;
     }
 
+    public Texture getInventoryTexture(String name) {
+        if(inventoryTextures.containsKey(name))
+            return inventoryTextures.get(name);
+        Texture texture = loadInventoryTexture(name);
+        inventoryTextures.put(name, texture);
+        return texture;
+    }
+
     private Sprite loadSprite(String name) {
         return new Sprite(new Texture(Gdx.files.internal(assetDirectoryName + "/textures/" + name + ".png")));
     }
 
+    private Texture loadInventoryTexture(String name) {
+        return new Texture(Gdx.files.internal(assetDirectoryName + "/inventory/" + name + ".png"));
+    }
 
     public void dispose() {
         for(Sprite sprite : sprites.values())
             sprite.getTexture().dispose();
+        for(Texture texture : inventoryTextures.values())
+            texture.dispose();
     }
 }

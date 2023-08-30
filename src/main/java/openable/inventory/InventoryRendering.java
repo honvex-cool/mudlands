@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import entities.Player;
 import openable.items.Item;
+import utils.AssetManager;
 import utils.Pair;
 
 import java.util.HashMap;
@@ -71,12 +72,15 @@ public class InventoryRendering {
 
     private int movingToJ = -1;
 
+    private AssetManager assetManager;
+
     private Map<Pair<Integer, Integer>, ImageButton> imageButtonMap = new HashMap<>();
 
-    public InventoryRendering(Player player) {
+    public InventoryRendering(Player player, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
         this.stage = new Stage();
         this.player = player;
+        this.assetManager = assetManager;
         inventory = player.getInventory();
 
 
@@ -211,22 +215,21 @@ public class InventoryRendering {
     }
 
     private void addTexture(Item item, ImageButton image) {
-        Texture upTexture = new Texture("assets/inventory/" + item + ".png");
+        Texture upTexture = assetManager.getInventoryTexture(item.toString());
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-        Texture downTexture = new Texture("assets/inventory/None.png");
+        Texture downTexture = assetManager.getInventoryTexture("None");
         style.up = new TextureRegionDrawable(upTexture);
         style.down = new TextureRegionDrawable(downTexture);
         image.setStyle(style);
     }
 
     private ImageButton createInventorySlot(Item item) {
-        Texture upTexture = new Texture("assets/inventory/" + item + ".png");
-        Texture downTexture = new Texture("assets/inventory/None.png");
+        Texture upTexture = assetManager.getInventoryTexture(item.toString());
+        Texture downTexture = assetManager.getInventoryTexture("None");
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = new TextureRegionDrawable(upTexture);
         style.down = new TextureRegionDrawable(downTexture);
-        ImageButton imageButton = new ImageButton(style);
-        return imageButton;
+        return new ImageButton(style);
     }
 
 
@@ -240,7 +243,7 @@ public class InventoryRendering {
             return;
         }
         inventory.removeItem(lastClickedI, lastClickedJ);
-        Texture downTexture = new Texture("assets/inventory/None.png");
+        Texture downTexture = assetManager.getInventoryTexture("None");
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         Pair<Integer, Integer> coords = new Pair<>(lastClickedI, lastClickedJ);
         style.up = new TextureRegionDrawable(downTexture);

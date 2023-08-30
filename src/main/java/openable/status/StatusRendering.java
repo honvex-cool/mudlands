@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import entities.Player;
+import utils.AssetManager;
 
 import static utils.Config.UISKIN;
 
@@ -34,12 +35,17 @@ public class StatusRendering {
 
     private Image image;
 
-    Texture noneTexture = new Texture("assets/inventory/None.png");
+    private Texture noneTexture;
 
-    public StatusRendering(Player player) {
+    private AssetManager assetManager;
+
+    public StatusRendering(Player player, AssetManager assetManager) {
+        skin = new Skin(Gdx.files.internal(UISKIN));
         this.stage = new Stage();
         this.player = player;
-        skin = new Skin(Gdx.files.internal(UISKIN));
+        this.assetManager = assetManager;
+        noneTexture = assetManager.getInventoryTexture("None");
+
         mainTable = new Table();
         mainTable.setFillParent(true);
 

@@ -98,7 +98,7 @@ public class GameScreen implements Screen {
             mobsView
         );
 
-        openableManager = new OpenableManager(player);
+        openableManager = new OpenableManager(player, assetManager);
     }
 
     @Override

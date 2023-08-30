@@ -17,6 +17,7 @@ import entities.Player;
 import openable.inventory.Inventory;
 import openable.items.Item;
 import openable.items.PickaxeItem;
+import utils.AssetManager;
 
 import static utils.Config.*;
 
@@ -38,11 +39,13 @@ public class CraftingRendering {
     private int page;
 
     private int maxPage = 1;
+    private AssetManager assetManager;
 
-    public CraftingRendering(Player player) {
+    public CraftingRendering(Player player, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
         this.stage = new Stage();
         this.inventory = player.getInventory();
+        this.assetManager = assetManager;
         page = 1;
         mainTable = new Table();
         inventoryTable = new Table();
@@ -101,8 +104,8 @@ public class CraftingRendering {
     }
 
     private ImageButton createInventorySlot(Item item) {
-        Texture upTexture = new Texture("assets/inventory/" + item + ".png");
-        Texture downTexture = new Texture("assets/inventory/None.png");
+        Texture upTexture = assetManager.getInventoryTexture(item.toString());
+        Texture downTexture = assetManager.getInventoryTexture("None");
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = new TextureRegionDrawable(upTexture);
         style.down = new TextureRegionDrawable(downTexture);

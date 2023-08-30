@@ -7,6 +7,7 @@ import entities.Player;
 import openable.crafting.CraftingRendering;
 import openable.inventory.InventoryRendering;
 import openable.status.StatusRendering;
+import utils.AssetManager;
 
 public class OpenableManager {
     private InventoryRendering inventoryRendering;
@@ -18,11 +19,11 @@ public class OpenableManager {
     private boolean craftingOpen;
 
     private boolean statusOpen;
-    public OpenableManager(Player player){
+    public OpenableManager(Player player, AssetManager assetManager){
         this.player = player;
-        craftingRendering = new CraftingRendering(player);
-        inventoryRendering = new InventoryRendering(player);
-        statusRendering = new StatusRendering(player);
+        craftingRendering = new CraftingRendering(player, assetManager);
+        inventoryRendering = new InventoryRendering(player, assetManager);
+        statusRendering = new StatusRendering(player, assetManager);
         inventoryOpen = false;
         craftingOpen = false;
         statusOpen = false;
