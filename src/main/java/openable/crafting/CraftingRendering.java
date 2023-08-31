@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import entities.Player;
 import openable.inventory.Inventory;
@@ -48,8 +45,8 @@ public class CraftingRendering {
 
     private ArrayList<Page> pages;
 
-    CraftedPopup popupAccept;
-    CraftedPopup popupDeny;
+    Dialog popupAccept;
+    Dialog popupDeny;
 
     public CraftingRendering(Player player, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
@@ -83,11 +80,11 @@ public class CraftingRendering {
             }
         });
 
-        popupAccept = new CraftedPopup("", skin);
+        popupAccept = new Dialog("", skin);
         popupAccept.text("");
         popupAccept.button("OK", true);
 
-        popupDeny = new CraftedPopup("MUD!", skin);
+        popupDeny = new Dialog("MUD!", skin);
         popupDeny.text("Not enough materials");
         popupDeny.button("OK", true);
 
