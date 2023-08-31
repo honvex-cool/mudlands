@@ -47,6 +47,17 @@ public class Inventory {
         field.setItem(item);
         field.setNumber(field.getNumber() + number);
     }
+    public boolean checkInventory(Item item, int number){
+        int currentNumber = 0;
+        for(int i = 0; i < INVENTORY_HEIGHT; i++) {
+            for(int j = 0; j < INVENTORY_WIDTH; j++) {
+                if(get(i, j).getItem().toString().equals(item.toString())) {
+                    currentNumber += get(i, j).getNumber();
+                }
+            }
+        }
+        return currentNumber >= number;
+    }
 
     public Pair<Integer, Integer> searchItem(Item item) {
         for(int i = 0; i < fields.getHeight(); i++) {
@@ -76,12 +87,23 @@ public class Inventory {
         field.clearField();
     }
 
+    public void removeItem(Item item, int number){
+        var pair = searchItem(item);
+        removeItem(pair.getFirst(), pair.getSecond(), number);
+    }
+
     public void equipItem(int i, int j) {
+        unEquipItem();
         rightHand = get(i, j).getItem();
         removeItem(i, j);
     }
 
     public Item getRightHand() {
         return rightHand;
+    }
+
+    public void unEquipItem(){
+        addItem(rightHand, 1);
+        rightHand = new NoneItem();
     }
 }

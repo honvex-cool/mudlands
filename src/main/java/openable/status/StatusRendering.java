@@ -5,11 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import entities.Player;
 import openable.inventory.Inventory;
@@ -42,6 +43,8 @@ public class StatusRendering {
     private AssetManager assetManager;
 
     private Inventory inventory;
+
+    private TextButton unEquipButton;
     public StatusRendering(Player player, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
         this.stage = new Stage();
@@ -54,10 +57,21 @@ public class StatusRendering {
         mainTable.setFillParent(true);
 
         hp = new Label("HP: " + this.player.getHp().getCurrentPoints(), skin);
+        unEquipButton = new TextButton("UNEQUIP", skin);
         image = new Image(noneTexture);
 
         mainTable.add(hp);
         mainTable.add(image).size(64f);
+        mainTable.row();
+        mainTable.add(unEquipButton);
+
+        unEquipButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                inventory.unEquipItem();
+                return true;
+            }
+        });
 
         stage.addActor(mainTable);
     }

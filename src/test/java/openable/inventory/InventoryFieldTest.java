@@ -1,6 +1,6 @@
 package openable.inventory;
 
-import openable.items.StickItem;
+import openable.items.materials.StickItem;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

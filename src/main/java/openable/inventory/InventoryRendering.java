@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import entities.Player;
-import openable.items.AppleItem;
+import openable.items.food.AppleItem;
 import openable.items.Item;
 import utils.AssetManager;
 import utils.Pair;

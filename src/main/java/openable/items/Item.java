@@ -5,17 +5,17 @@ import openable.inventory.Inventory;
 
 public class Item {
 
-    boolean stackable;
-    boolean usable;
-    boolean edible;
-    boolean equipable;
-    boolean craftable;
+    protected boolean stackable;
+    protected boolean usable;
+    protected boolean edible;
+    protected boolean equipable;
+    protected boolean craftable;
 
     public int getAttackStrength() {
         return attackStrength;
     }
 
-    int attackStrength = 0;
+    protected int attackStrength = 0;
 
     public void craft(Inventory inventory) {
 

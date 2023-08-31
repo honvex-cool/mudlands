@@ -4,7 +4,7 @@ import actions.ActionType;
 import components.MutablePositionComponent;
 import entities.mobs.Mob;
 import entities.Player;
-import openable.items.StoneItem;
+import openable.items.materials.StoneItem;
 
 public class Stones extends Drop {
     Stones(MutablePositionComponent mutablePositionComponent) {
