@@ -3,14 +3,17 @@ package entities.passives;
 import actions.ActionType;
 import components.Component;
 import components.MutablePositionComponent;
+import components.Vital;
 import entities.Entity;
 import entities.Hitbox;
+import entities.materials.Composition;
 import entities.mobs.Mob;
 
 import java.util.Map;
 import java.util.Set;
 
 public class Passive extends Entity implements Hitbox {
+    protected Composition composition;
     protected boolean generated;
 
     public Passive() {
@@ -33,12 +36,18 @@ public class Passive extends Entity implements Hitbox {
 
     @Override
     public void react(ActionType actionType, Mob actor) {
-        super.react(actionType, actor);
+        if(actionType == ActionType.HIT)
+            composition.damage(actor.getAttackDamage());
         generated = false;
     }
 
     @Override
     public Set<Component> viewComponents() {
-        return Set.of(mutablePositionComponent, hp);
+        return Set.of(mutablePositionComponent, composition);
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return Vital.isDrained(composition);
     }
 }

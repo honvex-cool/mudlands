@@ -1,5 +1,6 @@
 package openable.items.tools;
 
+import entities.materials.Damage;
 import openable.inventory.Inventory;
 import openable.items.Item;
 import openable.items.materials.StickItem;
@@ -18,7 +19,7 @@ public class SwordItem extends Item {
         edible = false;
         equipable = true;
         usable = false;
-        attackStrength = 50;
+        damage = new Damage(1, 1, 1, 20);
     }
 
 

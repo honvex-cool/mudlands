@@ -1,5 +1,6 @@
 package openable.items.tools;
 
+import entities.materials.Damage;
 import openable.inventory.Inventory;
 import openable.items.Item;
 import openable.items.materials.StickItem;
@@ -19,7 +20,7 @@ public class PickaxeItem extends Item {
         edible = false;
         equipable = true;
         usable = false;
-        attackStrength = 20;
+        damage = new Damage(1, 20, 1, 1);
     }
 
     @Override

@@ -263,7 +263,7 @@ public class InventoryRendering {
         Item item = inventory.get(lastClickedI, lastClickedJ).getItem();
         if(item.isEquipable()) {
             inventory.equipItem(lastClickedI, lastClickedJ);
-            player.setAttackStrength(item.getAttackStrength());
+            player.setAttackDamage(item.getAttackStrength());
             updateInventory();
         }
     }
