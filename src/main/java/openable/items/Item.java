@@ -1,7 +1,12 @@
 package openable.items;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import entities.Player;
+import openable.crafting.CraftedPopup;
 import openable.inventory.Inventory;
+import utils.Pair;
+
+import java.util.ArrayList;
 
 public class Item {
 
@@ -11,14 +16,24 @@ public class Item {
     protected boolean equipable;
     protected boolean craftable;
 
+    protected ArrayList<Pair<Item, Integer>> recipe;
+
+    public String getRecipe() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for(Pair<Item, Integer> item : recipe) {
+            stringBuilder.append(item.getFirst()).append(": ").append(item.getSecond()).append(", ");
+        }
+        return stringBuilder.toString();
+    }
+
     public int getAttackStrength() {
         return attackStrength;
     }
 
     protected int attackStrength = 0;
 
-    public void craft(Inventory inventory) {
-
+    public boolean craft(Inventory inventory) {
+        return isCraftable();
     }
 
     public void use(Player player) {
