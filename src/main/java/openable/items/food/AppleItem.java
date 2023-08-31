@@ -1,6 +1,7 @@
-package openable.items;
+package openable.items.food;
 
 import entities.Player;
+import openable.items.Item;
 
 public class AppleItem extends Item {
     String name = "Apple";

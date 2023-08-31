@@ -16,8 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import entities.Player;
 import openable.inventory.Inventory;
 import openable.items.Item;
-import openable.items.PickaxeItem;
+import openable.items.NoneItem;
+import openable.items.tools.AxeItem;
+import openable.items.tools.PickaxeItem;
+import openable.items.tools.SwordItem;
 import utils.AssetManager;
+
+import java.util.ArrayList;
 
 import static utils.Config.*;
 
@@ -38,18 +43,23 @@ public class CraftingRendering {
     private Table inventoryTable;
     private int page;
 
-    private int maxPage = 1;
+    private int maxPage = 0;
     private AssetManager assetManager;
+
+    private ArrayList<Page> pages;
 
     public CraftingRendering(Player player, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
         this.stage = new Stage();
         this.inventory = player.getInventory();
         this.assetManager = assetManager;
-        page = 1;
+        page = 0;
         mainTable = new Table();
         inventoryTable = new Table();
         mainTable.setFillParent(true);
+
+        pages = new ArrayList<>();
+        createPages();
 
         TextButton leftButton = new TextButton("LEFT", skin);
         leftButton.addListener(new InputListener() {
@@ -70,9 +80,18 @@ public class CraftingRendering {
             }
         });
 
+        int counter = 0;
+
+
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
             for(int col = 0; col < INVENTORY_WIDTH; col++) {
-                Item tmp = new PickaxeItem();
+                Item tmp;
+                if(counter >= pages.get(page).getSize()) {
+                    tmp = new NoneItem();
+                } else {
+                    tmp = pages.get(page).getItem(counter);
+                }
+                counter++;
                 ImageButton inventorySlot = createInventorySlot(tmp);
                 inventoryTable.add(inventorySlot).size(64).pad(5);
                 inventorySlot.addListener(new InputListener() {
@@ -91,12 +110,20 @@ public class CraftingRendering {
         stage.addActor(mainTable);
     }
 
+    private void createPages() {
+        Page page = new Page("Tools");
+        page.addItem(new PickaxeItem());
+        page.addItem(new SwordItem());
+        page.addItem(new AxeItem());
+        pages.add(page);
+    }
+
     private void updatePage() {
-        if(page == 0){
-            page = 1;
+        if(page < 0) {
+            page = 0;
             return;
         }
-        if(page > maxPage){
+        if(page > maxPage) {
             page = maxPage;
             return;
         }

@@ -4,7 +4,7 @@ import actions.ActionType;
 import components.MutablePositionComponent;
 import entities.mobs.Mob;
 import entities.Player;
-import openable.items.StickItem;
+import openable.items.materials.StickItem;
 
 public class Sticks extends Drop {
     Sticks(MutablePositionComponent mutablePositionComponent) {

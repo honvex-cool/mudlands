@@ -1,9 +1,11 @@
-package openable.items;
+package openable.items.materials;
 
-public class StickItem extends Item{
-    String name = "Stick";
+import openable.items.Item;
 
-    public StickItem() {
+public class StoneItem extends Item {
+    String name = "Stone";
+
+    public StoneItem() {
         stackable = true;
         craftable = false;
         edible = false;
