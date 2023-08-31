@@ -7,6 +7,7 @@ import components.MutableRotationComponent;
 import components.VelocityComponent;
 import entities.Entity;
 import entities.Hitbox;
+import entities.materials.Damage;
 
 import java.util.Set;
 
@@ -16,8 +17,7 @@ public class Mob extends Entity implements Hitbox {
     public ActionType nextAction = null;
     private float moveSpeed;
 
-    public int basicAttackStrength = 6;
-    public int attackStrength = 6;
+    private Damage damage = new Damage(5, 5, 5, 5);
 
     public Mob() {
         this(0,0);
@@ -38,12 +38,14 @@ public class Mob extends Entity implements Hitbox {
     public void updateVelocity() {
     }
 
-    public void setAttackStrength(int number) {
-        attackStrength = basicAttackStrength + number;
+    public void setAttackDamage(Damage damage) {
+        this.damage = damage;
     }
-    public int getAttackStrength(){
-        return attackStrength;
+
+    public Damage getAttackDamage(){
+        return damage;
     }
+
     public ActionType getNextAction(){
         return nextAction;
     }

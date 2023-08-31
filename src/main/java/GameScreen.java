@@ -122,7 +122,7 @@ public class GameScreen implements Screen {
         updateSystem.update(delta);
         chunkManagerSystem.update(ground,passives,mobs);
         inputSystem.update(player, delta);
-        spawnSystem.update(delta);
+        //spawnSystem.update(delta);
         actionManagerSystem.update(player,passives,mobs);
         mobs.add(player);
         moveSystem.move(mobs, passives, ground,delta);

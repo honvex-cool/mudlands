@@ -36,8 +36,6 @@ public class Entity implements Savable, ComponentHolder {
     }
 
     public void react(ActionType actionType, Mob actor){
-        if(actionType == ActionType.HIT)
-            hp.damage(actor.getAttackStrength());
     }
 
     public void update(float deltaTime) {

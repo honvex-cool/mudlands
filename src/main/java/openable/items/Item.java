@@ -1,6 +1,7 @@
 package openable.items;
 
 import entities.Player;
+import entities.materials.Damage;
 import openable.inventory.Inventory;
 
 public class Item {
@@ -10,12 +11,11 @@ public class Item {
     protected boolean edible;
     protected boolean equipable;
     protected boolean craftable;
+    protected Damage damage;
 
-    public int getAttackStrength() {
-        return attackStrength;
+    public Damage getAttackStrength() {
+        return damage;
     }
-
-    protected int attackStrength = 0;
 
     public void craft(Inventory inventory) {
 
