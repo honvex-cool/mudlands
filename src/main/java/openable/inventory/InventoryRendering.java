@@ -46,22 +46,6 @@ public class InventoryRendering {
 
     private Inventory inventory;
 
-    public int getLastClickedI() {
-        return lastClickedI;
-    }
-
-    public void setLastClickedI(int lastClickedI) {
-        this.lastClickedI = lastClickedI;
-    }
-
-    public int getLastClickedJ() {
-        return lastClickedJ;
-    }
-
-    public void setLastClickedJ(int lastClickedJ) {
-        this.lastClickedJ = lastClickedJ;
-    }
-
     private int lastClickedI = -1;
     private int lastClickedJ = -1;
 
@@ -76,6 +60,8 @@ public class InventoryRendering {
     private AssetManager assetManager;
 
     private Map<Pair<Integer, Integer>, ImageButton> imageButtonMap = new HashMap<>();
+
+    Dialog equip;
 
     public InventoryRendering(Player player, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
@@ -177,6 +163,10 @@ public class InventoryRendering {
         mainTable.add(inventoryTable).expand().fill().width(80f);
         stage.addActor(mainTable);
         inventory.addItem(new AppleItem(), 2);
+
+
+        equip = new Dialog("EQUIPPED", skin);
+        equip.button("OK", true);
     }
 
     public void updateInventory() {
@@ -265,6 +255,8 @@ public class InventoryRendering {
             inventory.equipItem(lastClickedI, lastClickedJ);
             player.setAttackDamage(item.getAttackStrength());
             updateInventory();
+            equip.getContentTable().clearChildren();
+            equip.show(stage);
         }
     }
 

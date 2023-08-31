@@ -1,5 +1,7 @@
 package openable.items;
 
+import java.util.ArrayList;
+
 public class NoneItem extends Item {
     String name = "None";
     public NoneItem() {
@@ -8,6 +10,7 @@ public class NoneItem extends Item {
         edible = false;
         equipable = false;
         usable = false;
+        recipe = new ArrayList<>();
     }
 
     @Override

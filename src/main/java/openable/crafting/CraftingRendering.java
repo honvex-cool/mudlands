@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import entities.Player;
 import openable.inventory.Inventory;
@@ -48,6 +45,9 @@ public class CraftingRendering {
 
     private ArrayList<Page> pages;
 
+    Dialog popupAccept;
+    Dialog popupDeny;
+
     public CraftingRendering(Player player, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
         this.stage = new Stage();
@@ -80,34 +80,59 @@ public class CraftingRendering {
             }
         });
 
+        popupAccept = new Dialog("", skin);
+        popupAccept.text("");
+        popupAccept.button("OK", true);
+
+        popupDeny = new Dialog("MUD!", skin);
+        popupDeny.text("Not enough materials");
+        popupDeny.button("OK", true);
+
+        showPage(pages.get(page));
+        mainTable.add(leftButton);
+        mainTable.add(inventoryTable);
+        mainTable.add(rightButton);
+        stage.addActor(mainTable);
+
+    }
+
+
+    private void showPage(Page page) {
         int counter = 0;
-
-
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
             for(int col = 0; col < INVENTORY_WIDTH; col++) {
-                Item tmp;
-                if(counter >= pages.get(page).getSize()) {
-                    tmp = new NoneItem();
+                Item item;
+                if(counter >= page.getSize()) {
+                    item = new NoneItem();
                 } else {
-                    tmp = pages.get(page).getItem(counter);
+                    item = page.getItem(counter);
                 }
                 counter++;
-                ImageButton inventorySlot = createInventorySlot(tmp);
+                ImageButton inventorySlot = createInventorySlot(item);
                 inventoryTable.add(inventorySlot).size(64).pad(5);
                 inventorySlot.addListener(new InputListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        tmp.craft(inventory);
+                        if(!item.isCraftable()) {
+                            popupDeny.getContentTable().clearChildren();
+                            popupDeny.text("Cannot be crafted");
+                            popupDeny.show(stage);
+                        }
+                        else if(item.craft(inventory)) {
+                            popupAccept.getContentTable().clearChildren();
+                            popupAccept.text("Crafted " + item);
+                            popupAccept.show(stage);
+                        } else {
+                            popupDeny.getContentTable().clearChildren();
+                            popupDeny.text("Not enough materials: " + item.getRecipe());
+                            popupDeny.show(stage);
+                        }
                         return true;
                     }
                 });
             }
             inventoryTable.row();
         }
-        mainTable.add(leftButton);
-        mainTable.add(inventoryTable);
-        mainTable.add(rightButton);
-        stage.addActor(mainTable);
     }
 
     private void createPages() {
