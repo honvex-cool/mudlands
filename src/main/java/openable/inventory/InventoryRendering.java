@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -26,7 +27,7 @@ public class InventoryRendering {
     private Player player;
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-
+    private boolean dragging = false;
     private Table inventoryTable;
 
     private boolean movingItem = false;
@@ -42,26 +43,22 @@ public class InventoryRendering {
     private Stage stage;
 
     private Label objectLabel, edible, equippable, number;
-    private TextButton useButton, destroyButton, equipButton, moveButton;
+    private TextButton useButton, destroyButton, equipButton;
 
     private Inventory inventory;
 
     private int lastClickedI = -1;
     private int lastClickedJ = -1;
 
-    private int movingFromI = -1;
-
-    private int movingFromJ = -1;
-
-    private int movingToI = -1;
-
-    private int movingToJ = -1;
-
     private AssetManager assetManager;
 
-    private Map<Pair<Integer, Integer>, ImageButton> imageButtonMap = new HashMap<>();
+    private Map<Pair<Integer, Integer>, InventoryImage> InventoryImageMap = new HashMap<>();
 
     Dialog equip;
+
+    private float offsetX, offsetY;
+
+    Image image;
 
     public InventoryRendering(Player player, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
@@ -89,8 +86,8 @@ public class InventoryRendering {
         useButton = new TextButton("USE", skin);
         destroyButton = new TextButton("DESTROY", skin);
         equipButton = new TextButton("EQUIP", skin);
-        moveButton = new TextButton("MOVE", skin);
         leftTable.defaults().size(200f, 50f);
+
 
         leftTable.add(useButton).row();
         useButton.addListener(new InputListener() {
@@ -119,44 +116,71 @@ public class InventoryRendering {
                 return true;
             }
         });
-        leftTable.add(moveButton).row();
-
-        moveButton.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(lastClickedJ != -1) {
-                    movingFromI = lastClickedI;
-                    movingFromJ = lastClickedJ;
-                    movingItem = true;
-                }
-                return true;
-            }
-        });
-
 
         mainTable.add(leftTable).expand().fill().width(20f);
         mainTable.pad(20f);
 
-
         inventoryTable = new Table();
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
             for(int col = 0; col < INVENTORY_WIDTH; col++) {
-                ImageButton inventorySlot = createInventorySlot(inventory.get(row, col).getItem());
+                InventoryImage inventorySlot = createInventorySlot(inventory.get(row, col).getItem());
+                inventorySlot.i = row;
+                inventorySlot.j = col;
                 inventoryTable.add(inventorySlot).size(64).pad(5);
-                imageButtonMap.put(new Pair<>(row, col), inventorySlot);
+                InventoryImageMap.put(new Pair<>(row, col), inventorySlot);
                 int finalRow = row;
                 int finalCol = col;
                 inventorySlot.addListener(new InputListener() {
                     @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(movingItem) {
-                            movingToI = finalRow;
-                            movingToJ = finalCol;
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                        if(dragging) {
+                            Actor hitActor = event.getStage().hit(Gdx.input.getX(), Gdx.input.getY(), true);
+                            if(hitActor instanceof InventoryImage) {
+                                InventoryImage inventoryImage = (InventoryImage)hitActor;
+                                InventoryField tmp = new InventoryField();
+                                InventoryField source = inventory.get(finalRow, finalCol);
+                                InventoryField target = inventory.get(INVENTORY_HEIGHT - inventoryImage.i - 1, inventoryImage.j);
+                                tmp.setField(source);
+                                source.setField(target);
+                                target.setField(tmp);
+                                updateInventory();
+                            }
+                            image.remove();
                         }
+                        dragging = false;
+                    }
+
+                    @Override
+                    public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                        if(dragging) {
+                            float deltaX = x - offsetX;
+                            float deltaY = y - offsetY;
+
+                            image.moveBy(deltaX, deltaY);
+
+                            offsetX = x;
+                            offsetY = y;
+                        }
+                    }
+
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        if(dragging) {
+                            return false;
+                        }
+                        image = new Image(assetManager.getInventoryTexture(inventory.get(finalRow, finalCol).getItem().toString()));
+                        image.setSize(64f, 64f);
+                        image.setPosition(Gdx.input.getX() - image.getWidth() / 2f, Gdx.graphics.getHeight() - Gdx.input.getY() - image.getHeight() / 2f);
+                        stage.addActor(image);
+
+                        offsetX = x;
+                        offsetY = y;
+                        dragging = true;
                         handleClick(finalRow, finalCol);
                         return true;
                     }
                 });
+
             }
             inventoryTable.row();
         }
@@ -173,8 +197,7 @@ public class InventoryRendering {
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
             for(int col = 0; col < INVENTORY_WIDTH; col++) {
                 Pair<Integer, Integer> pair = new Pair<>(row, col);
-                imageButtonMap.get(pair);
-                addTexture(inventory.get(row, col).getItem(), imageButtonMap.get(pair));
+                addTexture(inventory.get(row, col).getItem(), InventoryImageMap.get(pair));
             }
         }
     }
@@ -198,31 +221,11 @@ public class InventoryRendering {
             equippable.setText("Can Equip: ");
             number.setText("Number: ");
         }
-        if(movingItem && movingToI != -1) {
-            InventoryField tmp = new InventoryField();
-            InventoryField from = inventory.get(movingFromI, movingFromJ);
-            ImageButton fromImage = imageButtonMap.get(new Pair<>(movingFromI, movingFromJ));
-
-
-            InventoryField to = inventory.get(movingToI, movingToJ);
-            ImageButton toImage = imageButtonMap.get(new Pair<>(movingToI, movingToJ));
-            tmp.setField(from);
-            from.setField(to);
-            to.setField(tmp);
-
-            addTexture(from.getItem(), fromImage);
-
-            addTexture(to.getItem(), toImage);
-
-            movingItem = false;
-            movingToI = -1;
-            movingToJ = -1;
-        }
         stage.act();
         stage.draw();
     }
 
-    private void addTexture(Item item, ImageButton image) {
+    private void addTexture(Item item, InventoryImage image) {
         Texture upTexture = assetManager.getInventoryTexture(item.toString());
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         Texture downTexture = assetManager.getInventoryTexture("None");
@@ -231,13 +234,13 @@ public class InventoryRendering {
         image.setStyle(style);
     }
 
-    private ImageButton createInventorySlot(Item item) {
+    private InventoryImage createInventorySlot(Item item) {
         Texture upTexture = assetManager.getInventoryTexture(item.toString());
         Texture downTexture = assetManager.getInventoryTexture("None");
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = new TextureRegionDrawable(upTexture);
         style.down = new TextureRegionDrawable(downTexture);
-        return new ImageButton(style);
+        return new InventoryImage(style);
     }
 
 
@@ -282,6 +285,6 @@ public class InventoryRendering {
         Pair<Integer, Integer> coords = new Pair<>(lastClickedI, lastClickedJ);
         style.up = new TextureRegionDrawable(downTexture);
         style.down = new TextureRegionDrawable(downTexture);
-        imageButtonMap.get(coords).setStyle(style);
+        InventoryImageMap.get(coords).setStyle(style);
     }
 }
