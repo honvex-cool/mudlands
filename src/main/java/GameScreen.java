@@ -65,14 +65,14 @@ public class GameScreen implements Screen {
 
         inputSystem = new InputSystem();
 
-
-        chunkManagerSystem = new ChunkManagerSystem(player,loader, universalFactory);
         actionManagerSystem = new ActionManagerSystem();
 
 
         ground = new HashMap<>();
         passives = new HashMap<>();
         mobs = new ArrayList<>();
+
+        chunkManagerSystem = new ChunkManagerSystem(player,loader, ground,passives,mobs);
 
         HuntingMovementController controller = new HuntingMovementController(
             Collections.unmodifiableSet(passives.keySet()),
@@ -122,7 +122,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         updateSystem.update(delta);
-        chunkManagerSystem.update(ground,passives,mobs);
+        chunkManagerSystem.update();
         inputSystem.update(player, delta);
         spawnSystem.update(delta);
         actionManagerSystem.update(player,passives,mobs);
@@ -153,7 +153,7 @@ public class GameScreen implements Screen {
     public void dispose() {
         spriteBatch.dispose();
         assetManager.dispose();
-        chunkManagerSystem.unloadAll(ground,passives,mobs);
+        chunkManagerSystem.unloadAll();
         loader.savePlayer(player);
         try {
             loader.saveWorld();
