@@ -39,4 +39,8 @@ public class Grid {
     public int getHeight() {
         return height;
     }
+
+    public void add(int i, InventoryField field){
+        inventoryFields.get(i).add(field);
+    }
 }

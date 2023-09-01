@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -27,7 +26,7 @@ public class InventoryRendering {
     private Player player;
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-    private boolean dragging = false;
+    boolean dragging = false;
     private Table inventoryTable;
 
     private boolean movingItem = false;
@@ -43,22 +42,27 @@ public class InventoryRendering {
     private Stage stage;
 
     private Label objectLabel, edible, equippable, number;
-    private TextButton useButton, destroyButton, equipButton;
+    private TextButton useButton, destroyButton;
 
-    private Inventory inventory;
+    Inventory inventory;
 
-    private int lastClickedI = -1;
-    private int lastClickedJ = -1;
+    int lastClickedI = -1;
+    int lastClickedJ = -1;
 
-    private AssetManager assetManager;
+    AssetManager assetManager;
 
-    private Map<Pair<Integer, Integer>, InventoryImage> InventoryImageMap = new HashMap<>();
+    private Map<Pair<Integer, Integer>, InventoryImage> inventoryImageMap = new HashMap<>();
 
     Dialog equip;
 
-    private float offsetX, offsetY;
+    float offsetX;
+    float offsetY;
 
     Image image;
+
+    Table equipmentTable;
+
+    private InventoryImage headEquipment, chestEquipment, legEquipment, bootsEquipment, rightHandEquipment, leftHandEquipment;
 
     public InventoryRendering(Player player, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
@@ -67,9 +71,19 @@ public class InventoryRendering {
         this.assetManager = assetManager;
         inventory = player.getInventory();
 
-
         mainTable = new Table();
         mainTable.setFillParent(true);
+
+        equipmentTable = new Table();
+
+        setUpEquipment(headEquipment, inventory.getHead(), 0, INVENTORY_WIDTH);
+        setUpEquipment(chestEquipment, inventory.getChest(), 1, INVENTORY_WIDTH);
+        setUpEquipment(legEquipment, inventory.getLegs(), 2, INVENTORY_WIDTH);
+        setUpEquipment(bootsEquipment, inventory.getBoots(), 3, INVENTORY_WIDTH);
+        setUpEquipment(rightHandEquipment, inventory.getRightHand(), 4, INVENTORY_WIDTH);
+        setUpEquipment(leftHandEquipment, inventory.getLeftHand(), 5, INVENTORY_WIDTH);
+
+        mainTable.add(equipmentTable).left();
 
         Table leftTable = new Table();
 
@@ -85,9 +99,7 @@ public class InventoryRendering {
 
         useButton = new TextButton("USE", skin);
         destroyButton = new TextButton("DESTROY", skin);
-        equipButton = new TextButton("EQUIP", skin);
         leftTable.defaults().size(200f, 50f);
-
 
         leftTable.add(useButton).row();
         useButton.addListener(new InputListener() {
@@ -107,18 +119,9 @@ public class InventoryRendering {
                 return true;
             }
         });
-        leftTable.add(equipButton).row();
-
-        equipButton.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                handleEquipButton();
-                return true;
-            }
-        });
 
         mainTable.add(leftTable).expand().fill().width(20f);
-        mainTable.pad(20f);
+        mainTable.pad(80f);
 
         inventoryTable = new Table();
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
@@ -127,59 +130,8 @@ public class InventoryRendering {
                 inventorySlot.i = row;
                 inventorySlot.j = col;
                 inventoryTable.add(inventorySlot).size(64).pad(5);
-                InventoryImageMap.put(new Pair<>(row, col), inventorySlot);
-                int finalRow = row;
-                int finalCol = col;
-                inventorySlot.addListener(new InputListener() {
-                    @Override
-                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        if(dragging) {
-                            Actor hitActor = event.getStage().hit(Gdx.input.getX(), Gdx.input.getY(), true);
-                            if(hitActor instanceof InventoryImage) {
-                                InventoryImage inventoryImage = (InventoryImage)hitActor;
-                                InventoryField tmp = new InventoryField();
-                                InventoryField source = inventory.get(finalRow, finalCol);
-                                InventoryField target = inventory.get(INVENTORY_HEIGHT - inventoryImage.i - 1, inventoryImage.j);
-                                tmp.setField(source);
-                                source.setField(target);
-                                target.setField(tmp);
-                                updateInventory();
-                            }
-                            image.remove();
-                        }
-                        dragging = false;
-                    }
-
-                    @Override
-                    public void touchDragged(InputEvent event, float x, float y, int pointer) {
-                        if(dragging) {
-                            float deltaX = x - offsetX;
-                            float deltaY = y - offsetY;
-
-                            image.moveBy(deltaX, deltaY);
-
-                            offsetX = x;
-                            offsetY = y;
-                        }
-                    }
-
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(dragging) {
-                            return false;
-                        }
-                        image = new Image(assetManager.getInventoryTexture(inventory.get(finalRow, finalCol).getItem().toString()));
-                        image.setSize(64f, 64f);
-                        image.setPosition(Gdx.input.getX() - image.getWidth() / 2f, Gdx.graphics.getHeight() - Gdx.input.getY() - image.getHeight() / 2f);
-                        stage.addActor(image);
-
-                        offsetX = x;
-                        offsetY = y;
-                        dragging = true;
-                        handleClick(finalRow, finalCol);
-                        return true;
-                    }
-                });
+                inventoryImageMap.put(new Pair<>(row, col), inventorySlot);
+                inventorySlot.addListener(new InventoryChangeListener(this, row, col));
 
             }
             inventoryTable.row();
@@ -195,11 +147,20 @@ public class InventoryRendering {
 
     public void updateInventory() {
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
-            for(int col = 0; col < INVENTORY_WIDTH; col++) {
+            for(int col = 0; col <= INVENTORY_WIDTH; col++) {
                 Pair<Integer, Integer> pair = new Pair<>(row, col);
-                addTexture(inventory.get(row, col).getItem(), InventoryImageMap.get(pair));
+                addTexture(inventory.get(row, col).getItem(), inventoryImageMap.get(pair));
             }
         }
+    }
+
+
+    public void setUpEquipment(InventoryImage equipment, Item item, int i, int j) {
+        equipment = createInventorySlot(item);
+        equipment.set(i, j);
+        equipment.addListener(new InventoryChangeListener(this, i, j));
+        inventoryImageMap.put(new Pair<>(i, j), equipment);
+        equipmentTable.add(equipment).size(64f).pad(5f).row();
     }
 
     public void update() {
@@ -244,7 +205,7 @@ public class InventoryRendering {
     }
 
 
-    private void handleClick(int row, int col) {
+    void handleClick(int row, int col) {
         lastClickedI = row;
         lastClickedJ = col;
     }
@@ -285,6 +246,6 @@ public class InventoryRendering {
         Pair<Integer, Integer> coords = new Pair<>(lastClickedI, lastClickedJ);
         style.up = new TextureRegionDrawable(downTexture);
         style.down = new TextureRegionDrawable(downTexture);
-        InventoryImageMap.get(coords).setStyle(style);
+        inventoryImageMap.get(coords).setStyle(style);
     }
 }
