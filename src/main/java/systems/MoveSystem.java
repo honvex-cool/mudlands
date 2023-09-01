@@ -9,6 +9,7 @@ import entities.grounds.Ground;
 import entities.mobs.Mob;
 import entities.passives.Passive;
 import utils.Pair;
+import utils.VectorMath;
 
 import java.util.*;
 
@@ -30,16 +31,31 @@ public class MoveSystem {
                 continue;
             VelocityComponent velocityComponent = movement.getVelocity();
             Pair<Float, Float> velocity = velocityComponent.getAsPair();
+            if(velocity.getFirst() == 0 && velocity.getSecond() == 0)
+                continue;
             if(!(mob instanceof Player))
                 mob.rotationComponent.setRotationFromVector(velocity);
+
             if(tryMove(movement,mob,velocity,deltaTime))
                 continue;
-            else if(tryMove(movement,mob,new Pair<>(velocity.getFirst(),0f),deltaTime))
-                continue;
-            else if(tryMove(movement,mob,new Pair<>(0f,velocity.getSecond()),deltaTime))
-                continue;
 
-            movement.reject();
+            float moveRotation = VectorMath.getRotationFromVector(velocity);
+            float len = VectorMath.getLength(velocity);
+
+            float mod = 11f;
+            boolean success = false;
+            for(int i=1;i<9;i++){
+                if(tryMove(movement,mob,VectorMath.getVectorFromRotation(moveRotation+(float)i*mod,len),deltaTime)){
+                    success = true;
+                    break;
+                }
+                if(tryMove(movement,mob,VectorMath.getVectorFromRotation(moveRotation-(float)i*mod,len),deltaTime)) {
+                    success = true;
+                    break;
+                }
+            }
+            if(!success)
+                movement.reject();
         }
     }
 
@@ -55,7 +71,7 @@ public class MoveSystem {
         float dy = velocity.getSecond();
         float length = dx * dx + dy * dy;
         int cost = (int)Math.ceil(length * deltaTime / modifier);
-        if(cost >= movement.getAvailableStamina())
+        if(cost >= movement.getAvailableStamina() || (dx == 0 && dy == 0))
             return false;
         float newX = x + dx * deltaTime * modifier;
         float newY = y + dy * deltaTime * modifier;
@@ -64,7 +80,7 @@ public class MoveSystem {
         if(passive != null && passive.isActive())
             return false;
         for(Mob other : mobs)
-            if(other != mob && squaredDistance(other.mutablePositionComponent, newPositionComponent) < other.getRadius()+mob.getRadius())
+            if(other != mob && distance(other.mutablePositionComponent, newPositionComponent) < other.getRadius()+mob.getRadius())
                 return false;
         mob.mutablePositionComponent.setX(newPositionComponent.getX());
         mob.mutablePositionComponent.setY(newPositionComponent.getY());
@@ -72,10 +88,10 @@ public class MoveSystem {
         return true;
     }
 
-    private static float squaredDistance(PositionComponent first, PositionComponent second) {
+    private static float distance(PositionComponent first, PositionComponent second) {
         float xDiff = first.getX() - second.getX();
         float yDiff = first.getY() - second.getY();
-        return xDiff * xDiff + yDiff * yDiff;
+        return (float)Math.sqrt(xDiff * xDiff + yDiff * yDiff);
     }
 
 }

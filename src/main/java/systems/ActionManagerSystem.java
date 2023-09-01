@@ -26,7 +26,7 @@ public class ActionManagerSystem {
     private Set<Entity> getActionRecipients(Mob mob, Map<Pair<Integer,Integer>, Passive> passives, Collection<Mob> mobs){
         Set<Entity> set = new HashSet<>();
         for(float mo=1f;mo>0f;mo-=0.2f){
-            Pair<Float,Float> end = angleToVector(mob.rotationComponent.getRotation(),mo);
+            Pair<Float,Float> end = VectorMath.getVectorFromRotation(mob.rotationComponent.getRotation(),mo);
             float x = mob.mutablePositionComponent.getX();
             float y = mob.mutablePositionComponent.getY();
             Pair<Integer,Integer> endField = new Pair<>((int) Math.floor(x+end.getFirst()), (int) Math.floor(y+end.getSecond()));
@@ -41,11 +41,5 @@ public class ActionManagerSystem {
             }
         }
         return set;
-    }
-
-    protected Pair<Float,Float> angleToVector(float angle,float scale){
-        float dx = (float) Math.cos(Math.toRadians(angle))*scale;
-        float dy = (float) Math.sin(Math.toRadians(angle))*scale;
-        return new Pair<>(dx,dy);
     }
 }
