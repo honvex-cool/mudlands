@@ -1,8 +1,9 @@
  package components;
 
 import utils.Pair;
+import utils.VectorMath;
 
-public class MutableRotationComponent implements RotationComponent {
+ public class MutableRotationComponent implements RotationComponent {
     private float rotation=90; //in degrees
 
     @Override
@@ -21,10 +22,6 @@ public class MutableRotationComponent implements RotationComponent {
         if(vector.getFirst() == 0 && vector.getSecond() == 0){
             return;
         }
-        double len = Math.sqrt(Math.pow(vector.getFirst(),2)+Math.pow(vector.getSecond(), 2));
-        rotation = (float) Math.toDegrees(Math.asin(-vector.getFirst()/(len))) + 90f;
-        if(vector.getSecond()<0){
-            rotation = 360f - rotation;
-        }
+        rotation = VectorMath.getRotationFromVector(vector);
     }
 }

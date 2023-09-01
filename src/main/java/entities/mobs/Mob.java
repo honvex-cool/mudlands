@@ -65,4 +65,9 @@ public abstract class Mob extends Entity implements Hitbox {
             composition.damage(actor.getAttackDamage());
         }
     }
+
+    @Override
+    public float getRadius() {
+        return 0.25f;
+    }
 }
