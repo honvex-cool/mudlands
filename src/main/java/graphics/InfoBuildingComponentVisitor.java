@@ -8,6 +8,7 @@ public class InfoBuildingComponentVisitor implements ComponentVisitor {
     private float y;
     private float rotation;
     private HealthComponent healthComponent = null;
+    private Float staminaFraction = null;
     private String itemName = null;
 
     @Override
@@ -39,6 +40,11 @@ public class InfoBuildingComponentVisitor implements ComponentVisitor {
         itemName = name.substring(0, name.indexOf("Item"));
     }
 
+    @Override
+    public void visit(StaminaComponent staminaComponent) {
+        staminaFraction = Vital.asFraction(staminaComponent);
+    }
+
     public Transform buildTransform() {
         return new Transform(x, y, 1f, 1f);
     }
@@ -53,5 +59,9 @@ public class InfoBuildingComponentVisitor implements ComponentVisitor {
 
     public String getItemName() {
         return itemName;
+    }
+
+    public Float getStaminaFraction() {
+        return staminaFraction;
     }
 }

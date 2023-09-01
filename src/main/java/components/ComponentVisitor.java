@@ -6,4 +6,5 @@ public interface ComponentVisitor {
     void visit(VelocityComponent component);
     void visit(HealthComponent healthComponent);
     void visit(ItemComponent itemComponent);
+    void visit(StaminaComponent staminaComponent);
 }

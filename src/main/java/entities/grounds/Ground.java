@@ -5,9 +5,8 @@ import entities.Entity;
 import entities.mobs.Mob;
 
 public abstract class Ground extends Entity {
-    private float speedModifier = 1f;
     public float getSpeedModifier() {
-        return speedModifier;
+        return 1;
     }
 
     @Override

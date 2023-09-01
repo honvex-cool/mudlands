@@ -41,6 +41,16 @@ public class DrawablePresenter implements Presenter<Drawable> {
             layer,
             rotation
         );
+        Float staminaFraction = builder.getStaminaFraction();
+        if(staminaFraction != null) {
+            Transform barTransform = new Transform(0, 0, staminaFraction, 0.2f);
+            Drawable bar = new LocalizedSprite(
+                barTransform,
+                assetManager.getSprite("staminaBar"),
+                4
+            );
+            drawable = Stacked.verticallyCentered(drawable, bar);
+        }
         String itemName = builder.getItemName();
         if(itemName != null) {
             Drawable item = new LocalizedSprite(

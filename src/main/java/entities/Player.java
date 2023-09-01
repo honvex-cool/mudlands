@@ -2,12 +2,10 @@ package entities;
 
 import actions.ActionType;
 import actions.Cooldown;
-import components.Component;
-import components.ItemComponent;
-import components.MutableHealthComponent;
+import actions.Movement;
+import components.*;
 import entities.mobs.Mob;
 import openable.inventory.Inventory;
-import openable.items.Item;
 import openable.items.NoneItem;
 
 import java.util.Set;
@@ -16,10 +14,14 @@ public class Player extends Mob {
 
     private Inventory inventory = new Inventory();
     private final Cooldown hitCooldown = Cooldown.readyToUse(0.2f);
+    private final Cooldown regenerationCooldown = Cooldown.readyToUse(0.2f);
     private final ItemComponent itemComponent = () -> {
         var item = inventory.getRightHand().getClass();
         return item == NoneItem.class ? null : item;
     };
+    private boolean moving = false;
+
+    private final MutableStaminaComponent stamina = new MutableStaminaComponent(1000);
 
     public Player(){
         super();
@@ -29,6 +31,22 @@ public class Player extends Mob {
     @Override
     public void update(float deltaTime) {
         hitCooldown.advance(deltaTime);
+        if(!moving && regenerationCooldown.use(deltaTime))
+            stamina.fix(10);
+    }
+
+    @Override
+    public Movement getMovement() {
+        if(Vital.isDrained(stamina) || velocityComponent.getX() == 0 && velocityComponent.getY() == 0) {
+            moving = false;
+            return null;
+        }
+        return new Movement(velocityComponent, stamina.getCurrentPoints(), this::becomeTired);
+    }
+
+    private void becomeTired(int amount) {
+        stamina.damage(amount);
+        moving = true;
     }
 
     @Override
@@ -47,6 +65,6 @@ public class Player extends Mob {
 
     @Override
     public Set<Component> viewComponents() {
-        return Set.of(mutablePositionComponent, rotationComponent, itemComponent);
+        return Set.of(mutablePositionComponent, rotationComponent, itemComponent, stamina);
     }
 }

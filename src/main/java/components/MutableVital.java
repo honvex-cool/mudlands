@@ -1,31 +1,31 @@
 package components;
 
 public class MutableVital implements Vital {
-    private int currentHp;
-    private final int maxHp;
+    private int currentPoints;
+    private final int maxPoints;
 
-    MutableVital(int maxHp) {
-        if(maxHp <= 0)
+    MutableVital(int maxPoints) {
+        if(maxPoints <= 0)
             throw new IllegalArgumentException("`maxHp` must be positive");
-        this.maxHp = maxHp;
-        currentHp = this.maxHp;
+        this.maxPoints = maxPoints;
+        currentPoints = this.maxPoints;
     }
 
     @Override
     public final int getCurrentPoints() {
-        return currentHp;
+        return currentPoints;
     }
 
     @Override
     public final int getMaxPoints() {
-        return maxHp;
+        return maxPoints;
     }
 
     public final void damage(int amount) {
-        currentHp = Math.max(currentHp - amount, 0);
+        currentPoints = Math.max(currentPoints - amount, 0);
     }
 
     public final void fix(int amount) {
-        currentHp = Math.min(currentHp + amount, getMaxPoints());
+        currentPoints = Math.min(currentPoints + amount, getMaxPoints());
     }
 }
