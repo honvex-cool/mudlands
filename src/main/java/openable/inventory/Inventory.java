@@ -6,22 +6,53 @@ import utils.Pair;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
+
 import static utils.Config.INVENTORY_HEIGHT;
 import static utils.Config.INVENTORY_WIDTH;
 
 public class Inventory implements Serializable {
 
-    private Item rightHand;
+    private InventoryField rightHand;
+
+
+
+    private InventoryField leftHand;
+
+    private InventoryField head;
+    private InventoryField chest;
+    private InventoryField legs;
+    private InventoryField boots;
     public Grid getFields() {
         return fields;
     }
 
     private Grid fields;
 
+    private ArrayList<InventoryField> equipment;
+
     public Inventory() {
         fields = new Grid(INVENTORY_WIDTH, INVENTORY_HEIGHT);
-        rightHand = new NoneItem();
-        printInventory();
+        rightHand = new InventoryField();
+        head = new InventoryField();
+        chest = new InventoryField();
+        legs = new InventoryField();
+        boots = new InventoryField();
+        leftHand = new InventoryField();
+        equipment = new ArrayList<>();
+        equipment.add(head);
+        equipment.add(chest);
+        equipment.add(legs);
+        equipment.add(boots);
+        equipment.add(rightHand);
+        equipment.add(leftHand);
+        fields.add(0, head);
+        fields.add(1, chest);
+        fields.add(2, legs);
+        fields.add(3, boots);
+        fields.add(4, rightHand);
+        fields.add(5, leftHand);
+        //printInventory();
     }
 
     public void printInventory() {
@@ -96,16 +127,36 @@ public class Inventory implements Serializable {
 
     public void equipItem(int i, int j) {
         unEquipItem();
-        rightHand = get(i, j).getItem();
+        rightHand.setItem(get(i, j).getItem());
         removeItem(i, j);
     }
 
     public Item getRightHand() {
-        return rightHand;
+        return rightHand.getItem();
     }
 
     public void unEquipItem(){
-        addItem(rightHand, 1);
-        rightHand = new NoneItem();
+        addItem(rightHand.getItem(), 1);
+        rightHand = new InventoryField();
     }
+
+    public Item getHead() {
+        return head.getItem();
+    }
+
+    public Item getChest() {
+        return chest.getItem();
+    }
+
+    public Item getLegs() {
+        return legs.getItem();
+    }
+
+    public Item getBoots() {
+        return boots.getItem();
+    }
+    public Item getLeftHand() {
+        return leftHand.getItem();
+    }
+
 }

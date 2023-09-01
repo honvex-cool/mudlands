@@ -8,6 +8,11 @@ import java.io.Serializable;
 
 public class InventoryImage extends ImageButton{
 
+    public void set(int i ,int j) {
+        this.i = i;
+        this.j = j;
+    }
+
     public int i, j;
     public InventoryImage(ImageButtonStyle style) {
         super(style);
