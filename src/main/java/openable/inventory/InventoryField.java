@@ -9,13 +9,20 @@ public class InventoryField implements Serializable {
     private Item item;
     private int number;
 
+    private ItemType type;
+
     InventoryField() {
-        this(new NoneItem(), 0);
+        this(new NoneItem(), 0, ItemType.NONE);
     }
 
-    InventoryField(Item item, int number) {
+    InventoryField(ItemType type) {
+        this(new NoneItem(), 0, type);
+    }
+
+    InventoryField(Item item, int number, ItemType type) {
         this.item = item;
         this.number = number;
+        this.type = type;
     }
 
     public Item getItem() {
@@ -45,4 +52,12 @@ public class InventoryField implements Serializable {
         this.number = field.getNumber();
         this.item = field.getItem();
     }
+
+    public boolean accept(Item item){
+        if(type == ItemType.NONE){
+            return true;
+        }
+        return type == item.getType();
+    }
 }
+

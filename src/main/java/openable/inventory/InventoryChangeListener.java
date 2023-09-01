@@ -1,6 +1,7 @@
 package openable.inventory;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -10,11 +11,12 @@ import static utils.Config.INVENTORY_HEIGHT;
 
 public class InventoryChangeListener extends InputListener {
 
-    private InventoryRendering inventoryRendering;
-    private Inventory inventory;
-    private int finalRow, finalCol;
+    private final InventoryRendering inventoryRendering;
+    private final Inventory inventory;
+    private final int finalRow;
+    private final int finalCol;
 
-    public InventoryChangeListener(InventoryRendering inventoryRendering, int row, int col)   {
+    public InventoryChangeListener(InventoryRendering inventoryRendering, int row, int col) {
         this.inventoryRendering = inventoryRendering;
         this.inventory = inventoryRendering.inventory;
         finalRow = row;
@@ -23,19 +25,23 @@ public class InventoryChangeListener extends InputListener {
 
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        if(button == Input.Buttons.RIGHT || inventory.get(finalRow, finalCol).getItem().toString().equals("None")) {
+            return;
+        }
         if(inventoryRendering.dragging) {
             Actor hitActor = event.getStage().hit(Gdx.input.getX(), Gdx.input.getY(), true);
-            if(hitActor instanceof InventoryImage) {
-                InventoryImage inventoryImage = (InventoryImage)hitActor;
+            if(hitActor instanceof InventoryImage inventoryImage) {
                 InventoryField tmp = new InventoryField();
                 InventoryField source = inventory.get(finalRow, finalCol);
                 InventoryField target = inventory.get(INVENTORY_HEIGHT - inventoryImage.i - 1, inventoryImage.j);
-                tmp.setField(source);
-                source.setField(target);
-                target.setField(tmp);
-                inventoryRendering.updateInventory();
-                inventoryRendering.lastClickedI = INVENTORY_HEIGHT - inventoryImage.i - 1;
-                inventoryRendering.lastClickedJ = inventoryImage.j;
+                if(target.accept(source.getItem())) {
+                    tmp.setField(source);
+                    source.setField(target);
+                    target.setField(tmp);
+                    inventoryRendering.updateInventory();
+                    inventoryRendering.lastClickedI = INVENTORY_HEIGHT - inventoryImage.i - 1;
+                    inventoryRendering.lastClickedJ = inventoryImage.j;
+                }
             }
             inventoryRendering.image.remove();
         }
@@ -57,7 +63,13 @@ public class InventoryChangeListener extends InputListener {
 
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        System.out.println(finalRow + " " + finalCol);
+        if(inventory.get(finalRow, finalCol).getItem().toString().equals("None")) {
+            return false;
+        }
+        if(button == Input.Buttons.RIGHT){
+            inventoryRendering.showDescription(finalRow, finalCol);
+            return true;
+        }
         if(inventoryRendering.dragging) {
             return false;
         }

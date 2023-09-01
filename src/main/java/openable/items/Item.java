@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import entities.Player;
 import entities.materials.Damage;
 import openable.inventory.Inventory;
+import openable.inventory.ItemType;
 import utils.Pair;
 
 import java.io.Serializable;
@@ -21,7 +22,12 @@ public class Item implements Serializable {
     protected boolean craftable;
     protected Damage damage;
 
-    protected ArrayList<Pair<Item, Integer>> recipe;
+    protected ItemType type = ItemType.NONE;
+    public ItemType getType() {
+        return type;
+    }
+
+    protected ArrayList<Pair<Item, Integer>> recipe = new ArrayList<>();
 
     public String getRecipe() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -44,8 +50,8 @@ public class Item implements Serializable {
 
     }
 
-    void equip() {
-
+    public String getStats(){
+        return "";
     }
 
     public boolean isStackable() {

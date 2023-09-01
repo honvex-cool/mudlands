@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class InventoryFieldTest {
     @Test
     void testConstructor(){
-        InventoryField field = new InventoryField(new StickItem(), 20);
+        InventoryField field = new InventoryField(new StickItem(), 20, ItemType.NONE);
         assertEquals("Stick", field.getItem().toString());
         assertEquals(20, field.getNumber());
         assertTrue(field.getItem().isStackable());
@@ -17,7 +17,7 @@ class InventoryFieldTest {
 
     @Test
     void testClearField(){
-        InventoryField field = new InventoryField(new StickItem(), 20);
+        InventoryField field = new InventoryField(new StickItem(), 20, ItemType.NONE);
         field.clearField();
         assertEquals("None", field.getItem().toString());
         assertEquals(0, field.getNumber());
@@ -27,7 +27,7 @@ class InventoryFieldTest {
 
     @Test
     void testSetField(){
-        InventoryField field = new InventoryField(new StickItem(), 20);
+        InventoryField field = new InventoryField(new StickItem(), 20, ItemType.NONE);
         InventoryField field2 = new InventoryField();
         assertEquals("None", field2.getItem().toString());
         assertEquals(0, field2.getNumber());

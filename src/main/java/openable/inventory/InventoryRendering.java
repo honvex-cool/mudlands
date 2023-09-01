@@ -35,6 +35,7 @@ public class InventoryRendering {
 
     private Skin skin;
 
+    private Dialog description;
     public Stage getStage() {
         return stage;
     }
@@ -53,7 +54,6 @@ public class InventoryRendering {
 
     private Map<Pair<Integer, Integer>, InventoryImage> inventoryImageMap = new HashMap<>();
 
-    Dialog equip;
 
     float offsetX;
     float offsetY;
@@ -70,6 +70,9 @@ public class InventoryRendering {
         this.player = player;
         this.assetManager = assetManager;
         inventory = player.getInventory();
+
+        description = new Dialog("description", skin);
+        description.button("OK");
 
         mainTable = new Table();
         mainTable.setFillParent(true);
@@ -138,11 +141,6 @@ public class InventoryRendering {
         }
         mainTable.add(inventoryTable).expand().fill().width(80f);
         stage.addActor(mainTable);
-        inventory.addItem(new AppleItem(), 2);
-
-
-        equip = new Dialog("EQUIPPED", skin);
-        equip.button("OK", true);
     }
 
     public void updateInventory() {
@@ -219,8 +217,6 @@ public class InventoryRendering {
             inventory.equipItem(lastClickedI, lastClickedJ);
             player.setAttackDamage(item.getAttackStrength());
             updateInventory();
-            equip.getContentTable().clearChildren();
-            equip.show(stage);
         }
     }
 
@@ -247,5 +243,12 @@ public class InventoryRendering {
         style.up = new TextureRegionDrawable(downTexture);
         style.down = new TextureRegionDrawable(downTexture);
         inventoryImageMap.get(coords).setStyle(style);
+    }
+
+    public void showDescription(int i, int j){
+        description.getContentTable().clearChildren();
+        description.text(inventory.get(i, j).getItem().getRecipe());
+        description.text(inventory.get(i, j).getItem().getStats());
+        description.show(stage);
     }
 }

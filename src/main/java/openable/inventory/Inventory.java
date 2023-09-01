@@ -14,15 +14,13 @@ import static utils.Config.INVENTORY_WIDTH;
 public class Inventory implements Serializable {
 
     private InventoryField rightHand;
-
-
-
     private InventoryField leftHand;
 
     private InventoryField head;
     private InventoryField chest;
     private InventoryField legs;
     private InventoryField boots;
+
     public Grid getFields() {
         return fields;
     }
@@ -33,12 +31,12 @@ public class Inventory implements Serializable {
 
     public Inventory() {
         fields = new Grid(INVENTORY_WIDTH, INVENTORY_HEIGHT);
-        rightHand = new InventoryField();
-        head = new InventoryField();
-        chest = new InventoryField();
-        legs = new InventoryField();
-        boots = new InventoryField();
-        leftHand = new InventoryField();
+        rightHand = new InventoryField(ItemType.HANDS);
+        head = new InventoryField(ItemType.HEAD);
+        chest = new InventoryField(ItemType.CHEST);
+        legs = new InventoryField(ItemType.LEGS);
+        boots = new InventoryField(ItemType.BOOTS);
+        leftHand = new InventoryField(ItemType.HANDS);
         equipment = new ArrayList<>();
         equipment.add(head);
         equipment.add(chest);
@@ -80,7 +78,8 @@ public class Inventory implements Serializable {
         field.setItem(item);
         field.setNumber(field.getNumber() + number);
     }
-    public boolean checkInventory(Item item, int number){
+
+    public boolean checkInventory(Item item, int number) {
         int currentNumber = 0;
         for(int i = 0; i < INVENTORY_HEIGHT; i++) {
             for(int j = 0; j < INVENTORY_WIDTH; j++) {
@@ -120,7 +119,7 @@ public class Inventory implements Serializable {
         field.clearField();
     }
 
-    public void removeItem(Item item, int number){
+    public void removeItem(Item item, int number) {
         var pair = searchItem(item);
         removeItem(pair.getFirst(), pair.getSecond(), number);
     }
@@ -135,7 +134,7 @@ public class Inventory implements Serializable {
         return rightHand.getItem();
     }
 
-    public void unEquipItem(){
+    public void unEquipItem() {
         addItem(rightHand.getItem(), 1);
         rightHand = new InventoryField();
     }
@@ -155,6 +154,7 @@ public class Inventory implements Serializable {
     public Item getBoots() {
         return boots.getItem();
     }
+
     public Item getLeftHand() {
         return leftHand.getItem();
     }

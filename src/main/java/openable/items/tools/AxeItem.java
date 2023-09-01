@@ -2,6 +2,7 @@ package openable.items.tools;
 
 import entities.materials.Damage;
 import openable.inventory.Inventory;
+import openable.inventory.ItemType;
 import openable.items.Item;
 import openable.items.materials.StickItem;
 import openable.items.materials.StoneItem;
@@ -24,11 +25,11 @@ public class AxeItem extends Item {
         equipable = true;
         usable = false;
         damage = new Damage(20, 1, 1, 10);
+        type= ItemType.HANDS;
         createRecipe();
     }
 
     private void createRecipe(){
-        recipe = new ArrayList<>();
         recipe.add(new Pair<>(stone, requiredStone));
         recipe.add(new Pair<>(stick, requiredStick));
     }
