@@ -2,7 +2,7 @@ package components;
 
 import utils.Pair;
 
-public class VelocityComponent {
+public class VelocityComponent implements Component {
     private float x;
     private float y;
 
@@ -38,5 +38,10 @@ public class VelocityComponent {
 
     public void clear() {
         x = y = 0f;
+    }
+
+    @Override
+    public void accept(ComponentVisitor visitor) {
+        visitor.visit(this);
     }
 }

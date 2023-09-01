@@ -15,13 +15,13 @@ import java.util.*;
 
 public class ChunkManagerSystem{
     private WorldLoader worldLoader;
-    private UniversalLoader entityLoader;
+    private UniversalFactory entityLoader;
     private Pair<Integer, Integer> central_chunk_coordinates; //central chunk coordinates
     private Player player;
     private MutablePositionComponent player_position;
     private Set<Pair<Integer,Integer>> loaded;
 
-    public ChunkManagerSystem(Player player,WorldLoader worldLoader, UniversalLoader entityLoader){
+    public ChunkManagerSystem(Player player,WorldLoader worldLoader, UniversalFactory entityLoader){
         this.player = player;
         this.player_position = player.mutablePositionComponent;
         //in unloaded world player chunk won't match central_chunk_coordinates, used instead of initial loading
@@ -35,14 +35,14 @@ public class ChunkManagerSystem{
         Set<Mob> to_remove = new HashSet<>();
 
         for(var pair:unloading_chunks) {
-            Map<Pair<Integer,Integer>,SaveStruct> passivesToSave = new HashMap<>();
-            Set<SaveStruct> mobsToSave = new HashSet<>();
+            Map<Pair<Integer,Integer>,Passive> passivesToSave = new HashMap<>();
+            Set<Mob> mobsToSave = new HashSet<>();
             for(int dx=0;dx<Config.CHUNK_SIZE;dx++) {
                 for(int dy=0;dy<Config.CHUNK_SIZE;dy++){
                     Pair<Integer,Integer> curr = new Pair<>(pair.getFirst()*Config.CHUNK_SIZE+dx,pair.getSecond()*Config.CHUNK_SIZE+dy);
                     if(passives.containsKey(curr)){
                         Passive passive = passives.get(curr);
-                        passivesToSave.put(curr, entityLoader.savePassive(passive));
+                        passivesToSave.put(curr, passive);
                     }
                     grounds.remove(curr);
                     passives.remove(curr);
@@ -52,8 +52,8 @@ public class ChunkManagerSystem{
             for(Mob mob:mobs) {
                 if(PositionComponent.getChunk(mob.mutablePositionComponent).equals(pair)){
                     to_remove.add(mob);
-                    SaveStruct struct = entityLoader.saveMob(mob);
-                    mobsToSave.add(struct);
+                    //SaveStruct struct = entityLoader.saveMob(mob);
+                    mobsToSave.add(mob);
                 }
             }
 
@@ -66,12 +66,13 @@ public class ChunkManagerSystem{
     public void load(Map<Pair<Integer,Integer>, Ground> grounds, Map<Pair<Integer,Integer>, Passive> passives, Collection<Mob> mobs, Set<Pair<Integer,Integer>> loading_chunks){
         for(var pair:loading_chunks){
             var set = worldLoader.loadChunk(pair);
-            for(SaveStruct struct:set){
-                switch(struct.entityTag){
-                    case GROUND -> grounds.put(new Pair<>((int)Math.floor(struct.x),(int)Math.floor(struct.y)),entityLoader.loadGround(struct));
-                    case PASSIVE -> passives.put(new Pair<>((int)Math.floor(struct.x),(int)Math.floor(struct.y)),entityLoader.loadPassive(struct));
-                    //case MOB -> passives.add(new Mob(struct));
-                }
+            for(Entity entity:set){ //TODO change to regular objects, and only add them to appropriate lists
+                if(entity instanceof Ground)
+                    grounds.put(PositionComponent.getFieldAsPair(entity.mutablePositionComponent),(Ground)entity);
+                else if(entity instanceof Passive)
+                    passives.put(PositionComponent.getFieldAsPair(entity.mutablePositionComponent),(Passive)entity);
+                if(entity instanceof Mob)
+                    mobs.add((Mob)entity);
             }
         }
     }

@@ -1,10 +1,9 @@
 package entities;
 
 import entities.grounds.*;
-import entities.mobs.Mob;
-import entities.mobs.Pig;
-import entities.mobs.Zombie;
 import entities.passives.*;
+import generator.GroundType;
+import generator.ObjectType;
 
 import java.util.Map;
 
@@ -12,24 +11,18 @@ public final class EntityMappings {
     private EntityMappings() {
     }
 
-    public static final Map<Integer, Class<? extends Ground>> GROUND_MAP = Map.of(
-        1, Water.class,
-        2, Sand.class,
-        3, Grass.class,
-        4, Mud.class,
-        5, Stone.class,
-        6, Dirt.class
+    public static final Map<GroundType, Class<? extends Ground>> GROUND_MAP = Map.of(
+        GroundType.WATER, Water.class,
+        GroundType.SAND, Sand.class,
+        GroundType.GRASS, Grass.class,
+        GroundType.MUD, Mud.class,
+        GroundType.STONE, Stone.class,
+        GroundType.DIRT, Dirt.class
     );
 
-    public static final Map<Integer, Class<? extends Passive>> PASSIVE_MAP = Map.of(
-        1, Tree.class,
-        2, Rock.class,
-        101, Sticks.class,
-        102, Stones.class
-    );
+    public static final Map<ObjectType, Class<? extends Passive>> PASSIVE_MAP = Map.of(
+        ObjectType.TREE, Tree.class,
+        ObjectType.STONE, Rock.class
 
-    public static final Map<Integer, Class<? extends Mob>> MOB_MAP = Map.of(
-        201, Zombie.class,
-        251, Pig.class
     );
 }

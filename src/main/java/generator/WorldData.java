@@ -1,5 +1,7 @@
 package generator;
 
+import entities.Entity;
+import entities.Player;
 import utils.Pair;
 import utils.SaveStruct;
 
@@ -9,10 +11,10 @@ import java.util.Set;
 
 public class WorldData implements Serializable {
     private int seed;
-    private SaveStruct player;
-    private Map<Pair<Integer, Integer>, Set<SaveStruct>> changes;
+    private Player player;
+    private Map<Pair<Integer, Integer>, Set<Entity>> changes;
 
-    public WorldData(int seed, SaveStruct player, Map<Pair<Integer, Integer>, Set<SaveStruct>> changes) {
+    public WorldData(int seed, Player player, Map<Pair<Integer, Integer>, Set<Entity>> changes) {
         this.seed = seed;
         this.player = player;
         this.changes = changes;
@@ -22,11 +24,11 @@ public class WorldData implements Serializable {
         return seed;
     }
 
-    public SaveStruct getPlayerSavestruct() {
+    public Player getPlayer() {
         return player;
     }
 
-    public Map<Pair<Integer, Integer>, Set<SaveStruct>> getChanges() {
+    public Map<Pair<Integer, Integer>, Set<Entity>> getChanges() {
         return changes;
     }
 }

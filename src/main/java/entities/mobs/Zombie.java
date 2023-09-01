@@ -5,7 +5,7 @@ import entities.controllers.HuntingMovementController;
 import utils.Debug;
 
 public class Zombie extends Mob {
-    private final HuntingMovementController controller;
+    private transient final HuntingMovementController controller;
 
     public Zombie(HuntingMovementController controller) {
         this.controller = controller;
@@ -13,7 +13,7 @@ public class Zombie extends Mob {
 
     @Override
     public void updateVelocity() {
-        this.velocityComponent = controller.getVelocity(this.mutablePositionComponent);
+        //this.velocityComponent = controller.getVelocity(this.mutablePositionComponent);
     }
 
     @Override

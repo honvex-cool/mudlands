@@ -1,6 +1,8 @@
 package actions;
 
-public class Cooldown {
+import java.io.Serializable;
+
+public class Cooldown implements Serializable {
     private final float duration;
 
     private float remaining = 0.0f;

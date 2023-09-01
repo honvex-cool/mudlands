@@ -38,9 +38,4 @@ public abstract class Drop extends Passive {
     public Set<Component> viewComponents() {
         return Set.of(mutablePositionComponent);
     }
-
-    @Override
-    public Map<Integer, Integer> saveData() {
-        return Map.of();
-    }
 }

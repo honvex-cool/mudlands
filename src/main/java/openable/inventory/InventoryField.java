@@ -3,7 +3,9 @@ package openable.inventory;
 import openable.items.Item;
 import openable.items.NoneItem;
 
-public class InventoryField {
+import java.io.Serializable;
+
+public class InventoryField implements Serializable {
     private Item item;
     private int number;
 

@@ -1,11 +1,14 @@
 package generator;
 
+import entities.UniversalFactory;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import utils.Pair;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class WorldLoaderTest {
     /*@Test
@@ -37,7 +40,8 @@ class WorldLoaderTest {
 
     @Test
     void testCannotSaveNullWorld() {
-        WorldLoader worldLoader = new WorldLoader();
+        UniversalFactory universalFactory = mock(UniversalFactory.class);
+        WorldLoader worldLoader = new WorldLoader(universalFactory);
         try {
             worldLoader.saveWorld();
         } catch(Exception e) {
