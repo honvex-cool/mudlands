@@ -11,6 +11,11 @@ public class Composition implements HealthComponent {
         currentHp = this.mix.total();
     }
 
+    public Composition(Mix full,int points) {
+        this.mix = full;
+        currentHp = points;
+    }
+
     public void damage(Damage damage) {
         currentHp = Math.max(currentHp - damage.against(mix), 0);
     }

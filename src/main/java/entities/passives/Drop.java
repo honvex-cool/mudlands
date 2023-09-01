@@ -20,7 +20,7 @@ public abstract class Drop extends Passive {
 
     @Override
     public void react(ActionType actionType, Mob actor) {
-        if(actionType == ActionType.HIT)
+        if(actionType == ActionType.INTERACT)
             pickedUp = true;
     }
 

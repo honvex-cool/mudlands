@@ -6,6 +6,7 @@ import utils.SaveStruct;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class EntityLoader<T extends Entity & Savable> {
     private final Map<Integer, Class<? extends T>> typeToClass;

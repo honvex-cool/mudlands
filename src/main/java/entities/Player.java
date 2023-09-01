@@ -13,7 +13,7 @@ import java.util.Set;
 public class Player extends Mob {
 
     private Inventory inventory = new Inventory();
-    private final Cooldown hitCooldown = Cooldown.readyToUse(0.2f);
+    private final Cooldown actionCooldown = Cooldown.readyToUse(0.2f);
     private final Cooldown regenerationCooldown = Cooldown.readyToUse(0.2f);
     private final ItemComponent itemComponent = () -> {
         var item = inventory.getRightHand().getClass();
@@ -30,7 +30,7 @@ public class Player extends Mob {
 
     @Override
     public void update(float deltaTime) {
-        hitCooldown.advance(deltaTime);
+        actionCooldown.advance(deltaTime);
         if(!moving && regenerationCooldown.use(deltaTime))
             stamina.fix(10);
     }
@@ -55,7 +55,7 @@ public class Player extends Mob {
     }
 
     public void requestAction(ActionType actionType) {
-        if(actionType == ActionType.HIT && hitCooldown.use())
+        if(actionCooldown.use())
             nextAction = actionType;
     }
     public Inventory getInventory() {

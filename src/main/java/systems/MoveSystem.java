@@ -12,15 +12,17 @@ import utils.Pair;
 import java.util.*;
 
 public class MoveSystem {
-    public MoveSystem() {
+
+    private final Map<Pair<Integer,Integer>,Passive> passives;
+    private final Map<Pair<Integer,Integer>, Ground> grounds;
+    private final Collection<Mob> mobs;
+    public MoveSystem(Map<Pair<Integer,Integer>,Passive> passives, Map<Pair<Integer,Integer>, Ground> grounds, Collection<Mob> mobs) {
+        this.passives = passives;
+        this.grounds = grounds;
+        this.mobs = mobs;
     }
 
-    public void move(
-        Collection<Mob> mobs,
-        Map<Pair<Integer,Integer>,Passive> passives,
-        Map<Pair<Integer,Integer>, Ground> grounds,
-        float deltaTime
-    ) {
+    public void move(float deltaTime) {
         for(var mob : mobs) {
             Movement movement = mob.getMovement();
             if(movement == null)
@@ -28,27 +30,23 @@ public class MoveSystem {
             VelocityComponent velocityComponent = movement.getVelocity();
             Pair<Float, Float> velocity = velocityComponent.getAsPair();
             mob.rotationComponent.setRotationFromVector(velocity);
-            if(tryMove(movement,mob,velocity,passives,grounds,mobs,deltaTime))
+            if(tryMove(movement,mob,velocity,deltaTime))
                 continue;
-            else if(tryMove(movement,mob,new Pair<>(velocity.getFirst(),0f),passives,grounds,mobs,deltaTime))
+            else if(tryMove(movement,mob,new Pair<>(velocity.getFirst(),0f),deltaTime))
                 continue;
-            else if(tryMove(movement,mob,new Pair<>(0f,velocity.getSecond()),passives,grounds,mobs,deltaTime))
+            else if(tryMove(movement,mob,new Pair<>(0f,velocity.getSecond()),deltaTime))
                 continue;
+
             movement.reject();
         }
     }
 
     //returns true on success
-    boolean tryMove(
-        Movement movement,
-        Mob mob,
-        Pair<Float,Float> velocity,
-        Map<Pair<Integer,Integer>,Passive> passives,
-        Map<Pair<Integer,Integer>, Ground> grounds,
-        Collection<Mob> mobs,
-        float deltaTime
-    ) {
-        float modifier = grounds.get(PositionComponent.getFieldAsPair(mob.mutablePositionComponent)).getSpeedModifier();
+    boolean tryMove(Movement movement, Mob mob, Pair<Float,Float> velocity, float deltaTime) {
+        var ground = grounds.get(PositionComponent.getFieldAsPair(mob.mutablePositionComponent));
+        if(ground == null)
+            return false;
+        float modifier = ground.getSpeedModifier();
         float x = mob.mutablePositionComponent.getX();
         float y = mob.mutablePositionComponent.getY();
         float dx = velocity.getFirst();
@@ -64,7 +62,7 @@ public class MoveSystem {
         if(passive != null && passive.isActive())
             return false;
         for(Mob other : mobs)
-            if(other != mob && squaredDistance(other.mutablePositionComponent, newPositionComponent) < 1)
+            if(other != mob && squaredDistance(other.mutablePositionComponent, newPositionComponent) < 0.5)
                 return false;
         mob.mutablePositionComponent.setX(newPositionComponent.getX());
         mob.mutablePositionComponent.setY(newPositionComponent.getY());
@@ -77,4 +75,5 @@ public class MoveSystem {
         float yDiff = first.getY() - second.getY();
         return xDiff * xDiff + yDiff * yDiff;
     }
+
 }

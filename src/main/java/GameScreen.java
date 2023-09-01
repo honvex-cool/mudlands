@@ -66,7 +66,6 @@ public class GameScreen implements Screen {
 
 
         chunkManagerSystem = new ChunkManagerSystem(player,loader,entityLoader);
-        moveSystem = new MoveSystem();
         actionManagerSystem = new ActionManagerSystem();
 
 
@@ -84,6 +83,8 @@ public class GameScreen implements Screen {
         Collection<Ground> groundsView = Collections.unmodifiableCollection(ground.values());
         Collection<Passive> passivesView = Collections.unmodifiableCollection(passives.values());
         Collection<Mob> mobsView = Collections.unmodifiableCollection(mobs);
+
+        moveSystem = new MoveSystem(Collections.unmodifiableMap(passives),Collections.unmodifiableMap(ground),mobsView);
 
         updateSystem = new UpdateSystem(
             player,
@@ -122,10 +123,10 @@ public class GameScreen implements Screen {
         updateSystem.update(delta);
         chunkManagerSystem.update(ground,passives,mobs);
         inputSystem.update(player, delta);
-        //spawnSystem.update(delta);
+        spawnSystem.update(delta);
         actionManagerSystem.update(player,passives,mobs);
         mobs.add(player);
-        moveSystem.move(mobs, passives, ground,delta);
+        moveSystem.move(delta);
         mobs.remove(player);
         renderingSystem.update();
         openableManager.update();

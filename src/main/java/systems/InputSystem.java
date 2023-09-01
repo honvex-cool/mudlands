@@ -32,5 +32,7 @@ public class InputSystem {
 
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER))
             player.requestAction(ActionType.HIT);
+        else if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
+            player.requestAction(ActionType.INTERACT);
     }
 }
