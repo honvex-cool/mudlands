@@ -4,6 +4,7 @@ import actions.Movement;
 import components.MutablePositionComponent;
 import components.PositionComponent;
 import components.VelocityComponent;
+import entities.Player;
 import entities.grounds.Ground;
 import entities.mobs.Mob;
 import entities.passives.Passive;
@@ -29,7 +30,8 @@ public class MoveSystem {
                 continue;
             VelocityComponent velocityComponent = movement.getVelocity();
             Pair<Float, Float> velocity = velocityComponent.getAsPair();
-            mob.rotationComponent.setRotationFromVector(velocity);
+            if(!(mob instanceof Player))
+                mob.rotationComponent.setRotationFromVector(velocity);
             if(tryMove(movement,mob,velocity,deltaTime))
                 continue;
             else if(tryMove(movement,mob,new Pair<>(velocity.getFirst(),0f),deltaTime))
@@ -62,7 +64,7 @@ public class MoveSystem {
         if(passive != null && passive.isActive())
             return false;
         for(Mob other : mobs)
-            if(other != mob && squaredDistance(other.mutablePositionComponent, newPositionComponent) < 0.5)
+            if(other != mob && squaredDistance(other.mutablePositionComponent, newPositionComponent) < other.getRadius()+mob.getRadius())
                 return false;
         mob.mutablePositionComponent.setX(newPositionComponent.getX());
         mob.mutablePositionComponent.setY(newPositionComponent.getY());

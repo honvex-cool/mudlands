@@ -8,6 +8,10 @@ public interface PositionComponent extends Component {
 
     float getY();
 
+    default Pair<Float,Float> getPosition(){
+        return new Pair<>(getX(),getY());
+    }
+
     static int getChunkX(PositionComponent positionComponent) {
         return (int)Math.floor(positionComponent.getX() / Config.CHUNK_SIZE);
     }

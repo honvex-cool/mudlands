@@ -5,7 +5,9 @@ import components.VelocityComponent;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import entities.Player;
+import utils.Config;
 import utils.Debug;
+import utils.Pair;
 
 public class InputSystem {
 
@@ -30,9 +32,13 @@ public class InputSystem {
             velocity.setY(0);
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.ENTER))
+        Pair<Float,Float> pointerPosition = new Pair<>((float)Gdx.input.getX() - Config.NATIVE_WIDTH/2,(float)Config.NATIVE_HEIGHT/2 - Gdx.input.getY());
+        player.rotationComponent.setRotationFromVector(pointerPosition);
+
+
+        if(Gdx.input.isButtonPressed((Input.Buttons.LEFT)))
             player.requestAction(ActionType.HIT);
-        else if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
+        else if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT))
             player.requestAction(ActionType.INTERACT);
     }
 }
