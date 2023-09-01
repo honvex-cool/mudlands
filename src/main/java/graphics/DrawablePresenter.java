@@ -1,5 +1,6 @@
 package graphics;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import components.Component;
 import components.ComponentHolder;
 import components.HealthComponent;
@@ -40,6 +41,26 @@ public class DrawablePresenter implements Presenter<Drawable> {
             layer,
             rotation
         );
+        Float staminaFraction = builder.getStaminaFraction();
+        if(staminaFraction != null) {
+            Transform barTransform = new Transform(0, 0, staminaFraction, 0.2f);
+            Drawable bar = new LocalizedSprite(
+                barTransform,
+                assetManager.getSprite("staminaBar"),
+                4
+            );
+            drawable = Stacked.verticallyCentered(drawable, bar);
+        }
+        String itemName = builder.getItemName();
+        if(itemName != null) {
+            Drawable item = new LocalizedSprite(
+                transform.scaled(0.4f, 0.4f),
+                new Sprite(assetManager.getInventoryTexture(itemName)),
+                5,
+                0
+            );
+            drawable = Stacked.horizontallyTopAligned(drawable, item);
+        }
         HealthComponent health = builder.getHealthComponent();
         if(holder instanceof Passive && health != null && health.getCurrentPoints() != health.getMaxPoints()) {
             float greenFraction = (float)health.getCurrentPoints() / health.getMaxPoints();

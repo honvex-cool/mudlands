@@ -3,24 +3,25 @@ package entities.materials;
 import components.HealthComponent;
 
 public class Composition implements HealthComponent {
-    private final Materials full;
-    private Materials current;
+    private final Mix mix;
+    private int currentHp;
 
-    public Composition(Materials full) {
-        current = this.full = full;
+    public Composition(Mix full) {
+        this.mix = full;
+        currentHp = this.mix.total();
     }
 
     public void damage(Damage damage) {
-        current = current.damaged(damage);
+        currentHp = Math.max(currentHp - damage.against(mix), 0);
     }
 
     @Override
     public int getCurrentPoints() {
-        return current.total();
+        return currentHp;
     }
 
     @Override
     public int getMaxPoints() {
-        return full.total();
+        return mix.total();
     }
 }

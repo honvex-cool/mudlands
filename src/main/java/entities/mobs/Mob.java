@@ -1,6 +1,7 @@
 package entities.mobs;
 
 import actions.ActionType;
+import actions.Movement;
 import components.Component;
 import components.MutablePositionComponent;
 import components.MutableRotationComponent;
@@ -11,12 +12,10 @@ import entities.materials.Damage;
 
 import java.util.Set;
 
-public class Mob extends Entity implements Hitbox {
+public abstract class Mob extends Entity implements Hitbox {
     public VelocityComponent velocityComponent;
     public MutableRotationComponent rotationComponent;
     public ActionType nextAction = null;
-    private float moveSpeed;
-
     private Damage damage = new Damage(5, 5, 5, 5);
 
     public Mob() {
@@ -33,6 +32,10 @@ public class Mob extends Entity implements Hitbox {
     public void update(float deltaTime) {
         super.update(deltaTime);
         updateVelocity();
+    }
+
+    public Movement getMovement() {
+        return new Movement(velocityComponent, Integer.MAX_VALUE, null);
     }
 
     public void updateVelocity() {
