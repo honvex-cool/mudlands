@@ -1,11 +1,12 @@
 package openable.inventory;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static utils.Config.INVENTORY_HEIGHT;
 import static utils.Config.INVENTORY_WIDTH;
 
-public class Grid {
+public class Grid implements Serializable {
     private final int width;
     private final int height;
     ArrayList<ArrayList<InventoryField>> inventoryFields;

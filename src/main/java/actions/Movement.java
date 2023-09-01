@@ -2,9 +2,10 @@ package actions;
 
 import components.VelocityComponent;
 
+import java.io.Serializable;
 import java.util.function.Consumer;
 
-public class Movement {
+public class Movement implements Serializable {
     private final VelocityComponent velocity;
     private final int availableStamina;
     private final Consumer<Integer> onAccept;

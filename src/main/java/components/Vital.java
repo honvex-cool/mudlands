@@ -1,6 +1,8 @@
 package components;
 
-public interface Vital {
+import java.io.Serializable;
+
+public interface Vital extends Serializable {
     int getCurrentPoints();
     int getMaxPoints();
 

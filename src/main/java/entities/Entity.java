@@ -2,39 +2,25 @@ package entities;
 
 import actions.ActionType;
 import components.*;
+import entities.materials.Composition;
+import entities.materials.Mix;
 import entities.mobs.Mob;
 import utils.*;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-public class Entity implements Savable, ComponentHolder {
+public class Entity implements Serializable, ComponentHolder {
     public MutablePositionComponent mutablePositionComponent = new MutablePositionComponent(0, 0);
+    protected Composition composition;
     protected MutableHealthComponent hp = new MutableHealthComponent(100);
-    public boolean isGenerated() {
-        return false;
-    }
-
     public Entity() {
     }
 
     protected Entity(MutablePositionComponent mutablePositionComponent) {
         this.mutablePositionComponent = mutablePositionComponent;
     }
-
-    @Override
-    public Map<Integer, Integer> saveData() {
-        return Map.of(0,hp.getCurrentPoints());
-    }
-
-    @Override
-    public void construct(Map<Integer, Integer> struct, boolean generated) {
-        hp = new MutableHealthComponent(100);
-        if(!struct.isEmpty()){
-            hp.damage(hp.getMaxPoints() - struct.get(0));
-        }
-    }
-
     public void react(ActionType actionType, Mob actor){
     }
 
@@ -42,7 +28,7 @@ public class Entity implements Savable, ComponentHolder {
     }
 
     public boolean isDestroyed(){
-        return Vital.isDrained(hp);
+        return Vital.isDrained(composition);
     }
 
     public Entity getSuccessor(){

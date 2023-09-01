@@ -1,6 +1,12 @@
 package generator;
 
+import components.PositionComponent;
+import entities.Entity;
 import entities.Player;
+import entities.UniversalFactory;
+import entities.mobs.Mob;
+import entities.passives.EmptyPassive;
+import entities.passives.Passive;
 import utils.Config;
 import utils.Pair;
 import utils.SaveStruct;
@@ -12,15 +18,17 @@ import java.util.*;
 public class WorldLoader {
 
     private Generator generator;
-    private Map<Pair<Integer, Integer>, Set<SaveStruct>> changes;
+    private Map<Pair<Integer, Integer>, Set<Entity>> changes;
     private String world_name;
-    private SaveStruct player;
+    private Player player;
+    private UniversalFactory universalFactory;
 
-    public WorldLoader() {
+    public WorldLoader(UniversalFactory universalFactory) {
         this.changes = null;
         this.generator = null;
         this.world_name = null;
         this.player = null;
+        this.universalFactory = universalFactory;
     }
 
     public void createWorld(Integer seed, String world_name) {
@@ -34,7 +42,7 @@ public class WorldLoader {
         this.generator = new Generator(seed);
         this.world_name = world_name;
         this.changes = new HashMap<>();
-        this.player = new SaveStruct(EntityTag.PLAYER,0,0,0,new HashMap<>());
+        this.player = new Player();
     }
 
     public void loadWorld(String world_name) throws IOException, ClassNotFoundException {
@@ -54,7 +62,7 @@ public class WorldLoader {
         this.generator = new Generator(data.getSeed());
         this.world_name = world_name;
         this.changes = data.getChanges();
-        this.player = data.getPlayerSavestruct();
+        this.player = data.getPlayer();
     }
 
     public void saveWorld() throws IOException {
@@ -74,86 +82,72 @@ public class WorldLoader {
         objectOutputStream.close();
     }
 
-    public Set<SaveStruct> loadChunk(Pair<Integer,Integer> chunk) {
+    public Set<Entity> loadChunk(Pair<Integer,Integer> chunk) {
         //generate chunk
         var map = generator.generateChunk(chunk);
         var diffs = changes.get(chunk);
-        Set<SaveStruct> answer = new HashSet<>();
+        Set<Entity> answer = new HashSet<>();
         if(diffs != null) {
             //apply changes
-            for(var saveStruct : diffs) {
-                if(saveStruct.entityTag == EntityTag.PASSIVE) {
-                    Pair<Integer, Integer> coords = new Pair<>((int)Math.floor(saveStruct.x), (int) Math.floor(saveStruct.y));
+            for(var entity : diffs) {
+                if(entity instanceof Passive) {
+                    Pair<Integer, Integer> coords = PositionComponent.getFieldAsPair(entity.mutablePositionComponent);
                     map.get(coords).objectType = ObjectType.NONE;
-                    if(saveStruct.type != -1){
-                        answer.add(saveStruct);
-                    }
+                    if(!(entity instanceof EmptyPassive))
+                        answer.add(entity);
                 }
-                else{
-                    answer.add(saveStruct);
+                else{ //mobs
+                    answer.add(entity);
                 }
             }
         }
-        answer.addAll(getSaveStructs(map));
+        answer.addAll(createDefaults(map));
         return answer;
     }
 
-    public void saveChunk(Pair<Integer,Integer> chunk, Map<Pair<Integer,Integer>,SaveStruct> passives, Set<SaveStruct> mobs) {
+    public void saveChunk(Pair<Integer,Integer> chunk, Map<Pair<Integer,Integer>,Passive> passives, Set<Mob> mobs) {
         //generate chunk
         var generated = generator.generateChunk(chunk);
 
         //calculate differences between generation and state
-        Set<SaveStruct> diffs = new HashSet<>();
+        Set<Entity> diffs = new HashSet<>();
         for(var key : generated.keySet()) {
+            FieldStruct fieldStruct = generated.get(key);
             if(passives.containsKey(key)) {
-                if(passives.get(key).type >= 0){
-                    diffs.add(passives.get(key));
-                }
+                Passive passive = passives.get(key);
+                Passive defaultPassive = universalFactory.createPassive(fieldStruct,key);
+
+                if(fieldStruct.objectType == ObjectType.NONE || !passive.equals(defaultPassive))
+                    diffs.add(passive);
             }
-            else {
-                diffs.add(new SaveStruct(EntityTag.PASSIVE,-1, key.getFirst(),key.getSecond(),new HashMap<>()));
+            else{
+                if(fieldStruct.objectType != ObjectType.NONE){
+                    diffs.add(universalFactory.createEmptyPassive(key));
+                }
             }
         }
 
         diffs.addAll(mobs);
-
         //save differences
         changes.put(chunk, diffs);
     }
 
-    public Set<SaveStruct> getSaveStructs(Map<Pair<Integer,Integer>,FieldStruct> map){
-        Set<SaveStruct> set = new HashSet<>();
+    public Set<Entity> createDefaults(Map<Pair<Integer,Integer>,FieldStruct> map){
+        Set<Entity> set = new HashSet<>();
 
         for(var key:map.keySet()) {
             FieldStruct fieldStruct = map.get(key);
-            int type = switch(fieldStruct.groundType){
-                case WATER -> 1;
-                case SAND -> 2;
-                case GRASS -> 3;
-                case MUD -> 4;
-                case STONE -> 5;
-                case DIRT -> 6;
-            };
-            set.add(new SaveStruct(EntityTag.GROUND,type, key.getFirst(), key.getSecond(), new HashMap<>()));
-
-            type = switch(fieldStruct.objectType){
-                case NONE -> -1;
-                case TREE -> 1;
-                case STONE -> 2;
-                default -> 0;
-            };
-            if(type != -1){
-                set.add(new SaveStruct(EntityTag.PASSIVE,-1*type, key.getFirst(), key.getSecond(), new HashMap<>()));
-            }
+            set.add(universalFactory.createGround(fieldStruct,key));
+            if(fieldStruct.objectType != ObjectType.NONE)
+                set.add(universalFactory.createPassive(fieldStruct,key));
         }
-
         return set;
     }
 
-    public SaveStruct getPlayerSaveStruct() {
+    public Player loadPlayer() {
         return player;
     }
-    public void setPlayerSaveStruct(SaveStruct playerSaveStruct){
-        this.player = playerSaveStruct;
+    public void savePlayer(Player player){
+        this.player = player;
     }
 }

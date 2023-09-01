@@ -32,7 +32,7 @@ public class Player extends Mob {
     public void update(float deltaTime) {
         actionCooldown.advance(deltaTime);
         if(!moving && regenerationCooldown.use(deltaTime))
-            stamina.fix(10);
+            stamina.fix(1000);
     }
 
     @Override

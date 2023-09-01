@@ -6,12 +6,13 @@ import entities.materials.Damage;
 import openable.inventory.Inventory;
 import utils.Pair;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import utils.Pair;
 
 import java.util.ArrayList;
 
-public class Item {
+public class Item implements Serializable {
 
     protected boolean stackable;
     protected boolean usable;

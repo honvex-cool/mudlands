@@ -12,7 +12,6 @@ class EntityMappingsTest {
     void testMappingsAreBijective() {
         assertTrue(isBijective(EntityMappings.GROUND_MAP));
         assertTrue(isBijective(EntityMappings.PASSIVE_MAP));
-        assertTrue(isBijective(EntityMappings.MOB_MAP));
     }
 
     private boolean isBijective(Map<?, ?> map) {

@@ -55,6 +55,14 @@ public abstract class Mob extends Entity implements Hitbox {
 
     @Override
     public Set<Component> viewComponents() {
-        return Set.of(mutablePositionComponent, rotationComponent);
+        return Set.of(mutablePositionComponent, rotationComponent,composition);
+    }
+
+    @Override
+    public void react(ActionType actionType, Mob actor) {
+        super.react(actionType, actor);
+        if(actionType == ActionType.HIT){
+            composition.damage(actor.getAttackDamage());
+        }
     }
 }

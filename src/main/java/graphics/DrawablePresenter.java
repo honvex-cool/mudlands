@@ -62,7 +62,7 @@ public class DrawablePresenter implements Presenter<Drawable> {
             drawable = Stacked.horizontallyTopAligned(drawable, item);
         }
         HealthComponent health = builder.getHealthComponent();
-        if(holder instanceof Passive && health != null && health.getCurrentPoints() != health.getMaxPoints()) {
+        if(health != null && health.getCurrentPoints() != health.getMaxPoints()) {
             float greenFraction = (float)health.getCurrentPoints() / health.getMaxPoints();
             float redFraction = 1 - greenFraction;
             Transform greenTransform = new Transform(0, 0, greenFraction, 0.1f);

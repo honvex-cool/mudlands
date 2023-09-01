@@ -4,10 +4,12 @@ import openable.items.Item;
 import openable.items.NoneItem;
 import utils.Pair;
 
+import java.io.Serializable;
+
 import static utils.Config.INVENTORY_HEIGHT;
 import static utils.Config.INVENTORY_WIDTH;
 
-public class Inventory {
+public class Inventory implements Serializable {
 
     private Item rightHand;
     public Grid getFields() {

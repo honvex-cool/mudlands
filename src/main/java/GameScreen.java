@@ -24,10 +24,10 @@ import java.io.IOException;
 import java.util.*;
 
 public class GameScreen implements Screen {
-    private final WorldLoader loader = new WorldLoader();
+    private final WorldLoader loader;
     private final SpriteBatch spriteBatch = new SpriteBatch();
     private final AssetManager assetManager = new AssetManager("assets");
-    private final UniversalLoader entityLoader;
+    private final UniversalFactory universalFactory;
     private RenderingSystem renderingSystem;
     private InputSystem inputSystem;
     private final SpawnSystem spawnSystem;
@@ -43,35 +43,36 @@ public class GameScreen implements Screen {
     private Collection<Mob> mobs;
 
     public GameScreen(MudlandsGame mudlandsGame) {
-        entityLoader = new UniversalLoader(
+        universalFactory = new UniversalFactory(
             EntityMappings.GROUND_MAP,
-            EntityMappings.PASSIVE_MAP,
-            EntityMappings.MOB_MAP
+            EntityMappings.PASSIVE_MAP
         );
+
+        loader = new WorldLoader(universalFactory);
 
         if(Debug.LOAD_WORLD) {
             try {
                 loader.loadWorld("testWorld");
-                player = entityLoader.loadPlayer(loader.getPlayerSaveStruct());
+                player = loader.loadPlayer();
             } catch(IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         } else {
             loader.createWorld(42, "testWorld");
-            player = new Player();
+            player = loader.loadPlayer();
         }
 
 
         inputSystem = new InputSystem();
 
-
-        chunkManagerSystem = new ChunkManagerSystem(player,loader,entityLoader);
         actionManagerSystem = new ActionManagerSystem();
 
 
         ground = new HashMap<>();
         passives = new HashMap<>();
         mobs = new ArrayList<>();
+
+        chunkManagerSystem = new ChunkManagerSystem(player,loader, ground,passives,mobs);
 
         HuntingMovementController controller = new HuntingMovementController(
             Collections.unmodifiableSet(passives.keySet()),
@@ -121,7 +122,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         updateSystem.update(delta);
-        chunkManagerSystem.update(ground,passives,mobs);
+        chunkManagerSystem.update();
         inputSystem.update(player, delta);
         spawnSystem.update(delta);
         actionManagerSystem.update(player,passives,mobs);
@@ -152,8 +153,8 @@ public class GameScreen implements Screen {
     public void dispose() {
         spriteBatch.dispose();
         assetManager.dispose();
-        chunkManagerSystem.unloadAll(ground,passives,mobs);
-        loader.setPlayerSaveStruct(entityLoader.savePlayer(player));
+        chunkManagerSystem.unloadAll();
+        loader.savePlayer(player);
         try {
             loader.saveWorld();
         } catch(IOException e) {
