@@ -140,5 +140,12 @@ public class ChunkManagerSystem{
         for(var key:passivesToDelete) {
             passives.remove(key);
         }
+
+        Set<Mob> mobsToDelete = new HashSet<>();
+        for(Mob mob:mobs){
+            if(mob.isDestroyed())
+                mobsToDelete.add(mob);
+        }
+        mobs.removeAll(mobsToDelete);
     }
 }

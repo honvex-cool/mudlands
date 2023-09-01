@@ -2,6 +2,8 @@ package entities;
 
 import actions.ActionType;
 import components.*;
+import entities.materials.Composition;
+import entities.materials.Mix;
 import entities.mobs.Mob;
 import utils.*;
 
@@ -11,6 +13,7 @@ import java.util.Set;
 
 public class Entity implements Serializable, ComponentHolder {
     public MutablePositionComponent mutablePositionComponent = new MutablePositionComponent(0, 0);
+    protected Composition composition;
     protected MutableHealthComponent hp = new MutableHealthComponent(100);
     public Entity() {
     }
@@ -25,7 +28,7 @@ public class Entity implements Serializable, ComponentHolder {
     }
 
     public boolean isDestroyed(){
-        return Vital.isDrained(hp);
+        return Vital.isDrained(composition);
     }
 
     public Entity getSuccessor(){

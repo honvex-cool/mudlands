@@ -2,6 +2,8 @@ package entities.mobs;
 
 import actions.Cooldown;
 import components.VelocityComponent;
+import entities.materials.Composition;
+import entities.materials.Mix;
 
 import java.util.random.RandomGenerator;
 
@@ -11,6 +13,7 @@ public class Pig extends Mob {
 
     public Pig(RandomGenerator randomGenerator) {
         this.randomGenerator = randomGenerator;
+        this.composition = new Composition(new Mix(0,0,0,100));
         change();
     }
 

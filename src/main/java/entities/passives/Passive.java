@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class Passive extends Entity implements Hitbox {
-    protected Composition composition;
-    protected boolean generated;
     public Passive() {
     }
     protected Passive(MutablePositionComponent mutablePositionComponent) {
@@ -24,16 +22,10 @@ public class Passive extends Entity implements Hitbox {
     public void react(ActionType actionType, Mob actor) {
         if(actionType == ActionType.HIT)
             composition.damage(actor.getAttackDamage());
-        generated = false;
     }
 
     @Override
     public Set<Component> viewComponents() {
         return Set.of(mutablePositionComponent, composition);
-    }
-
-    @Override
-    public boolean isDestroyed() {
-        return Vital.isDrained(composition);
     }
 }

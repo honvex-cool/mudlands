@@ -2,6 +2,8 @@ package entities.mobs;
 
 import actions.ActionType;
 import entities.controllers.HuntingMovementController;
+import entities.materials.Composition;
+import entities.materials.Mix;
 import utils.Debug;
 
 public class Zombie extends Mob {
@@ -9,6 +11,7 @@ public class Zombie extends Mob {
 
     public Zombie(HuntingMovementController controller) {
         this.controller = controller;
+        this.composition = new Composition(new Mix(0,0,20,80));
     }
 
     @Override
