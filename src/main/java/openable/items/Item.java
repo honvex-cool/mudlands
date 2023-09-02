@@ -1,16 +1,12 @@
 package openable.items;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import entities.Player;
 import entities.materials.Damage;
 import openable.inventory.Inventory;
 import utils.Pair;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import utils.Pair;
 
-import java.util.ArrayList;
 
 public class Item implements Serializable {
 
@@ -19,7 +15,7 @@ public class Item implements Serializable {
     protected boolean edible;
     protected boolean equipable;
     protected boolean craftable;
-    protected Damage damage;
+    protected Damage damage = new Damage(5, 5, 5, 5);
 
     protected ArrayList<Pair<Item, Integer>> recipe;
 

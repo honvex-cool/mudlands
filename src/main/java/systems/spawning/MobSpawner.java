@@ -5,7 +5,6 @@ import entities.mobs.Ghost;
 import entities.mobs.Mob;
 import entities.mobs.Pig;
 import entities.mobs.Zombie;
-import systems.spawning.PlacementRules;
 
 import java.util.random.RandomGenerator;
 
@@ -46,7 +45,7 @@ public class MobSpawner {
     }
 
     private boolean tryPlaceRandomlyAround(Mob mob, PositionComponent positionComponent) {
-        float x = generator.nextFloat(positionComponent.getX() - 16, positionComponent.getY() + 16);
+        float x = generator.nextFloat(positionComponent.getX() - 16, positionComponent.getX() + 16);
         float y = generator.nextFloat(positionComponent.getY() - 16, positionComponent.getY() + 16);
         mob.mutablePositionComponent.setX(x);
         mob.mutablePositionComponent.setY(y);
