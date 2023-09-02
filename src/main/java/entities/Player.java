@@ -49,11 +49,6 @@ public class Player extends Mob {
         moving = true;
     }
 
-    @Override
-    public void updateVelocity() {
-        super.updateVelocity();
-    }
-
     public void requestAction(ActionType actionType) {
         if(actionCooldown.use())
             nextAction = actionType;

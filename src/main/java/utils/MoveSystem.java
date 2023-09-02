@@ -1,25 +1,22 @@
-package systems;
+package utils;
 
 import actions.Movement;
 import components.MutablePositionComponent;
 import components.PositionComponent;
 import components.VelocityComponent;
-import entities.Player;
 import entities.grounds.Ground;
 import entities.mobs.Mob;
-import entities.passives.Passive;
-import utils.Pair;
-import utils.VectorMath;
+import systems.spawning.PlacementRules;
 
 import java.util.*;
 
 public class MoveSystem {
-
-    private final Map<Pair<Integer,Integer>,Passive> passives;
+    private final PlacementRules placementRules;
     private final Map<Pair<Integer,Integer>, Ground> grounds;
     private final Collection<Mob> mobs;
-    public MoveSystem(Map<Pair<Integer,Integer>,Passive> passives, Map<Pair<Integer,Integer>, Ground> grounds, Collection<Mob> mobs) {
-        this.passives = passives;
+
+    public MoveSystem(PlacementRules placementRules, Map<Pair<Integer,Integer>, Ground> grounds, Collection<Mob> mobs) {
+        this.placementRules = placementRules;
         this.grounds = grounds;
         this.mobs = mobs;
     }
@@ -33,8 +30,6 @@ public class MoveSystem {
             Pair<Float, Float> velocity = velocityComponent.getAsPair();
             if(velocity.getFirst() == 0 && velocity.getSecond() == 0)
                 continue;
-            if(!(mob instanceof Player))
-                mob.rotationComponent.setRotationFromVector(velocity);
 
             if(tryMove(movement,mob,velocity,deltaTime))
                 continue;
@@ -62,8 +57,6 @@ public class MoveSystem {
     //returns true on success
     boolean tryMove(Movement movement, Mob mob, Pair<Float,Float> velocity, float deltaTime) {
         var ground = grounds.get(PositionComponent.getFieldAsPair(mob.mutablePositionComponent));
-        if(ground == null)
-            return false;
         float modifier = ground.getSpeedModifier();
         float x = mob.mutablePositionComponent.getX();
         float y = mob.mutablePositionComponent.getY();
@@ -76,22 +69,11 @@ public class MoveSystem {
         float newX = x + dx * deltaTime * modifier;
         float newY = y + dy * deltaTime * modifier;
         MutablePositionComponent newPositionComponent = new MutablePositionComponent(newX, newY);
-        Passive passive = passives.get(new Pair<>((int)Math.floor(newX),(int)Math.floor(newY)));
-        if(passive != null && passive.isActive())
+        if(!placementRules.canMobBePlaced(mob, newPositionComponent))
             return false;
-        for(Mob other : mobs)
-            if(other != mob && distance(other.mutablePositionComponent, newPositionComponent) < other.getRadius()+mob.getRadius())
-                return false;
         mob.mutablePositionComponent.setX(newPositionComponent.getX());
         mob.mutablePositionComponent.setY(newPositionComponent.getY());
         movement.accept(cost);
         return true;
     }
-
-    private static float distance(PositionComponent first, PositionComponent second) {
-        float xDiff = first.getX() - second.getX();
-        float yDiff = first.getY() - second.getY();
-        return (float)Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-    }
-
 }
