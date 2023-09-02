@@ -9,6 +9,8 @@ import components.VelocityComponent;
 import entities.Entity;
 import entities.Hitbox;
 import entities.materials.Damage;
+import utils.Pair;
+import utils.VectorMath;
 
 import java.util.Set;
 
@@ -17,6 +19,7 @@ public abstract class Mob extends Entity implements Hitbox {
     public MutableRotationComponent rotationComponent;
     public ActionType nextAction = null;
     private Damage damage = new Damage(5, 5, 5, 5);
+    private float speed;
 
     public Mob() {
         this(0,0);
@@ -31,14 +34,10 @@ public abstract class Mob extends Entity implements Hitbox {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        updateVelocity();
     }
 
     public Movement getMovement() {
         return new Movement(velocityComponent, Integer.MAX_VALUE, null);
-    }
-
-    public void updateVelocity() {
     }
 
     public void setAttackDamage(Damage damage) {
@@ -68,6 +67,21 @@ public abstract class Mob extends Entity implements Hitbox {
 
     @Override
     public float getRadius() {
-        return 0.25f;
+        return 0.45f;
+    }
+
+    protected final void setSpeed(float speed) {
+        this.speed = speed;
+        setDirection(VectorMath.getRotationFromVector(velocityComponent.getAsPair()));
+    }
+
+    protected final void setDirection(float direction) {
+        Pair<Float, Float> velocity = VectorMath.getVectorFromRotation(direction, speed);
+        velocityComponent.setX(velocity.getFirst());
+        velocityComponent.setY(velocity.getSecond());
+        rotationComponent.setRotation(direction);
+    }
+
+    public void requestAction(ActionType actionType) {
     }
 }

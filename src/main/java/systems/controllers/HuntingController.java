@@ -1,5 +1,6 @@
 package systems.controllers;
 
+import actions.ActionType;
 import components.MutablePositionComponent;
 import components.PositionComponent;
 import components.VelocityComponent;
@@ -26,6 +27,9 @@ public class HuntingController implements Controller {
 
     @Override
     public void control(Mob mob) {
+        if(VectorMath.distance(mob.mutablePositionComponent.getPosition(), hunted.getPosition()) <= 1.5) {
+            mob.requestAction(ActionType.HIT);
+        }
         mob.velocityComponent = getVelocity(mob.mutablePositionComponent);
         Pair<Float, Float> difference = new Pair<>(
             hunted.getX() - mob.mutablePositionComponent.getX(),

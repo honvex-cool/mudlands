@@ -3,12 +3,9 @@ package entities;
 import actions.ActionType;
 import components.*;
 import entities.materials.Composition;
-import entities.materials.Mix;
 import entities.mobs.Mob;
-import utils.*;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.Set;
 
 public class Entity implements Serializable, ComponentHolder {

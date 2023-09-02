@@ -38,8 +38,11 @@ public class MobControlSystem {
     }
 
     public void update(float deltaTime) {
-        for(Mob mob : mobs)
-            controllers.get(mob.getClass()).control(mob);
+        for(Mob mob : mobs) {
+            Controller controller = controllers.get(mob.getClass());
+            if(controller != null)
+                controller.control(mob);
+        }
         spawnManager.update(deltaTime);
     }
 
