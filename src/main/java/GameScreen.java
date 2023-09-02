@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entities.*;
+import entities.mobs.Ghost;
 import entities.mobs.Zombie;
 import systems.controllers.CluelessController;
 import systems.controllers.HuntingController;
@@ -12,7 +13,7 @@ import entities.grounds.Water;
 import entities.mobs.Mob;
 import entities.mobs.Pig;
 import entities.passives.Passive;
-import entities.spawning.MobSpawner;
+import systems.spawning.MobSpawner;
 import generator.WorldLoader;
 import graphics.GraphicsContext;
 import graphics.GraphicsContextImpl;
@@ -89,19 +90,28 @@ public class GameScreen implements Screen {
             mobsView
         );
         placementRules.forbidOn(Pig.class, Water.class);
+        placementRules.forbidOn(Ghost.class, Water.class);
 
-        HuntingController huntingController = new HuntingController(
+        HuntingController zombieHuntingController = new HuntingController(
             placementRules,
             player.mutablePositionComponent,
             30
         );
-        huntingController.addHunter(Zombie.class);
+        zombieHuntingController.addHunter(Zombie.class);
+        HuntingController ghostHuntingController = new HuntingController(
+            placementRules,
+            player.mutablePositionComponent,
+            40
+        );
+        ghostHuntingController.addHunter(Ghost.class);
 
         MobSpawner spawner = new MobSpawner(placementRules, random, 5);
         mobControlSystem = new MobControlSystem(player.mutablePositionComponent, mobs, 40);
         mobControlSystem.addSpawningRule(8, spawner::spawnPigAround);
         mobControlSystem.addSpawningRule(10, spawner::spawnZombieAround);
-        mobControlSystem.registerController(Zombie.class, huntingController);
+        mobControlSystem.addSpawningRule(20, spawner::spawnGhostAround);
+        mobControlSystem.registerController(Zombie.class, zombieHuntingController);
+        mobControlSystem.registerController(Ghost.class, ghostHuntingController);
         mobControlSystem.registerController(Pig.class, new CluelessController(random, 100));
 
         moveSystem = new MoveSystem(placementRules, Collections.unmodifiableMap(ground), mobsView);

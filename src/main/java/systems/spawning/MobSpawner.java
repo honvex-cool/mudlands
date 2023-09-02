@@ -1,6 +1,7 @@
-package entities.spawning;
+package systems.spawning;
 
 import components.PositionComponent;
+import entities.mobs.Ghost;
 import entities.mobs.Mob;
 import entities.mobs.Pig;
 import entities.mobs.Zombie;
@@ -25,6 +26,10 @@ public class MobSpawner {
 
     public Mob spawnZombieAround(PositionComponent positionComponent) {
         return placeOrGiveUp(new Zombie(), positionComponent);
+    }
+
+    public Mob spawnGhostAround(PositionComponent positionComponent) {
+        return placeOrGiveUp(new Ghost(), positionComponent);
     }
 
     private Mob placeOrGiveUp(Mob mob, PositionComponent positionComponent) {

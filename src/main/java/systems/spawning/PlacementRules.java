@@ -32,9 +32,14 @@ public class PlacementRules {
     public boolean canMobBePlaced(Mob mob, PositionComponent positionComponent) {
         if(isForbiddenAt(mob.getClass(), positionComponent))
             return false;
-        for(Mob other : mobs)
-            if(other != mob && distance(other.mutablePositionComponent, positionComponent) < other.getRadius()+mob.getRadius())
+        if(!mob.isActive())
+            return true;
+        for(Mob other : mobs) {
+            if(other == mob || !other.isActive())
+                continue;
+            if(distance(other.mutablePositionComponent, positionComponent) < other.getRadius() + mob.getRadius())
                 return false;
+        }
         return true;
     }
 
