@@ -4,6 +4,7 @@ import actions.ActionType;
 import actions.Cooldown;
 import actions.Movement;
 import components.*;
+import entities.materials.Damage;
 import entities.mobs.Mob;
 import openable.inventory.Inventory;
 import openable.items.NoneItem;
@@ -12,7 +13,7 @@ import java.util.Set;
 
 public class Player extends Mob {
 
-    private Inventory inventory = new Inventory();
+    private final Inventory inventory = new Inventory();
     private final Cooldown actionCooldown = Cooldown.readyToUse(0.2f);
     private final Cooldown regenerationCooldown = Cooldown.readyToUse(0.2f);
     private final ItemComponent itemComponent = () -> {
@@ -28,6 +29,10 @@ public class Player extends Mob {
         hp = new MutableHealthComponent(100);
     }
 
+    @Override
+    public Damage getAttackDamage(){
+        return inventory.getRightHand().getAttackStrength();
+    }
     @Override
     public void update(float deltaTime) {
         actionCooldown.advance(deltaTime);
@@ -47,11 +52,6 @@ public class Player extends Mob {
     private void becomeTired(int amount) {
         stamina.damage(amount);
         moving = true;
-    }
-
-    @Override
-    public void updateVelocity() {
-        super.updateVelocity();
     }
 
     public void requestAction(ActionType actionType) {

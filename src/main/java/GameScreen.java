@@ -4,10 +4,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entities.*;
-import entities.controllers.HuntingMovementController;
+import entities.mobs.Ghost;
+import entities.mobs.Zombie;
+import systems.controllers.CluelessController;
+import systems.controllers.HuntingController;
 import entities.grounds.Ground;
+import entities.grounds.Water;
 import entities.mobs.Mob;
+import entities.mobs.Pig;
 import entities.passives.Passive;
+import systems.spawning.MobSpawner;
 import generator.WorldLoader;
 import graphics.GraphicsContext;
 import graphics.GraphicsContextImpl;
@@ -15,10 +21,9 @@ import graphics.DrawablePresenter;
 import graphics.ResolutionProvider;
 import openable.OpenableManager;
 import systems.*;
-import utils.AssetManager;
-import utils.Config;
-import utils.Debug;
-import utils.Pair;
+import systems.spawning.PlacementRules;
+import systems.spawning.MobControlSystem;
+import utils.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -27,23 +32,23 @@ public class GameScreen implements Screen {
     private final WorldLoader loader;
     private final SpriteBatch spriteBatch = new SpriteBatch();
     private final AssetManager assetManager = new AssetManager("assets");
-    private final UniversalFactory universalFactory;
     private RenderingSystem renderingSystem;
     private InputSystem inputSystem;
     private OpenableManager openableManager;
-    private final SpawnSystem spawnSystem;
+
     private ChunkManagerSystem chunkManagerSystem;
+    private final MobControlSystem mobControlSystem;
     private MoveSystem moveSystem;
     private ActionManagerSystem actionManagerSystem;
     private UpdateSystem updateSystem;
 
     private Player player;
-    private Map<Pair<Integer, Integer>, Ground> ground;
-    private Map<Pair<Integer, Integer>, Passive> passives;
-    private Collection<Mob> mobs;
+    private final Map<Pair<Integer,Integer>, Ground> ground;
+    private final Map<Pair<Integer,Integer>, Passive> passives;
+    private final Collection<Mob> mobs;
 
     public GameScreen(MudlandsGame mudlandsGame) {
-        universalFactory = new UniversalFactory(
+        UniversalFactory universalFactory = new UniversalFactory(
             EntityMappings.GROUND_MAP,
             EntityMappings.PASSIVE_MAP
         );
@@ -71,20 +76,45 @@ public class GameScreen implements Screen {
         passives = new HashMap<>();
         mobs = new ArrayList<>();
 
-        chunkManagerSystem = new ChunkManagerSystem(player, loader, ground, passives, mobs);
+        Random random = new Random(42);
 
-        HuntingMovementController controller = new HuntingMovementController(
-            Collections.unmodifiableSet(passives.keySet()),
-            player.mutablePositionComponent,
-            30
-        );
-        spawnSystem = new SpawnSystem(mobs, controller);
+        chunkManagerSystem = new ChunkManagerSystem(player,loader, ground,passives,mobs);
 
         Collection<Ground> groundsView = Collections.unmodifiableCollection(ground.values());
         Collection<Passive> passivesView = Collections.unmodifiableCollection(passives.values());
         Collection<Mob> mobsView = Collections.unmodifiableCollection(mobs);
 
-        moveSystem = new MoveSystem(Collections.unmodifiableMap(passives), Collections.unmodifiableMap(ground), mobsView);
+        PlacementRules placementRules = new PlacementRules(
+            Collections.unmodifiableMap(passives),
+            Collections.unmodifiableMap(ground),
+            mobsView
+        );
+        placementRules.forbidOn(Pig.class, Water.class);
+        placementRules.forbidOn(Ghost.class, Water.class);
+
+        HuntingController zombieHuntingController = new HuntingController(
+            placementRules,
+            player.mutablePositionComponent,
+            30
+        );
+        zombieHuntingController.addHunter(Zombie.class);
+        HuntingController ghostHuntingController = new HuntingController(
+            placementRules,
+            player.mutablePositionComponent,
+            40
+        );
+        ghostHuntingController.addHunter(Ghost.class);
+
+        MobSpawner spawner = new MobSpawner(placementRules, random, 5);
+        mobControlSystem = new MobControlSystem(player.mutablePositionComponent, mobs, 40);
+        mobControlSystem.addSpawningRule(8, spawner::spawnPigAround);
+        mobControlSystem.addSpawningRule(10, spawner::spawnZombieAround);
+        mobControlSystem.addSpawningRule(20, spawner::spawnGhostAround);
+        mobControlSystem.registerController(Zombie.class, zombieHuntingController);
+        mobControlSystem.registerController(Ghost.class, ghostHuntingController);
+        mobControlSystem.registerController(Pig.class, new CluelessController(random, 100));
+
+        moveSystem = new MoveSystem(placementRules, Collections.unmodifiableMap(ground), mobsView);
 
         updateSystem = new UpdateSystem(
             player,
@@ -120,10 +150,10 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         updateSystem.update(delta);
+        mobControlSystem.update(delta);
         chunkManagerSystem.update();
         inputSystem.update(player, delta);
-        spawnSystem.update(delta);
-        actionManagerSystem.update(player, passives, mobs);
+        actionManagerSystem.update(player,passives,mobs);
         mobs.add(player);
         moveSystem.move(delta);
         mobs.remove(player);
