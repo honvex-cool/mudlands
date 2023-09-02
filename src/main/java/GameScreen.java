@@ -12,8 +12,8 @@ import generator.WorldLoader;
 import graphics.GraphicsContext;
 import graphics.GraphicsContextImpl;
 import graphics.DrawablePresenter;
-import openable.OpenableManager;
 import graphics.ResolutionProvider;
+import openable.OpenableManager;
 import systems.*;
 import utils.AssetManager;
 import utils.Config;
@@ -30,16 +30,16 @@ public class GameScreen implements Screen {
     private final UniversalFactory universalFactory;
     private RenderingSystem renderingSystem;
     private InputSystem inputSystem;
+    private OpenableManager openableManager;
     private final SpawnSystem spawnSystem;
     private ChunkManagerSystem chunkManagerSystem;
     private MoveSystem moveSystem;
     private ActionManagerSystem actionManagerSystem;
     private UpdateSystem updateSystem;
 
-    private OpenableManager openableManager;
     private Player player;
-    private Map<Pair<Integer,Integer>, Ground> ground;
-    private Map<Pair<Integer,Integer>, Passive> passives;
+    private Map<Pair<Integer, Integer>, Ground> ground;
+    private Map<Pair<Integer, Integer>, Passive> passives;
     private Collection<Mob> mobs;
 
     public GameScreen(MudlandsGame mudlandsGame) {
@@ -62,17 +62,16 @@ public class GameScreen implements Screen {
             player = loader.loadPlayer();
         }
 
-
         inputSystem = new InputSystem();
+        openableManager = new OpenableManager(inputSystem, player, assetManager);
 
         actionManagerSystem = new ActionManagerSystem();
-
 
         ground = new HashMap<>();
         passives = new HashMap<>();
         mobs = new ArrayList<>();
 
-        chunkManagerSystem = new ChunkManagerSystem(player,loader, ground,passives,mobs);
+        chunkManagerSystem = new ChunkManagerSystem(player, loader, ground, passives, mobs);
 
         HuntingMovementController controller = new HuntingMovementController(
             Collections.unmodifiableSet(passives.keySet()),
@@ -85,7 +84,7 @@ public class GameScreen implements Screen {
         Collection<Passive> passivesView = Collections.unmodifiableCollection(passives.values());
         Collection<Mob> mobsView = Collections.unmodifiableCollection(mobs);
 
-        moveSystem = new MoveSystem(Collections.unmodifiableMap(passives),Collections.unmodifiableMap(ground),mobsView);
+        moveSystem = new MoveSystem(Collections.unmodifiableMap(passives), Collections.unmodifiableMap(ground), mobsView);
 
         updateSystem = new UpdateSystem(
             player,
@@ -110,7 +109,6 @@ public class GameScreen implements Screen {
             mobsView
         );
 
-        openableManager = new OpenableManager(player, assetManager);
     }
 
     @Override
@@ -125,7 +123,7 @@ public class GameScreen implements Screen {
         chunkManagerSystem.update();
         inputSystem.update(player, delta);
         spawnSystem.update(delta);
-        actionManagerSystem.update(player,passives,mobs);
+        actionManagerSystem.update(player, passives, mobs);
         mobs.add(player);
         moveSystem.move(delta);
         mobs.remove(player);

@@ -6,10 +6,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import entities.Player;
 import utils.Config;
-import utils.Debug;
 import utils.Pair;
 
 public class InputSystem {
+
+    private boolean inventoryClicked;
+    private boolean craftingClicked;
+    private boolean statusClicked;
+
+    private boolean open;
+
+    public InputSystem() {
+        inventoryClicked = false;
+        craftingClicked = false;
+        statusClicked = false;
+        open = false;
+    }
 
     public void update(Player player, float deltaTime) {
         VelocityComponent velocity = player.velocityComponent;
@@ -32,13 +44,47 @@ public class InputSystem {
             velocity.setY(0);
         }
 
-        Pair<Float,Float> pointerPosition = new Pair<>((float)Gdx.input.getX() - Config.NATIVE_WIDTH/2,(float)Config.NATIVE_HEIGHT/2 - Gdx.input.getY());
+        Pair<Float, Float> pointerPosition = new Pair<>((float)Gdx.input.getX() - Config.NATIVE_WIDTH / 2, (float)Config.NATIVE_HEIGHT / 2 - Gdx.input.getY());
         player.rotationComponent.setRotationFromVector(pointerPosition);
 
+        if(Gdx.input.isKeyPressed(Input.Keys.E)) {
+            setBooleans(true, false, false);
+            open = true;
+        } else if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
+            setBooleans(false, true, false);
+            open = true;
+        } else if(Gdx.input.isKeyPressed(Input.Keys.R)) {
+            setBooleans(false, false, true);
+            open = true;
+        } else if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            setBooleans(false, false, false);
+            open = false;
+        } else {
+            setBooleans(false, false, false);
+        }
 
-        if(Gdx.input.isButtonPressed((Input.Buttons.LEFT)))
+        if(Gdx.input.isButtonPressed((Input.Buttons.LEFT)) && !open)
             player.requestAction(ActionType.HIT);
-        else if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT))
+        else if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && !open)
             player.requestAction(ActionType.INTERACT);
+    }
+
+
+    private void setBooleans(boolean inv, boolean craft, boolean status) {
+        inventoryClicked = inv;
+        craftingClicked = craft;
+        statusClicked = status;
+    }
+
+    public boolean isInventoryClicked() {
+        return inventoryClicked;
+    }
+
+    public boolean isCraftingClicked() {
+        return craftingClicked;
+    }
+
+    public boolean isStatusClicked() {
+        return statusClicked;
     }
 }
