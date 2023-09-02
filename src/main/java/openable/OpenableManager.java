@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import entities.Player;
 import openable.crafting.CraftingRendering;
+import openable.inventory.Inventory;
 import openable.inventory.InventoryRendering;
 import openable.status.StatusRendering;
 import systems.InputSystem;
@@ -13,8 +14,6 @@ public class OpenableManager {
     private InventoryRendering inventoryRendering;
     private CraftingRendering craftingRendering;
     private StatusRendering statusRendering;
-    private Player player;
-
     private boolean inventoryOpen;
     private boolean craftingOpen;
     private boolean statusOpen;
@@ -22,8 +21,7 @@ public class OpenableManager {
 
     public OpenableManager(InputSystem inputSystem, Player player, AssetManager assetManager) {
         this.inputSystem = inputSystem;
-        this.player = player;
-        craftingRendering = new CraftingRendering(player, assetManager);
+        craftingRendering = new CraftingRendering(player.getInventory(), assetManager);
         inventoryRendering = new InventoryRendering(player, assetManager);
         statusRendering = new StatusRendering(player, assetManager);
         inventoryOpen = false;
@@ -47,6 +45,7 @@ public class OpenableManager {
             Gdx.input.setInputProcessor(craftingRendering.getStage());
         } else if(inputSystem.isStatusClicked()) {
             setBooleans(false, false, true);
+            statusRendering.updateInventory();
             Gdx.input.setInputProcessor(statusRendering.getStage());
         } else if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             setBooleans(false, false, false);

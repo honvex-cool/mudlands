@@ -1,6 +1,7 @@
 package openable.crafting;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,9 +39,7 @@ public class CraftingRendering {
     private Table mainTable;
 
     private Table inventoryTable;
-    private int page;
 
-    private int maxPage = 0;
     private AssetManager assetManager;
 
     private ArrayList<Page> pages;
@@ -48,25 +47,27 @@ public class CraftingRendering {
     Dialog popupAccept;
     Dialog popupDeny;
 
-    public CraftingRendering(Player player, AssetManager assetManager) {
+    Dialog popupInfo;
+
+    private CraftingManager manager;
+
+    public CraftingRendering(Inventory inventory, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
         this.stage = new Stage();
-        this.inventory = player.getInventory();
+        this.inventory = inventory;
         this.assetManager = assetManager;
-        page = 0;
+        this.manager = new CraftingManager();
         mainTable = new Table();
         inventoryTable = new Table();
         mainTable.setFillParent(true);
-
-        pages = new ArrayList<>();
-        createPages();
 
         TextButton leftButton = new TextButton("LEFT", skin);
         leftButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                page--;
-                updatePage();
+                if(manager.updatePage(-1)) {
+                    showPage(manager.getCurrentPage());
+                }
                 return true;
             }
         });
@@ -74,8 +75,9 @@ public class CraftingRendering {
         rightButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                page++;
-                updatePage();
+                if(manager.updatePage(1)) {
+                    showPage(manager.getCurrentPage());
+                }
                 return true;
             }
         });
@@ -88,16 +90,20 @@ public class CraftingRendering {
         popupDeny.text("Not enough materials");
         popupDeny.button("OK", true);
 
-        showPage(pages.get(page));
+        popupInfo = new Dialog("Description", skin);
+        popupInfo.text("");
+        popupInfo.button("OK", true);
+
+        showPage(manager.getCurrentPage());
         mainTable.add(leftButton);
         mainTable.add(inventoryTable);
         mainTable.add(rightButton);
         stage.addActor(mainTable);
-
     }
 
 
     private void showPage(Page page) {
+        inventoryTable.clear();
         int counter = 0;
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
             for(int col = 0; col < INVENTORY_WIDTH; col++) {
@@ -113,19 +119,19 @@ public class CraftingRendering {
                 inventorySlot.addListener(new InputListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(!item.isCraftable()) {
-                            popupDeny.getContentTable().clearChildren();
-                            popupDeny.text("Cannot be crafted");
-                            popupDeny.show(stage);
+                        if(item.toString().equals("None")){
+                            return false;
                         }
-                        else if(item.craft(inventory)) {
-                            popupAccept.getContentTable().clearChildren();
-                            popupAccept.text("Crafted " + item);
-                            popupAccept.show(stage);
+                        if(button == Input.Buttons.RIGHT && item.isCraftable()) {
+                            showPopup(popupInfo, item.getRecipe());
+                            return true;
+                        }
+                        if(!item.isCraftable()) {
+                            showPopup(popupDeny, "Cannot be crafted");
+                        } else if(item.craft(inventory)) {
+                            showPopup(popupAccept, "Crafted " + item);
                         } else {
-                            popupDeny.getContentTable().clearChildren();
-                            popupDeny.text("Not enough materials: " + item.getRecipe());
-                            popupDeny.show(stage);
+                            showPopup(popupDeny, "Not enough materials: " + item.getRecipe());
                         }
                         return true;
                     }
@@ -135,24 +141,10 @@ public class CraftingRendering {
         }
     }
 
-    private void createPages() {
-        Page page = new Page("Tools");
-        page.addItem(new PickaxeItem());
-        page.addItem(new SwordItem());
-        page.addItem(new AxeItem());
-        pages.add(page);
-    }
-
-    private void updatePage() {
-        if(page < 0) {
-            page = 0;
-            return;
-        }
-        if(page > maxPage) {
-            page = maxPage;
-            return;
-        }
-        //nextPageOfCraftableItems
+    private void showPopup(Dialog dialog, String text) {
+        dialog.getContentTable().clearChildren();
+        dialog.text(text);
+        dialog.show(stage);
     }
 
     private ImageButton createInventorySlot(Item item) {
@@ -165,7 +157,6 @@ public class CraftingRendering {
         return imageButton;
     }
 
-
     public void update() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -177,5 +168,4 @@ public class CraftingRendering {
         stage.act();
         stage.draw();
     }
-
 }

@@ -19,69 +19,64 @@ import static utils.Config.UISKIN;
 public class StatusRendering {
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    private Stage stage;
-
     private Skin skin;
-
-    private Label hp;
+    private Stage stage;
+    private Player player;
+    private AssetManager assetManager;
+    private StatusManager statusManager;
 
     private Table mainTable;
 
-    private Player player;
+    private Table equipmentTable;
 
-    private Image image;
-
-    private Texture noneTexture;
-
-    private AssetManager assetManager;
-
-    private Inventory inventory;
-
-    private TextButton unEquipButton;
-
-    Dialog unEquip;
+    private Image headImage, chestImage, legsImage, bootsImage, rightHandImage, leftHandImage;
     public StatusRendering(Player player, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
-        this.stage = new Stage();
         this.player = player;
-        this.inventory = player.getInventory();
+        stage = new Stage();
         this.assetManager = assetManager;
-        noneTexture = assetManager.getInventoryTexture("None");
+        statusManager = new StatusManager(player);
+
+        headImage = new Image(assetManager.getInventoryTexture(statusManager.getHead().toString()));
+        headImage.setSize(64, 64);
+        chestImage = new Image(assetManager.getInventoryTexture(statusManager.getChest().toString()));
+        chestImage.setSize(64, 64);
+        legsImage = new Image(assetManager.getInventoryTexture(statusManager.getLegs().toString()));
+        legsImage.setSize(64, 64);
+        bootsImage = new Image(assetManager.getInventoryTexture(statusManager.getBoots().toString()));
+        bootsImage.setSize(64, 64);
+        rightHandImage = new Image(assetManager.getInventoryTexture(statusManager.getRightHand().toString()));
+        rightHandImage.setSize(64, 64);
+        leftHandImage = new Image(assetManager.getInventoryTexture(statusManager.getLeftHand().toString()));
+        leftHandImage.setSize(64, 64);
 
         mainTable = new Table();
         mainTable.setFillParent(true);
 
-        hp = new Label("HP: " + this.player.getHp().getCurrentPoints(), skin);
-        unEquipButton = new TextButton("UNEQUIP", skin);
-        image = new Image(noneTexture);
-
-        mainTable.add(hp);
-        mainTable.add(image).size(64f);
-        mainTable.row();
-        mainTable.add(unEquipButton);
-        unEquip = new Dialog("UNEQUIPPED", skin);
-        unEquip.button("OK", true);
-
-        unEquipButton.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(!inventory.getRightHand().toString().equals("None")) {
-                    inventory.unEquipItem();
-                    unEquip.getContentTable().clearChildren();
-                    unEquip.show(stage);
-                }
-                return true;
-            }
-        });
+        mainTable.defaults().size(64f);
+        mainTable.add(rightHandImage).pad(25);
+        equipmentTable = new Table();
+        equipmentTable.defaults().size(64f);
+        equipmentTable.add(headImage).pad(25).row();
+        equipmentTable.add(chestImage).pad(25).row();
+        equipmentTable.add(legsImage).pad(25).row();
+        equipmentTable.add(bootsImage).pad(25).row();
+        mainTable.add(equipmentTable);
+        mainTable.add(leftHandImage).pad(25);
 
         stage.addActor(mainTable);
     }
 
+
+    public void updateInventory(){
+        statusManager.updateStatus();
+        headImage.setDrawable(new TextureRegionDrawable(assetManager.getInventoryTexture(statusManager.getHead().toString())));
+        chestImage.setDrawable(new TextureRegionDrawable(assetManager.getInventoryTexture(statusManager.getChest().toString())));
+        legsImage.setDrawable(new TextureRegionDrawable(assetManager.getInventoryTexture(statusManager.getLegs().toString())));
+        bootsImage.setDrawable(new TextureRegionDrawable(assetManager.getInventoryTexture(statusManager.getBoots().toString())));
+        rightHandImage.setDrawable(new TextureRegionDrawable(assetManager.getInventoryTexture(statusManager.getRightHand().toString())));
+        leftHandImage.setDrawable(new TextureRegionDrawable(assetManager.getInventoryTexture(statusManager.getLeftHand().toString())));
+    }
 
     public void update() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -91,9 +86,11 @@ public class StatusRendering {
         shapeRenderer.rect(10f, 10f, Gdx.graphics.getWidth() - 20f, Gdx.graphics.getHeight() - 20f);
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
-        hp.setText("HP: " + this.player.getHp().getCurrentPoints());
-        image.setDrawable(new TextureRegionDrawable(assetManager.getInventoryTexture(inventory.getRightHand().toString())));
         stage.act();
         stage.draw();
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 }
