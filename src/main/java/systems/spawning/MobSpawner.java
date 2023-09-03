@@ -6,6 +6,7 @@ import entities.mobs.Mob;
 import entities.mobs.Pig;
 import entities.mobs.Zombie;
 
+import java.util.Random;
 import java.util.random.RandomGenerator;
 
 public class MobSpawner {
@@ -20,7 +21,7 @@ public class MobSpawner {
     }
 
     public Mob spawnPigAround(PositionComponent positionComponent) {
-        return placeOrGiveUp(new Pig(), positionComponent);
+        return placeOrGiveUp(new Pig(new Random(generator.nextLong())), positionComponent);
     }
 
     public Mob spawnZombieAround(PositionComponent positionComponent) {
