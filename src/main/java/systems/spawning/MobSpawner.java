@@ -1,10 +1,7 @@
 package systems.spawning;
 
 import components.PositionComponent;
-import entities.mobs.Ghost;
-import entities.mobs.Mob;
-import entities.mobs.Pig;
-import entities.mobs.Zombie;
+import entities.mobs.*;
 
 import java.util.Random;
 import java.util.random.RandomGenerator;
@@ -22,6 +19,14 @@ public class MobSpawner {
 
     public Mob spawnPigAround(PositionComponent positionComponent) {
         return placeOrGiveUp(new Pig(new Random(generator.nextLong())), positionComponent);
+    }
+
+    public Mob spawnCowAround(PositionComponent positionComponent) {
+        int tameness = generator.nextInt(2, 10);
+        return placeOrGiveUp(
+            new Cow(new Random(generator.nextLong()), tameness),
+            positionComponent
+        );
     }
 
     public Mob spawnZombieAround(PositionComponent positionComponent) {

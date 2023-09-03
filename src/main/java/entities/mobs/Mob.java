@@ -19,7 +19,6 @@ public abstract class Mob extends Entity implements Hitbox {
     public MutableRotationComponent rotationComponent;
     public ActionType nextAction = null;
     private Damage damage = new Damage(5, 5, 5, 5);
-    private float speed;
 
     public Mob() {
         this(0,0);
@@ -70,16 +69,15 @@ public abstract class Mob extends Entity implements Hitbox {
         return 0.45f;
     }
 
-    protected final void setSpeed(float speed) {
-        this.speed = speed;
-        setDirection(VectorMath.getRotationFromVector(velocityComponent.getAsPair()));
-    }
-
-    protected final void setDirection(float direction) {
+    protected final void setVelocity(float speed, float direction) {
         Pair<Float, Float> velocity = VectorMath.getVectorFromRotation(direction, speed);
         velocityComponent.setX(velocity.getFirst());
         velocityComponent.setY(velocity.getSecond());
         rotationComponent.setRotation(direction);
+    }
+
+    protected final void halt() {
+        setVelocity(0, 0);
     }
 
     public void requestAction(ActionType actionType) {
