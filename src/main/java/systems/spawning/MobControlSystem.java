@@ -1,7 +1,7 @@
 package systems.spawning;
 
-import utils.Repeatable;
-import utils.RepeatableManager;
+import actions.Repeatable;
+import actions.RepeatableManager;
 import components.PositionComponent;
 import entities.mobs.Mob;
 import org.jetbrains.annotations.NotNull;

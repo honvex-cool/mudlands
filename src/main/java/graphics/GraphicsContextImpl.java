@@ -63,4 +63,8 @@ public class GraphicsContextImpl implements GraphicsContext {
         }
         spriteBatch.end();
     }
+    @Override
+    public void dispose(){
+        spriteBatch.dispose();
+    }
 }

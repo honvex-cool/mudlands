@@ -16,26 +16,28 @@ import java.util.List;
 public class RenderingSystem {
 
     private final Presenter<? extends Drawable> spritePresenter;
-    private final GraphicsContext graphicsContext;
+    private GraphicsContext graphicsContext;
     private final Player player;
     private final Collection<Ground> grounds;
     private final Collection<Passive> passives;
     private final Collection<Mob> mobs;
 
     public RenderingSystem(
-        GraphicsContext graphicsContext,
         Presenter<? extends Drawable> spritePresenter,
         Player player,
         Collection<Ground> grounds,
         Collection<Passive> passives,
         Collection<Mob> mobs
     ) {
-        this.graphicsContext = graphicsContext;
         this.spritePresenter = spritePresenter;
         this.player = player;
         this.grounds = grounds;
         this.passives = passives;
         this.mobs = mobs;
+    }
+
+    public void setGraphicsContext(GraphicsContext graphicsContext){
+        this.graphicsContext = graphicsContext;
     }
 
     public void update() {

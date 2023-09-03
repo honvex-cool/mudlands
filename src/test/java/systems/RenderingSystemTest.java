@@ -59,13 +59,13 @@ class RenderingSystemTest {
         when(presenter.present(mob)).thenReturn(List.of(mobDrawable));
 
         renderingSystem = new RenderingSystem(
-            graphicsContext,
             presenter,
             player,
             List.of(ground),
             List.of(passive),
             List.of(mob)
         );
+        renderingSystem.setGraphicsContext(graphicsContext);
     }
 
     @Test

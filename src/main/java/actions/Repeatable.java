@@ -1,6 +1,5 @@
-package utils;
+package actions;
 
-import actions.Cooldown;
 import org.jetbrains.annotations.NotNull;
 
 public class Repeatable {

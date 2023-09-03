@@ -11,13 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import entities.Player;
 import openable.inventory.Inventory;
 import openable.items.Item;
 import openable.items.NoneItem;
-import openable.items.tools.AxeItem;
-import openable.items.tools.PickaxeItem;
-import openable.items.tools.SwordItem;
 import utils.AssetManager;
 
 import java.util.ArrayList;
@@ -26,7 +22,7 @@ import static utils.Config.*;
 
 public class CraftingRendering {
 
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private ShapeRenderer shapeRenderer;
 
     public Stage getStage() {
         return stage;
@@ -52,6 +48,7 @@ public class CraftingRendering {
     private CraftingManager manager;
 
     public CraftingRendering(Inventory inventory, AssetManager assetManager) {
+        shapeRenderer = new ShapeRenderer();
         skin = new Skin(Gdx.files.internal(UISKIN));
         this.stage = new Stage();
         this.inventory = inventory;

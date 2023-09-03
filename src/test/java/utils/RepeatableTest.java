@@ -1,5 +1,6 @@
 package utils;
 
+import actions.Repeatable;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
