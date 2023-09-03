@@ -16,6 +16,8 @@ public class GraphicsContextInventoryImpl implements GraphicsContextInventory {
     private InventoryRendering inventoryRendering;
     private StatusRendering statusRendering;
 
+    boolean invOpen = false, craftOpen = false, statusOpen = false;
+
     public GraphicsContextInventoryImpl(InventoryManager inventoryManager, CraftingManager craftingManager, StatusManager statusManager, AssetManager assetManager) {
         craftingRendering = new CraftingRendering(craftingManager, assetManager);
         statusRendering = new StatusRendering(statusManager, assetManager);
@@ -30,17 +32,39 @@ public class GraphicsContextInventoryImpl implements GraphicsContextInventory {
 
     @Override
     public void end(boolean inv, boolean craft, boolean status) {
+        if(inv && !invOpen){
+            inventoryRendering.updateInventory();
+            Gdx.input.setInputProcessor(inventoryRendering.getStage());
+            invOpen = true;
+            craftOpen = false;
+            statusOpen = false;
+        }
+        if(craft && !craftOpen){
+            Gdx.input.setInputProcessor(craftingRendering.getStage());
+            craftOpen = true;
+            invOpen = false;
+            statusOpen = false;
+        }
+        if(status && !statusOpen){
+            statusRendering.updateInventory();
+            Gdx.input.setInputProcessor(statusRendering.getStage());
+            statusOpen = true;
+            invOpen = false;
+            craftOpen = false;
+        }
+        if(!inv && !craft && !status){
+            statusOpen = false;
+            invOpen = false;
+            craftOpen = false;
+        }
         if(inv) {
             inventoryRendering.update();
-            Gdx.input.setInputProcessor(inventoryRendering.getStage());
         }
         else if(craft) {
             craftingRendering.update();
-            Gdx.input.setInputProcessor(craftingRendering.getStage());
         }
         else if(status) {
             statusRendering.update();
-            Gdx.input.setInputProcessor(statusRendering.getStage());
         }
         else{
             Gdx.input.setInputProcessor(null);

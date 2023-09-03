@@ -2,29 +2,17 @@ package openable;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import openable.crafting.CraftingManager;
-import openable.inventory.InventoryManager;
-import openable.status.StatusManager;
 import systems.InputSystem;
 
 public class OpenableManager {
-
-    private StatusManager statusManager;
-
-    private CraftingManager craftingManager;
-
-    private InventoryManager inventoryManager;
 
     private boolean inventoryOpen;
     private boolean craftingOpen;
     private boolean statusOpen;
     private InputSystem inputSystem;
 
-    public OpenableManager(InputSystem inputSystem, InventoryManager inventoryManager, CraftingManager craftingManager, StatusManager statusManager) {
+    public OpenableManager(InputSystem inputSystem) {
         this.inputSystem = inputSystem;
-        this.statusManager = statusManager;
-        this.craftingManager = craftingManager;
-        this.inventoryManager = inventoryManager;
         inventoryOpen = false;
         craftingOpen = false;
         statusOpen = false;

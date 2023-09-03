@@ -172,7 +172,7 @@ public class MudlandsGame {
         craftingManager = new CraftingManager(player.getInventory());
         statusManager = new StatusManager(player);
         inventoryManager = new InventoryManager(player);
-        openableRenderingSystem = new OpenableRenderingSystem(inputSystem, inventoryManager, craftingManager, statusManager);
+        openableRenderingSystem = new OpenableRenderingSystem(inputSystem);
     }
     public InventoryManager getInventoryManager(){
         return inventoryManager;

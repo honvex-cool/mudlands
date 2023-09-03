@@ -11,8 +11,8 @@ public class OpenableRenderingSystem {
     private GraphicsContextInventory graphicsContext;
     private OpenableManager openableManager;
 
-    public OpenableRenderingSystem(InputSystem inputSystem, InventoryManager inventoryManager, CraftingManager craftingManager, StatusManager statusManager) {
-        this.openableManager = new OpenableManager(inputSystem, inventoryManager, craftingManager, statusManager);
+    public OpenableRenderingSystem(InputSystem inputSystem) {
+        this.openableManager = new OpenableManager(inputSystem);
     }
 
     public void setGraphicsContext(GraphicsContextInventory graphicsContext){
