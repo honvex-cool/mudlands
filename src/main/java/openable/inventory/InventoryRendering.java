@@ -23,53 +23,35 @@ import static utils.Config.*;
 
 public class InventoryRendering {
 
-    private Player player;
+    InventoryManager inventoryManager;
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
-
     boolean dragging = false;
     private Table inventoryTable;
-
-    private boolean movingItem = false;
-
     private Table mainTable;
-
     private Skin skin;
-
     private Dialog description;
     public Stage getStage() {
         return stage;
     }
-
     private Stage stage;
-
     private Label objectLabel, edible, equippable, number;
     private TextButton useButton, destroyButton;
 
-    Inventory inventory;
-
     int lastClickedI = -1;
     int lastClickedJ = -1;
-
     AssetManager assetManager;
-
     private Map<Pair<Integer, Integer>, InventoryImage> inventoryImageMap = new HashMap<>();
-
-
     float offsetX;
     float offsetY;
-
     Image image;
-
     Table equipmentTable;
-
     private InventoryImage headEquipment, chestEquipment, legEquipment, bootsEquipment, rightHandEquipment, leftHandEquipment;
 
-    public InventoryRendering(Player player, AssetManager assetManager) {
+    public InventoryRendering(InventoryManager inventoryManager, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
-        this.stage = new Stage();
-        this.player = player;
+        stage = new Stage();
+        this.inventoryManager = inventoryManager;
         this.assetManager = assetManager;
-        inventory = player.getInventory();
 
         description = new Dialog("description", skin);
         description.button("OK");
@@ -79,12 +61,12 @@ public class InventoryRendering {
 
         equipmentTable = new Table();
 
-        setUpEquipment(headEquipment, inventory.getHead(), 0, INVENTORY_WIDTH);
-        setUpEquipment(chestEquipment, inventory.getChest(), 1, INVENTORY_WIDTH);
-        setUpEquipment(legEquipment, inventory.getLegs(), 2, INVENTORY_WIDTH);
-        setUpEquipment(bootsEquipment, inventory.getBoots(), 3, INVENTORY_WIDTH);
-        setUpEquipment(rightHandEquipment, inventory.getRightHand(), 4, INVENTORY_WIDTH);
-        setUpEquipment(leftHandEquipment, inventory.getLeftHand(), 5, INVENTORY_WIDTH);
+        setUpEquipment(headEquipment, inventoryManager.getHead(), 0, INVENTORY_WIDTH);
+        setUpEquipment(chestEquipment, inventoryManager.getChest(), 1, INVENTORY_WIDTH);
+        setUpEquipment(legEquipment, inventoryManager.getLegs(), 2, INVENTORY_WIDTH);
+        setUpEquipment(bootsEquipment, inventoryManager.getBoots(), 3, INVENTORY_WIDTH);
+        setUpEquipment(rightHandEquipment, inventoryManager.getRightHand(), 4, INVENTORY_WIDTH);
+        setUpEquipment(leftHandEquipment, inventoryManager.getLeftHand(), 5, INVENTORY_WIDTH);
 
         mainTable.add(equipmentTable).left();
 
@@ -118,7 +100,6 @@ public class InventoryRendering {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 handleDestroyButton();
-                movingItem = false;
                 return true;
             }
         });
@@ -129,7 +110,7 @@ public class InventoryRendering {
         inventoryTable = new Table();
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
             for(int col = 0; col < INVENTORY_WIDTH; col++) {
-                InventoryImage inventorySlot = createInventorySlot(inventory.get(row, col).getItem());
+                InventoryImage inventorySlot = createInventorySlot(inventoryManager.getItem(row, col));
                 inventorySlot.i = row;
                 inventorySlot.j = col;
                 inventoryTable.add(inventorySlot).size(64).pad(5);
@@ -147,7 +128,7 @@ public class InventoryRendering {
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
             for(int col = 0; col <= INVENTORY_WIDTH; col++) {
                 Pair<Integer, Integer> pair = new Pair<>(row, col);
-                addTexture(inventory.get(row, col).getItem(), inventoryImageMap.get(pair));
+                addTexture(inventoryManager.getItem(row, col), inventoryImageMap.get(pair));
             }
         }
     }
@@ -170,10 +151,10 @@ public class InventoryRendering {
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
         if(lastClickedI != -1) {
-            objectLabel.setText("Name: " + inventory.get(lastClickedI, lastClickedJ).getItem());
-            edible.setText("Edible: " + inventory.get(lastClickedI, lastClickedJ).getItem().isEdible());
-            equippable.setText("Can Equip: " + inventory.get(lastClickedI, lastClickedJ).getItem().isEquipable());
-            number.setText("Number: " + inventory.get(lastClickedI, lastClickedJ).getNumber());
+            objectLabel.setText("Name: " + inventoryManager.getItem(lastClickedI, lastClickedJ));
+            edible.setText("Edible: " + inventoryManager.getItem(lastClickedI, lastClickedJ).isEdible());
+            equippable.setText("Can Equip: " + inventoryManager.getItem(lastClickedI, lastClickedJ).isEquipable());
+            number.setText("Number: " + inventoryManager.get(lastClickedI, lastClickedJ).getNumber());
         } else {
             objectLabel.setText("Name: ");
             edible.setText("Edible: ");
@@ -208,26 +189,14 @@ public class InventoryRendering {
         lastClickedJ = col;
     }
 
-    private void handleEquipButton() {
-        if(lastClickedI == -1) {
-            return;
-        }
-        Item item = inventory.get(lastClickedI, lastClickedJ).getItem();
-        if(item.isEquipable()) {
-            inventory.equipItem(lastClickedI, lastClickedJ);
-            player.setAttackDamage(item.getAttackStrength());
-            updateInventory();
-        }
-    }
-
     private void handleUseButton() {
         if(lastClickedI == -1) {
             return;
         }
-        Item item = inventory.get(lastClickedI, lastClickedJ).getItem();
+        Item item = inventoryManager.getItem(lastClickedI, lastClickedJ);
         if(item.isUsable()) {
-            item.use(player);
-            inventory.removeItem(lastClickedI, lastClickedJ, 1);
+            item.use(inventoryManager.getPlayer());
+            inventoryManager.removeItem(lastClickedI, lastClickedJ, 1);
             updateInventory();
         }
     }
@@ -236,7 +205,7 @@ public class InventoryRendering {
         if(lastClickedI == -1) {
             return;
         }
-        inventory.removeItem(lastClickedI, lastClickedJ);
+        inventoryManager.removeItem(lastClickedI, lastClickedJ);
         Texture downTexture = assetManager.getInventoryTexture("None");
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         Pair<Integer, Integer> coords = new Pair<>(lastClickedI, lastClickedJ);
@@ -247,8 +216,14 @@ public class InventoryRendering {
 
     public void showDescription(int i, int j){
         description.getContentTable().clearChildren();
-        description.text(inventory.get(i, j).getItem().getRecipe());
-        description.text(inventory.get(i, j).getItem().getStats());
+        description.text(inventoryManager.getItem(i, j).getRecipe());
+        description.text(inventoryManager.getItem(i, j).getStats());
         description.show(stage);
+    }
+
+    public void dispose() {
+        stage.dispose();
+        skin.dispose();
+        shapeRenderer.dispose();
     }
 }

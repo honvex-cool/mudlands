@@ -12,7 +12,11 @@ import generator.WorldLoader;
 import graphics.DrawablePresenter;
 import graphics.GraphicsContext;
 import graphics.GraphicsContextImpl;
+import graphics.GraphicsContextInventory;
 import openable.OpenableManager;
+import openable.crafting.CraftingManager;
+import openable.inventory.InventoryManager;
+import openable.status.StatusManager;
 import systems.*;
 import systems.controllers.CluelessController;
 import systems.controllers.HuntingController;
@@ -29,10 +33,14 @@ import java.util.*;
 public class MudlandsGame {
     private final WorldLoader loader;
     private GraphicsContext graphicsContext;
+    private GraphicsContextInventory graphicsContextInventory;
     private final AssetManager assetManager = new AssetManager("assets");
+    private StatusManager statusManager;
+    private CraftingManager craftingManager;
+    private InventoryManager inventoryManager;
     private RenderingSystem renderingSystem;
+    private OpenableRenderingSystem openableRenderingSystem;
     private InputSystem inputSystem;
-    private OpenableManager openableManager;
     private ChunkManagerSystem chunkManagerSystem;
     private MobControlSystem mobControlSystem;
     private MoveSystem moveSystem;
@@ -82,7 +90,7 @@ public class MudlandsGame {
         moveSystem.move(delta);
         mobs.remove(player);
         renderingSystem.update();
-        //openableManager.update(); //TODO detach from gdx
+        openableRenderingSystem.update();
     }
 
     public void create(int seed,String name){
@@ -101,9 +109,11 @@ public class MudlandsGame {
         prepare();
     }
 
-    public void setGraphicsContext(GraphicsContextImpl graphicsContext){
+    public void setGraphicsContext(GraphicsContextImpl graphicsContext, GraphicsContextInventory graphicsContextInventory){
         this.graphicsContext = graphicsContext;
         renderingSystem.setGraphicsContext(graphicsContext);
+        this.graphicsContextInventory = graphicsContextInventory;
+        openableRenderingSystem.setGraphicsContext(graphicsContextInventory);
     }
 
     private void prepare(){
@@ -159,7 +169,24 @@ public class MudlandsGame {
             mobsView
         );
 
-        //openableManager = new OpenableManager(inputSystem, player, assetManager); //TODO detach from gdx
+        craftingManager = new CraftingManager(player.getInventory());
+        statusManager = new StatusManager(player);
+        inventoryManager = new InventoryManager(player);
+        openableRenderingSystem = new OpenableRenderingSystem(inputSystem, inventoryManager, craftingManager, statusManager);
+    }
+    public InventoryManager getInventoryManager(){
+        return inventoryManager;
+    }
+    public StatusManager getStatusManager() {
+        return statusManager;
+    }
+
+    public CraftingManager getCraftingManager() {
+        return craftingManager;
+    }
+
+    public AssetManager getAssetManager() {
+        return assetManager;
     }
 
     public void dispose(){
