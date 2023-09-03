@@ -3,18 +3,17 @@ package generator;
 import entities.Entity;
 import entities.Player;
 import utils.Pair;
-import utils.SaveStruct;
 
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-public class WorldData implements Serializable {
+public class GameData implements Serializable {
     private int seed;
     private Player player;
     private Map<Pair<Integer, Integer>, Set<Entity>> changes;
 
-    public WorldData(int seed, Player player, Map<Pair<Integer, Integer>, Set<Entity>> changes) {
+    public GameData(int seed, Player player, Map<Pair<Integer, Integer>, Set<Entity>> changes) {
         this.seed = seed;
         this.player = player;
         this.changes = changes;

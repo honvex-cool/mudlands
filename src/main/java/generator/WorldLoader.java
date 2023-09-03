@@ -9,8 +9,6 @@ import entities.passives.EmptyPassive;
 import entities.passives.Passive;
 import utils.Config;
 import utils.Pair;
-import utils.SaveStruct;
-import entities.EntityTag;
 
 import java.io.*;
 import java.util.*;
@@ -56,7 +54,7 @@ public class WorldLoader {
         File file = new File(Config.SAVE_PATH + world_name + Config.EXTENSION);
         FileInputStream fileInputStream = new FileInputStream(file);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-        WorldData data = (WorldData) objectInputStream.readObject();
+        GameData data = (GameData) objectInputStream.readObject();
         objectInputStream.close();
 
         this.generator = new Generator(data.getSeed());
@@ -71,9 +69,10 @@ public class WorldLoader {
         File file = new File(Config.SAVE_PATH + world_name + Config.EXTENSION);
         if(file.exists())
             file.delete();
+
         file.createNewFile();
 
-        WorldData data = new WorldData(generator.getSeed(), player, changes);
+        GameData data = new GameData(generator.getSeed(), player, changes);
 
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
