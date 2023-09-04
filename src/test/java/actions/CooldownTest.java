@@ -2,25 +2,24 @@ package actions;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CooldownTest {
     @Test
-    void testCooldownIsReady() {
+    void testReadyToUse() {
         Cooldown cooldown = Cooldown.readyToUse(3f);
         assertTrue(cooldown.isReady());
     }
 
     @Test
-    void testReset() {
+    void testCooldownIsNotReadyAfterReset() {
         Cooldown cooldown = Cooldown.readyToUse(3f);
         cooldown.reset();
         assertFalse(cooldown.isReady());
     }
 
     @Test
-    void testAdvance() {
+    void testAdvanceSimulatesTheFlowOfTime() {
         Cooldown cooldown = Cooldown.readyToUse(3f); // will need 3 seconds to cool down
         cooldown.reset();
 
@@ -55,5 +54,36 @@ class CooldownTest {
     void testConvenientUseIfReady() {
         Cooldown cooldown = Cooldown.notReadyToUse(3f);
         assertTrue(cooldown.use(3f));
+    }
+
+    @Test
+    void testTwoCooldownsAreEqualIfTheyHaveTheSameState() {
+        Cooldown first = Cooldown.notReadyToUse(5);
+        Cooldown second = Cooldown.notReadyToUse(5);
+        assertEquals(first, second);
+
+        first.advance(4);
+        second.advance(4);
+        assertEquals(first, second);
+    }
+
+    @Test
+    void testTwoCooldownsAreDifferentIfTheyHaveDifferentDuration() {
+        Cooldown first = Cooldown.notReadyToUse(5);
+        Cooldown second = Cooldown.notReadyToUse(6);
+        assertNotEquals(first, second);
+
+        first.advance(1);
+        second.advance(2);
+        assertNotEquals(first, second);
+    }
+
+    @Test
+    void testTwoCooldownsAreDifferentIfTheyAreDifferentlyAdvanced() {
+        Cooldown first = Cooldown.notReadyToUse(5);
+        Cooldown second = Cooldown.notReadyToUse(5);
+        first.advance(4);
+        second.advance(3);
+        assertNotEquals(first, second);
     }
 }
