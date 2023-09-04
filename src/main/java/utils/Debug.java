@@ -7,7 +7,7 @@ public final class Debug {
     private Debug() {
     }
 
-    public static final boolean LOAD_WORLD = true;
+    public static final boolean LOAD_WORLD = false;
     public static final float TEST_DELTA = 1E-7f;
 
     public static void log(Object... objects) {

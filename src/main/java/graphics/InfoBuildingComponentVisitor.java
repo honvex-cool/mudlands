@@ -37,7 +37,7 @@ public class InfoBuildingComponentVisitor implements ComponentVisitor {
         if(rightHand == null)
             return;
         String name = rightHand.getSimpleName();
-        itemName = name.substring(0, name.indexOf("Item"));
+        itemName = "inventory/" + name.substring(0, name.indexOf("Item"));
     }
 
     @Override

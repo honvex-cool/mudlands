@@ -22,7 +22,13 @@ public class GdxGame extends Game {
     }
     @Override
     public void create() {
-        graphicsContext = new GraphicsContextImpl(new SpriteBatch(),new OrthographicCamera(),new ResolutionProvider(), Config.TILES_ON_SCREEN);
+        graphicsContext = new GraphicsContextImpl(
+            new SpriteBatch(),
+            new OrthographicCamera(),
+            new ResolutionProvider(),
+            mudlandsGame.getAssetManager(),
+            Config.TILES_ON_SCREEN
+        );
         graphicsContextInventory = new GraphicsContextInventoryImpl(mudlandsGame.getInventoryManager(), mudlandsGame.getCraftingManager(), mudlandsGame.getStatusManager(), mudlandsGame.getAssetManager());
         mudlandsGame.setGraphicsContext(graphicsContext, graphicsContextInventory);
 

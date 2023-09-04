@@ -3,10 +3,7 @@ import entities.Player;
 import entities.UniversalFactory;
 import entities.grounds.Ground;
 import entities.grounds.Water;
-import entities.mobs.Ghost;
-import entities.mobs.Mob;
-import entities.mobs.Pig;
-import entities.mobs.Zombie;
+import entities.mobs.*;
 import entities.passives.Passive;
 import generator.WorldLoader;
 import graphics.DrawablePresenter;
@@ -128,7 +125,8 @@ public class MudlandsGame {
             mobsView
         );
         placementRules.forbidOn(Pig.class, Water.class);
-        placementRules.forbidOn(Ghost.class, Water.class);
+        placementRules.forbidOn(Cow.class, Water.class);
+        placementRules.forbidOn(Zombie.class, Water.class);
 
         HuntingController zombieHuntingController = new HuntingController(
             placementRules,
@@ -147,9 +145,10 @@ public class MudlandsGame {
 
         MobSpawner spawner = new MobSpawner(placementRules, randomForMobs, 5);
         mobControlSystem = new MobControlSystem(player.mutablePositionComponent, mobs, 40);
-        mobControlSystem.addSpawningRule(8, spawner::spawnPigAround);
-        mobControlSystem.addSpawningRule(10, spawner::spawnZombieAround);
-        mobControlSystem.addSpawningRule(20, spawner::spawnGhostAround);
+        mobControlSystem.addSpawningRule(20, spawner::spawnPigAround);
+        mobControlSystem.addSpawningRule(10, spawner::spawnCowAround);
+        mobControlSystem.addSpawningRule(30, spawner::spawnZombieAround);
+        mobControlSystem.addSpawningRule(40, spawner::spawnGhostAround);
         mobControlSystem.registerController(Zombie.class, zombieHuntingController);
         mobControlSystem.registerController(Ghost.class, ghostHuntingController);
         mobControlSystem.registerController(Pig.class, new CluelessController(randomForMobs, 100));
@@ -166,7 +165,7 @@ public class MudlandsGame {
         );
 
         renderingSystem = new RenderingSystem(
-            new DrawablePresenter(assetManager),
+            new DrawablePresenter(),
             player,
             groundsView,
             passivesView,

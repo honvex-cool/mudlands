@@ -35,7 +35,7 @@ public class AssetManager {
     }
 
     private Sprite loadSprite(String name) {
-        return new Sprite(new Texture(Gdx.files.internal(assetDirectoryName + "/textures/" + name + ".png")));
+        return new Sprite(new Texture(Gdx.files.internal(assetDirectoryName + "/" + name + ".png")));
     }
 
     private Texture loadInventoryTexture(String name) {

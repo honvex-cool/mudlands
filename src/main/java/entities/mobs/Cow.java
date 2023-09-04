@@ -50,5 +50,6 @@ public class Cow extends RoamingMob {
         float direction = VectorMath.getRotationFromVector(difference) + generator.nextFloat(-15, 15);
         setVelocity(CHARGE_SPEED, direction);
         untilChange = Cooldown.notReadyToUse(0.7f);
+        charging = true;
     }
 }
