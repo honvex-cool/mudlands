@@ -87,4 +87,5 @@ public class InputSystem {
     public boolean isStatusClicked() {
         return statusClicked;
     }
+
 }

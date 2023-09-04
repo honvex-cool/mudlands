@@ -1,7 +1,7 @@
 package openable.crafting;
 
-import entities.Player;
 import openable.inventory.Inventory;
+import openable.items.Item;
 import openable.items.tools.AxeItem;
 import openable.items.tools.PickaxeItem;
 import openable.items.tools.SwordItem;
@@ -16,7 +16,10 @@ public class CraftingManager {
 
     private ArrayList<Page> pages;
 
-    public CraftingManager() {
+    private Inventory inventory;
+
+    public CraftingManager(Inventory inventory) {
+        this.inventory = inventory;
         pages = new ArrayList<>();
         createPages();
         maxPage = pages.size() - 1;
@@ -43,6 +46,9 @@ public class CraftingManager {
         return true;
     }
 
+    public boolean craft(Item item){
+        return item.craft(inventory);
+    }
     public Page getCurrentPage() {
         return pages.get(page);
     }

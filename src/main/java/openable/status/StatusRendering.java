@@ -21,7 +21,6 @@ public class StatusRendering {
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Skin skin;
     private Stage stage;
-    private Player player;
     private AssetManager assetManager;
     private StatusManager statusManager;
 
@@ -30,12 +29,12 @@ public class StatusRendering {
     private Table equipmentTable;
 
     private Image headImage, chestImage, legsImage, bootsImage, rightHandImage, leftHandImage;
-    public StatusRendering(Player player, AssetManager assetManager) {
+
+    public StatusRendering(StatusManager statusManager, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
-        this.player = player;
         stage = new Stage();
         this.assetManager = assetManager;
-        statusManager = new StatusManager(player);
+        this.statusManager = statusManager;
 
         headImage = new Image(assetManager.getInventoryTexture(statusManager.getHead().toString()));
         headImage.setSize(64, 64);
@@ -68,7 +67,7 @@ public class StatusRendering {
     }
 
 
-    public void updateInventory(){
+    public void updateInventory() {
         statusManager.updateStatus();
         headImage.setDrawable(new TextureRegionDrawable(assetManager.getInventoryTexture(statusManager.getHead().toString())));
         chestImage.setDrawable(new TextureRegionDrawable(assetManager.getInventoryTexture(statusManager.getChest().toString())));
@@ -88,6 +87,12 @@ public class StatusRendering {
         Gdx.gl.glDisable(GL20.GL_BLEND);
         stage.act();
         stage.draw();
+    }
+
+    public void dispose() {
+        stage.dispose();
+        skin.dispose();
+        shapeRenderer.dispose();
     }
 
     public Stage getStage() {

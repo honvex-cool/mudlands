@@ -18,7 +18,7 @@ public class InventoryChangeListener extends InputListener {
 
     public InventoryChangeListener(InventoryRendering inventoryRendering, int row, int col) {
         this.inventoryRendering = inventoryRendering;
-        this.inventory = inventoryRendering.inventory;
+        this.inventory = inventoryRendering.inventoryManager.inventory;
         finalRow = row;
         finalCol = col;
     }

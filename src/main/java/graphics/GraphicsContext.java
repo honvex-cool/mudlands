@@ -9,7 +9,8 @@ public interface GraphicsContext {
 
     default void begin() {
     }
-
     default void end() {
     }
+
+    void dispose();
 }
