@@ -19,7 +19,7 @@ public class WorldLoader {
     private Map<Pair<Integer, Integer>, Set<Entity>> changes;
     private String world_name;
     private Player player;
-    private UniversalFactory universalFactory;
+    private final UniversalFactory universalFactory;
 
     public WorldLoader(UniversalFactory universalFactory) {
         this.changes = null;
@@ -29,8 +29,8 @@ public class WorldLoader {
         this.universalFactory = universalFactory;
     }
 
-    public void createWorld(Long seed, String world_name) {
-        if(world_name != null) {
+    public void createWorld(Long seed, String worldName) {
+        if(worldName != null) {
             try {
                 saveWorld();
             } catch(
@@ -38,7 +38,7 @@ public class WorldLoader {
             }
         }
         this.generator = new Generator(seed);
-        this.world_name = world_name;
+        this.world_name = worldName;
         this.changes = new HashMap<>();
         this.player = new Player();
     }
@@ -140,6 +140,7 @@ public class WorldLoader {
             if(fieldStruct.objectType != ObjectType.NONE)
                 set.add(universalFactory.createPassive(fieldStruct,key));
         }
+        set.remove(null);
         return set;
     }
 

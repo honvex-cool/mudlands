@@ -17,9 +17,4 @@ public class AppleItem extends Item {
     public void use(Player player) {
         player.heal(hp);
     }
-
-    @Override
-    public String toString() {
-        return name;
-    }
 }
