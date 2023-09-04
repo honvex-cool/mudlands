@@ -34,7 +34,7 @@ public class InventoryRendering {
         return stage;
     }
     private Stage stage;
-    private Label objectLabel, edible, equippable, number;
+    private Label objectLabel, edible, number;
     private TextButton useButton, destroyButton;
 
     int lastClickedI = -1;
@@ -74,12 +74,10 @@ public class InventoryRendering {
 
         objectLabel = new Label("Name: ", skin);
         edible = new Label("Edible: ", skin);
-        equippable = new Label("Can Equip: ", skin);
         number = new Label("Number: ", skin);
 
         leftTable.add(objectLabel).row();
         leftTable.add(edible).row();
-        leftTable.add(equippable).row();
         leftTable.add(number).row();
 
         useButton = new TextButton("USE", skin);
@@ -153,12 +151,10 @@ public class InventoryRendering {
         if(lastClickedI != -1) {
             objectLabel.setText("Name: " + inventoryManager.getItem(lastClickedI, lastClickedJ));
             edible.setText("Edible: " + inventoryManager.getItem(lastClickedI, lastClickedJ).isEdible());
-            equippable.setText("Can Equip: " + inventoryManager.getItem(lastClickedI, lastClickedJ).isEquipable());
             number.setText("Number: " + inventoryManager.get(lastClickedI, lastClickedJ).getNumber());
         } else {
             objectLabel.setText("Name: ");
             edible.setText("Edible: ");
-            equippable.setText("Can Equip: ");
             number.setText("Number: ");
         }
         stage.act();

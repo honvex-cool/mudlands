@@ -11,7 +11,6 @@ import utils.Pair;
 import java.util.ArrayList;
 
 public class PickaxeItem extends Item {
-    String name = "Pickaxe";
     private final int requiredStone = 3;
     private final int requiredStick = 2;
     private final StoneItem stone = new StoneItem();
@@ -19,10 +18,10 @@ public class PickaxeItem extends Item {
 
 
     public PickaxeItem() {
+        name = "Pickaxe";
         stackable = false;
         craftable = true;
         edible = false;
-        equipable = true;
         usable = false;
         damage = new Damage(1, 20, 1, 1);
         type = ItemType.HANDS;
@@ -43,10 +42,5 @@ public class PickaxeItem extends Item {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 }
