@@ -6,7 +6,7 @@ import openable.items.Item;
 public class AppleItem extends Item {
     String name = "Apple";
 
-    int hp = 20;
+    private final int hp = 20;
 
     public AppleItem() {
         stackable = true;
@@ -18,7 +18,7 @@ public class AppleItem extends Item {
 
     @Override
     public void use(Player player) {
-        player.getHp().fix(hp);
+        player.heal(hp);
     }
 
     @Override

@@ -11,7 +11,6 @@ import java.util.Set;
 public class Entity implements Serializable, ComponentHolder {
     public MutablePositionComponent mutablePositionComponent = new MutablePositionComponent(0, 0);
     protected Composition composition;
-    protected MutableHealthComponent hp = new MutableHealthComponent(100);
     public Entity() {
     }
 
@@ -35,9 +34,5 @@ public class Entity implements Serializable, ComponentHolder {
     @Override
     public Set<Component> viewComponents() {
         return Set.of(mutablePositionComponent);
-    }
-
-    public MutableHealthComponent getHp() {
-        return hp;
     }
 }

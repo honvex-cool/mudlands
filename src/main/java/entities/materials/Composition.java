@@ -6,18 +6,24 @@ public class Composition implements HealthComponent {
     private final Mix mix;
     private int currentHp;
 
+    private final int maxHp;
+
     public Composition(Mix full) {
-        this.mix = full;
-        currentHp = this.mix.total();
+        this(full,full.total());
     }
 
     public Composition(Mix full,int points) {
         this.mix = full;
         currentHp = points;
+        maxHp = points;
     }
 
     public void damage(Damage damage) {
         currentHp = Math.max(currentHp - damage.against(mix), 0);
+    }
+
+    public void fix(int amount) {
+        currentHp = Math.min(currentHp + amount, maxHp);
     }
 
     @Override
@@ -27,6 +33,6 @@ public class Composition implements HealthComponent {
 
     @Override
     public int getMaxPoints() {
-        return mix.total();
+        return maxHp;
     }
 }

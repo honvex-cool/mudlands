@@ -1,6 +1,5 @@
 package systems;
 
-import components.PositionComponent;
 import entities.Entity;
 import entities.mobs.Mob;
 import entities.Player;
@@ -22,6 +21,18 @@ public class ActionManagerSystem {
             }
             player.nextAction = null;
         }
+
+        mobs.add(player);
+        for(Mob mob:mobs){
+            if(mob.nextAction != null && !mob.isDestroyed()){
+                Set<Entity> recipients = getActionRecipients(mob,passives,mobs);
+                for(Entity entity:recipients) {
+                    entity.react(mob.nextAction,mob);
+                }
+                mob.nextAction = null;
+            }
+        }
+        mobs.remove(player);
     }
     private Set<Entity> getActionRecipients(Mob mob, Map<Pair<Integer,Integer>, Passive> passives, Collection<Mob> mobs){
         Set<Entity> set = new HashSet<>();
@@ -35,7 +46,7 @@ public class ActionManagerSystem {
                 set.add(passives.get(endField));
             }
             for(Mob m:mobs){
-                if(VectorMath.distance(endPoint,m.mutablePositionComponent.getPosition()) < m.getRadius()) {
+                if(VectorMath.distance(endPoint,m.mutablePositionComponent.getPosition()) < m.getRadius() && m != mob) {
                     set.add(m);
                 }
             }

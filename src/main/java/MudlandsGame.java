@@ -39,11 +39,11 @@ public class MudlandsGame {
     private InventoryManager inventoryManager;
     private RenderingSystem renderingSystem;
     private OpenableRenderingSystem openableRenderingSystem;
-    private InputSystem inputSystem;
+    private final InputSystem inputSystem;
     private ChunkManagerSystem chunkManagerSystem;
     private MobControlSystem mobControlSystem;
     private MoveSystem moveSystem;
-    private ActionManagerSystem actionManagerSystem;
+    private final ActionManagerSystem actionManagerSystem;
     private UpdateSystem updateSystem;
     private Player player;
     private final Map<Pair<Integer,Integer>, Ground> ground;
@@ -53,6 +53,7 @@ public class MudlandsGame {
     private final Collection<Ground> groundsView;
     private final Collection<Passive> passivesView;
     private final Collection<Mob> mobsView;
+    private boolean running = true;
     public MudlandsGame(){
         UniversalFactory universalFactory = new UniversalFactory(
             EntityMappings.GROUND_MAP,
@@ -90,6 +91,10 @@ public class MudlandsGame {
         mobs.remove(player);
         renderingSystem.update();
         openableRenderingSystem.update();
+
+        if(player.isDestroyed()){
+            running = false;
+        }
     }
 
     public void create(long seed,String name){
@@ -200,6 +205,6 @@ public class MudlandsGame {
     }
 
     public boolean isRunning(){
-        return true;
+        return running;
     }
 }

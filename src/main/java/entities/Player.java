@@ -4,7 +4,9 @@ import actions.ActionType;
 import actions.Cooldown;
 import actions.Movement;
 import components.*;
+import entities.materials.Composition;
 import entities.materials.Damage;
+import entities.materials.Mix;
 import entities.mobs.Mob;
 import openable.inventory.Inventory;
 import openable.items.NoneItem;
@@ -26,7 +28,7 @@ public class Player extends Mob {
 
     public Player(){
         super();
-        hp = new MutableHealthComponent(100);
+        this.composition = new Composition(new Mix(0,0,10,90),200);
     }
 
     @Override
@@ -65,6 +67,10 @@ public class Player extends Mob {
 
     @Override
     public Set<Component> viewComponents() {
-        return Set.of(mutablePositionComponent, rotationComponent, itemComponent, stamina);
+        return Set.of(mutablePositionComponent, rotationComponent, itemComponent, stamina, composition);
+    }
+
+    public void heal(int amount){
+        composition.fix(amount);
     }
 }
