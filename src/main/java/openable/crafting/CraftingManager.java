@@ -4,6 +4,7 @@ import openable.inventory.Inventory;
 import openable.items.Item;
 import openable.items.tools.AxeItem;
 import openable.items.tools.PickaxeItem;
+import openable.items.tools.PotionItem;
 import openable.items.tools.SwordItem;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class CraftingManager {
         page.addItem(new PickaxeItem());
         page.addItem(new SwordItem());
         page.addItem(new AxeItem());
+        page.addItem(new PotionItem());
         pages.add(page);
     }
 

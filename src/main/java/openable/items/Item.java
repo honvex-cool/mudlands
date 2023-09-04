@@ -11,10 +11,10 @@ import java.util.ArrayList;
 
 public class Item implements Serializable {
 
+    protected String name = "";
     protected boolean stackable;
     protected boolean usable;
     protected boolean edible;
-    protected boolean equipable;
     protected boolean craftable;
     protected Damage damage = new Damage(5, 5, 5, 5);
 
@@ -74,14 +74,6 @@ public class Item implements Serializable {
         this.edible = edible;
     }
 
-    public boolean isEquipable() {
-        return equipable;
-    }
-
-    public void setEquipable(boolean equipable) {
-        this.equipable = equipable;
-    }
-
     public boolean isCraftable() {
         return craftable;
     }
@@ -92,6 +84,6 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "item";
+        return name;
     }
 }

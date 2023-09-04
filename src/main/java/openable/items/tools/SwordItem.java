@@ -11,17 +11,16 @@ import utils.Pair;
 import java.util.ArrayList;
 
 public class SwordItem extends Item {
-    String name = "Sword";
     private final int requiredStone = 2;
     private final int requiredStick = 1;
     private final StoneItem stone = new StoneItem();
     private final StickItem stick = new StickItem();
 
     public SwordItem() {
+        name = "Sword";
         stackable = false;
         craftable = true;
         edible = false;
-        equipable = true;
         usable = false;
         damage = new Damage(1, 1, 1, 20);
         type = ItemType.HANDS;
@@ -42,10 +41,5 @@ public class SwordItem extends Item {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 }

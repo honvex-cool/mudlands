@@ -11,7 +11,6 @@ import utils.Pair;
 import java.util.ArrayList;
 
 public class AxeItem extends Item {
-    String name = "Axe";
     private final int requiredStone = 3;
     private final int requiredStick = 2;
     private final StoneItem stone = new StoneItem();
@@ -19,10 +18,10 @@ public class AxeItem extends Item {
 
 
     public AxeItem() {
+        name = "Axe";
         stackable = false;
         craftable = true;
         edible = false;
-        equipable = true;
         usable = false;
         damage = new Damage(20, 1, 1, 10);
         type= ItemType.HANDS;
@@ -47,10 +46,5 @@ public class AxeItem extends Item {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 }
