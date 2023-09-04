@@ -10,6 +10,7 @@ public class AppleItem extends Item {
         stackable = true;
         craftable = false;
         edible = true;
+        equipable = false;
         usable = true;
     }
 
