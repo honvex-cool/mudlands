@@ -2,41 +2,35 @@ package generator;
 
 import entities.UniversalFactory;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import utils.Pair;
-
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class WorldLoaderTest {
-    /*@Test
-    void testSaveLoad() {
-        WorldLoader worldLoader = new WorldLoader();
-        worldLoader.createWorld(123, "testWorld");
-        var map = worldLoader.loadChunk(0, 0);
-        assertNotNull(map);
 
-        map.put(new Pair(1, 1), new FieldStruct(GroundType.WATER, ObjectType.IRONSTONE));
-        worldLoader.saveChunk(0, 0, map);
+    @Test
+    public void testCreateSaveLoadWorld(){
+        UniversalFactory universalFactoryMock = mock(UniversalFactory.class);
+        WorldLoader worldLoader = new WorldLoader(universalFactoryMock);
+
+        worldLoader.createWorld(123L,"testCreateWorld");
 
         try {
             worldLoader.saveWorld();
         } catch(IOException e) {
-            throw new RuntimeException(e);
+            fail();
         }
 
-        WorldLoader worldLoader1 = new WorldLoader();
+        UniversalFactory universalFactoryMock2 = mock(UniversalFactory.class);
+        WorldLoader worldLoader2 = new WorldLoader(universalFactoryMock2);
+
         try {
-            worldLoader1.loadWorld("testWorld");
+            worldLoader2.loadWorld("testCreateWorld");
         } catch(Exception e) {
-            throw new RuntimeException(e);
+            fail();
         }
-
-        var map1 = worldLoader1.loadChunk(0, 0);
-        assertEquals(map, map1);
-    }*/
+    }
 
     @Test
     void testCannotSaveNullWorld() {

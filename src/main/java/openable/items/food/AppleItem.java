@@ -10,17 +10,11 @@ public class AppleItem extends Item {
         stackable = true;
         craftable = false;
         edible = true;
-        equipable = false;
         usable = true;
     }
 
     @Override
     public void use(Player player) {
         player.heal(hp);
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 }
