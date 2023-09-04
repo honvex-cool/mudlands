@@ -10,22 +10,28 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GeneratorTest {
-    /*@Test
-    void testConstructor() {
-        Generator generator = new Generator();
-        //assertEquals(123456789, generator.getSeed());
-        //Generator generator1 = new Generator(321);
-        //assertEquals(321, generator1.getSeed());
+    @Test
+    void testSeedImplicatesOutput() {
+        Generator generator1 = new Generator(7312L);
+        var gen1 = generator1.generateChunk(new Pair<>(73,12));
 
-        var map = new HashMap<Pair<Integer, Integer>, FieldStruct>();
+        Generator generator2 = new Generator(7312L);
+        var gen2 = generator2.generateChunk(new Pair<>(73,12));
 
-        for(int x = -4; x < 4; x++)
-            for(int y = -4; y < 4; y++)
-                map.putAll(generator.generateChunk(x, y));
-        try {
-            generator.saveMapToFile(map, "test");
-        } catch(IOException e) {
-            throw new RuntimeException(e);
-        }
-    }*/
+        assertEquals(gen1,gen2);
+    }
+
+    @Test
+    void testDifferentSeedsGiveDifferentOutputs() { //chance of this test not passing with valid code is close to 0
+        Generator generator1 = new Generator(145L);
+        var gen1 = generator1.generateChunk(new Pair<>(-20,45));
+        var gen1_ = generator1.generateChunk(new Pair<>(23,-30));
+
+        Generator generator2 = new Generator(541L);
+        var gen2 = generator2.generateChunk(new Pair<>(-20,45));
+        var gen2_ = generator2.generateChunk(new Pair<>(23,-30));
+
+        assertNotEquals(gen1,gen2);
+        assertNotEquals(gen1_,gen2_);
+    }
 }

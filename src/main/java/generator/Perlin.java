@@ -1,17 +1,11 @@
 package generator;
-
-import com.badlogic.gdx.math.Vector2;
-import utils.Config;
-import utils.Pair;
-
-import java.io.File;
 import java.util.*;
 
 public class Perlin {
-    private int seed;
-    private int gridsize;
+    private final long seed;
+    private final int gridsize;
 
-    public Perlin(int seed, int gridsize) {
+    public Perlin(long seed, int gridsize) {
         this.seed = seed;
         this.gridsize = gridsize;
     }

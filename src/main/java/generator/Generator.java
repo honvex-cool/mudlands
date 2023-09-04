@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.util.*;
 
 public class Generator {
-    private int seed;
-    private Perlin height_noise, height_noise2, humidity_noise, humidity_noise2;
+    private final long seed;
+    private final Perlin height_noise, height_noise2, humidity_noise, humidity_noise2;
 
-    Generator(Integer seed) {
+    Generator(Long seed) {
         this.seed = seed;
         this.height_noise = new Perlin(seed, Config.DEFAULT_GRID_SIZE);
         this.height_noise2 = new Perlin(seed + 1, Config.DEFAULT_GRID_SIZE);
@@ -20,15 +20,11 @@ public class Generator {
         this.humidity_noise2 = new Perlin(seed + 3, Config.DEFAULT_GRID_SIZE);
     }
 
-    Generator() {
-        this(123456789);
-    }
-
-    public int getSeed() {
+    public long getSeed() {
         return seed;
     }
 
-    public Map<Pair<Integer, Integer>, FieldStruct> generateChunk(Pair<Integer,Integer> chunk) { //object is temporary and will be replaced be appropriate class
+    public Map<Pair<Integer, Integer>, FieldStruct> generateChunk(Pair<Integer,Integer> chunk) {
         var map = new HashMap<Pair<Integer, Integer>, FieldStruct>();
         for(int y = 0; y < Config.CHUNK_SIZE; y++) {
             for(int x = 0; x < Config.CHUNK_SIZE; x++) {
@@ -39,7 +35,7 @@ public class Generator {
                 GroundType ground = getGroundType(height, humidity);
                 ObjectType object = getObjectType(height, humidity, ground, x, y);
 
-                map.put(new Pair(rx, ry), new FieldStruct(ground, object));
+                map.put(new Pair<>(rx, ry), new FieldStruct(ground, object));
             }
         }
         return map;
@@ -79,10 +75,17 @@ public class Generator {
                     object = ObjectType.STONE;
                 }
             }
+            case MUD -> {
+                if(humidity > 0.5 && rand_val % 4 == 0){
+                    object = ObjectType.MUDPUDDLE;
+                }
+            }
         }
         return object;
     }
 
+
+    //Unused debug functions which won't (hopefully) be longer needed
     @Deprecated
     void printMap(Map<Pair<Integer, Integer>, Pair<GroundType, ObjectType>> map) {
         int minx = Integer.MAX_VALUE;
@@ -97,7 +100,7 @@ public class Generator {
         }
         for(int y = 0; y < maxy - miny; y++) {
             for(int x = 0; x < maxx - minx; x++) {
-                char symbol = switch(map.get(new Pair(x + minx, y + miny)).getFirst()) {
+                char symbol = switch(map.get(new Pair<>(x + minx, y + miny)).getFirst()) {
                     case WATER -> ' ';
                     case SAND -> '.';
                     case GRASS -> '/';
@@ -111,7 +114,7 @@ public class Generator {
             System.err.println();
         }
     }
-
+    @Deprecated
     void saveMapToFile(Map<Pair<Integer, Integer>, FieldStruct> map, String filename) throws IOException {
         File file = new File(filename + ".map");
         file.createNewFile();
@@ -134,7 +137,7 @@ public class Generator {
         }
         for(int y = 0; y < maxy - miny; y++) {
             for(int x = 0; x < maxx - minx; x++) {
-                char symbol = switch(map.get(new Pair(x + minx, y + miny)).groundType) {
+                char symbol = switch(map.get(new Pair<>(x + minx, y + miny)).groundType) {
                     case WATER -> ' ';
                     case SAND -> '.';
                     case GRASS -> '/';
@@ -142,7 +145,7 @@ public class Generator {
                     case MUD -> '~';
                     default -> '?';
                 };
-                char symbol2 = switch(map.get(new Pair(x + minx, y + miny)).objectType) {
+                char symbol2 = switch(map.get(new Pair<>(x + minx, y + miny)).objectType) {
                     case TREE -> 't';
                     case STONE -> 's';
                     default -> '?';

@@ -21,6 +21,7 @@ public class GameScreen implements Screen {
         mudlandsGame.update(delta);
         if(!mudlandsGame.isRunning()){
             mudlandsGame.dispose();
+            //change screen
         }
 
     }

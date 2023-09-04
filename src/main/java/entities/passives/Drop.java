@@ -5,7 +5,6 @@ import components.Component;
 import components.MutablePositionComponent;
 import entities.mobs.Mob;
 
-import java.util.Map;
 import java.util.Set;
 
 public abstract class Drop extends Passive {

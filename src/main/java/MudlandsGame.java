@@ -13,7 +13,6 @@ import graphics.DrawablePresenter;
 import graphics.GraphicsContext;
 import graphics.GraphicsContextImpl;
 import graphics.GraphicsContextInventory;
-import openable.OpenableManager;
 import openable.crafting.CraftingManager;
 import openable.inventory.InventoryManager;
 import openable.status.StatusManager;
@@ -93,7 +92,7 @@ public class MudlandsGame {
         openableRenderingSystem.update();
     }
 
-    public void create(int seed,String name){
+    public void create(long seed,String name){
         loader.createWorld(seed, name);
         player = loader.loadPlayer();
         prepare();

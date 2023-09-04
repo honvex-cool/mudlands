@@ -22,7 +22,7 @@ public final class EntityMappings {
 
     public static final Map<ObjectType, Class<? extends Passive>> PASSIVE_MAP = Map.of(
         ObjectType.TREE, Tree.class,
-        ObjectType.STONE, Rock.class
-
+        ObjectType.STONE, Rock.class,
+        ObjectType.MUDPUDDLE, MudPuddle.class
     );
 }

@@ -29,7 +29,7 @@ public class WorldLoader {
         this.universalFactory = universalFactory;
     }
 
-    public void createWorld(Integer seed, String world_name) {
+    public void createWorld(Long seed, String world_name) {
         if(world_name != null) {
             try {
                 saveWorld();

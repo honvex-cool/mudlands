@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 class GdxProgram {
     public void run(MudlandsGame mudlandsGame) {
         new Lwjgl3Application(new GdxGame(mudlandsGame), createConfiguration());
-        System.out.println("aa");
     }
 
     private static Lwjgl3ApplicationConfiguration createConfiguration() {

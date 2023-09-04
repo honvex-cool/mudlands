@@ -40,6 +40,7 @@ public class GdxGame extends Game {
     public void dispose() {
         gameScreen.dispose();
         graphicsContext.dispose();
+        graphicsContextInventory.dispose();
         super.dispose();
     }
 }
