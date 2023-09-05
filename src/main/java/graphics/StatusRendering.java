@@ -1,34 +1,30 @@
-package openable.status;
+package graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import entities.Player;
-import openable.inventory.Inventory;
+import openable.status.StatusManager;
 import utils.AssetManager;
 
 import static utils.Config.UISKIN;
 
 public class StatusRendering {
 
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private Skin skin;
-    private Stage stage;
-    private AssetManager assetManager;
-    private StatusManager statusManager;
-
-    private Table mainTable;
-
-    private Table equipmentTable;
-
-    private Image headImage, chestImage, legsImage, bootsImage, rightHandImage, leftHandImage;
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private final Skin skin;
+    private final Stage stage;
+    private final AssetManager assetManager;
+    private final StatusManager statusManager;
+    private final Image headImage;
+    private final Image chestImage;
+    private final Image legsImage;
+    private final Image bootsImage;
+    private final Image rightHandImage;
+    private final Image leftHandImage;
 
     public StatusRendering(StatusManager statusManager, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
@@ -49,12 +45,12 @@ public class StatusRendering {
         leftHandImage = new Image(assetManager.getInventoryTexture(statusManager.getLeftHand().toString()));
         leftHandImage.setSize(64, 64);
 
-        mainTable = new Table();
+        Table mainTable = new Table();
         mainTable.setFillParent(true);
 
         mainTable.defaults().size(64f);
         mainTable.add(rightHandImage).pad(25);
-        equipmentTable = new Table();
+        Table equipmentTable = new Table();
         equipmentTable.defaults().size(64f);
         equipmentTable.add(headImage).pad(25).row();
         equipmentTable.add(chestImage).pad(25).row();

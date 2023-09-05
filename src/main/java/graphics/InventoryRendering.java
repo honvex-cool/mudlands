@@ -1,4 +1,4 @@
-package openable.inventory;
+package graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -10,8 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import entities.Player;
-import openable.items.food.AppleItem;
+import openable.inventory.Inventory;
+import openable.inventory.InventoryImage;
+import openable.inventory.InventoryManager;
 import openable.items.Item;
 import utils.AssetManager;
 import utils.Pair;
@@ -24,28 +25,26 @@ import static utils.Config.*;
 public class InventoryRendering {
 
     InventoryManager inventoryManager;
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     boolean dragging = false;
-    private Table inventoryTable;
-    private Table mainTable;
-    private Skin skin;
-    private Dialog description;
+    private final Skin skin;
+    private final Dialog description;
     public Stage getStage() {
         return stage;
     }
-    private Stage stage;
-    private Label objectLabel, edible, number;
-    private TextButton useButton, destroyButton;
+    private final Stage stage;
+    private final Label objectLabel;
+    private final Label edible;
+    private final Label number;
 
     int lastClickedI = -1;
     int lastClickedJ = -1;
     AssetManager assetManager;
-    private Map<Pair<Integer, Integer>, InventoryImage> inventoryImageMap = new HashMap<>();
+    private final Map<Pair<Integer, Integer>, InventoryImage> inventoryImageMap = new HashMap<>();
     float offsetX;
     float offsetY;
     Image image;
-    Table equipmentTable;
-    private InventoryImage headEquipment, chestEquipment, legEquipment, bootsEquipment, rightHandEquipment, leftHandEquipment;
+    private final Table equipmentTable;
 
     public InventoryRendering(InventoryManager inventoryManager, AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
@@ -56,17 +55,17 @@ public class InventoryRendering {
         description = new Dialog("description", skin);
         description.button("OK");
 
-        mainTable = new Table();
+        Table mainTable = new Table();
         mainTable.setFillParent(true);
 
         equipmentTable = new Table();
 
-        setUpEquipment(headEquipment, inventoryManager.getHead(), 0, INVENTORY_WIDTH);
-        setUpEquipment(chestEquipment, inventoryManager.getChest(), 1, INVENTORY_WIDTH);
-        setUpEquipment(legEquipment, inventoryManager.getLegs(), 2, INVENTORY_WIDTH);
-        setUpEquipment(bootsEquipment, inventoryManager.getBoots(), 3, INVENTORY_WIDTH);
-        setUpEquipment(rightHandEquipment, inventoryManager.getRightHand(), 4, INVENTORY_WIDTH);
-        setUpEquipment(leftHandEquipment, inventoryManager.getLeftHand(), 5, INVENTORY_WIDTH);
+        setUpEquipment(inventoryManager.getHead(), 0, INVENTORY_WIDTH);
+        setUpEquipment(inventoryManager.getChest(), 1, INVENTORY_WIDTH);
+        setUpEquipment(inventoryManager.getLegs(), 2, INVENTORY_WIDTH);
+        setUpEquipment(inventoryManager.getBoots(), 3, INVENTORY_WIDTH);
+        setUpEquipment(inventoryManager.getRightHand(), 4, INVENTORY_WIDTH);
+        setUpEquipment(inventoryManager.getLeftHand(), 5, INVENTORY_WIDTH);
 
         mainTable.add(equipmentTable).left();
 
@@ -80,8 +79,8 @@ public class InventoryRendering {
         leftTable.add(edible).row();
         leftTable.add(number).row();
 
-        useButton = new TextButton("USE", skin);
-        destroyButton = new TextButton("DESTROY", skin);
+        TextButton useButton = new TextButton("USE", skin);
+        TextButton destroyButton = new TextButton("DESTROY", skin);
         leftTable.defaults().size(200f, 50f);
 
         leftTable.add(useButton).row();
@@ -105,7 +104,7 @@ public class InventoryRendering {
         mainTable.add(leftTable).expand().fill().width(20f);
         mainTable.pad(80f);
 
-        inventoryTable = new Table();
+        Table inventoryTable = new Table();
         for(int row = 0; row < INVENTORY_HEIGHT; row++) {
             for(int col = 0; col < INVENTORY_WIDTH; col++) {
                 InventoryImage inventorySlot = createInventorySlot(inventoryManager.getItem(row, col));
@@ -132,8 +131,8 @@ public class InventoryRendering {
     }
 
 
-    public void setUpEquipment(InventoryImage equipment, Item item, int i, int j) {
-        equipment = createInventorySlot(item);
+    public void setUpEquipment(Item item, int i, int j) {
+        InventoryImage equipment = createInventorySlot(item);
         equipment.set(i, j);
         equipment.addListener(new InventoryChangeListener(this, i, j));
         inventoryImageMap.put(new Pair<>(i, j), equipment);
@@ -221,5 +220,9 @@ public class InventoryRendering {
         stage.dispose();
         skin.dispose();
         shapeRenderer.dispose();
+    }
+
+    public Inventory getInventory() {
+        return inventoryManager.getPlayer().getInventory();
     }
 }

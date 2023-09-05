@@ -2,19 +2,15 @@ package graphics;
 
 import com.badlogic.gdx.Gdx;
 import openable.crafting.CraftingManager;
-import openable.crafting.CraftingRendering;
-import openable.inventory.Inventory;
 import openable.inventory.InventoryManager;
-import openable.inventory.InventoryRendering;
 import openable.status.StatusManager;
-import openable.status.StatusRendering;
 import utils.AssetManager;
 
 public class GraphicsContextInventoryImpl implements GraphicsContextInventory {
 
-    private CraftingRendering craftingRendering;
-    private InventoryRendering inventoryRendering;
-    private StatusRendering statusRendering;
+    private final CraftingRendering craftingRendering;
+    private final InventoryRendering inventoryRendering;
+    private final StatusRendering statusRendering;
 
     boolean invOpen = false, craftOpen = false, statusOpen = false;
 
