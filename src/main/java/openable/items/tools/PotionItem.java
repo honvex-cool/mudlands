@@ -38,13 +38,10 @@ public class PotionItem extends Item {
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(inventory.checkInventory(ghost, requiredGhost) && inventory.checkInventory(blood, requiredZombie) && inventory.checkInventory(mud, requiredMud)){
-            inventory.addItem(new PotionItem(), 1);
-            inventory.removeItem(ghost, requiredGhost);
-            inventory.removeItem(mud, requiredMud);
-            inventory.removeItem(blood, requiredZombie);
-            return true;
+        if(super.craft(inventory)) {
+            return tryCrafting(inventory, new PotionItem());
         }
         return false;
     }
+
 }

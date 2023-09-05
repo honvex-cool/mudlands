@@ -59,11 +59,13 @@ public class Player extends Mob {
     public void requestAction(ActionType actionType) {
         if(actionCooldown.use())
             nextAction = actionType;
+        if(actionType == ActionType.HIT){
+            inventory.useItem();
+        }
     }
     public Inventory getInventory() {
         return inventory;
     }
-
 
     @Override
     public Set<Component> viewComponents() {

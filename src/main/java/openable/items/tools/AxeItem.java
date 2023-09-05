@@ -16,7 +16,6 @@ public class AxeItem extends Item {
     private final StoneItem stone = new StoneItem();
     private final StickItem stick = new StickItem();
 
-
     public AxeItem() {
         name = "Axe";
         stackable = false;
@@ -24,7 +23,7 @@ public class AxeItem extends Item {
         edible = false;
         usable = false;
         damage = new Damage(20, 1, 1, 10);
-        type= ItemType.HANDS;
+        type = ItemType.HANDS;
         createRecipe();
     }
 
@@ -33,17 +32,10 @@ public class AxeItem extends Item {
         recipe.add(new Pair<>(stick, requiredStick));
     }
 
-
     @Override
     public boolean craft(Inventory inventory) {
-        if(!super.craft(inventory)){
-            return false;
-        }
-        if(inventory.checkInventory(stone, requiredStone) && inventory.checkInventory(stick, requiredStick)){
-            inventory.addItem(new AxeItem(), 1);
-            inventory.removeItem(stone, requiredStone);
-            inventory.removeItem(stick, requiredStick);
-            return true;
+        if(super.craft(inventory)) {
+            return tryCrafting(inventory, new AxeItem());
         }
         return false;
     }

@@ -35,11 +35,8 @@ public class PickaxeItem extends Item {
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(inventory.checkInventory(stone, requiredStone) && inventory.checkInventory(stick, requiredStick)){
-            inventory.addItem(new PickaxeItem(), 1);
-            inventory.removeItem(stone, requiredStone);
-            inventory.removeItem(stick, requiredStick);
-            return true;
+        if(super.craft(inventory)) {
+            return tryCrafting(inventory, new PickaxeItem());
         }
         return false;
     }

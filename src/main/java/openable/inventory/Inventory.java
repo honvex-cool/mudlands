@@ -124,20 +124,18 @@ public class Inventory implements Serializable {
         removeItem(pair.getFirst(), pair.getSecond(), number);
     }
 
-    public void equipItem(int i, int j) {
-        unEquipItem();
-        rightHand.setItem(get(i, j).getItem());
-        removeItem(i, j);
+    public void useItem() {
+        Item rightHandItem = rightHand.getItem();
+        rightHandItem.damageItem();
+        if(rightHandItem.getDurability() == 0){
+            rightHand.clearField();
+        }
     }
 
     public Item getRightHand() {
         return rightHand.getItem();
     }
 
-    public void unEquipItem() {
-        addItem(rightHand.getItem(), 1);
-        rightHand = new InventoryField();
-    }
 
     public Item getHead() {
         return head.getItem();
