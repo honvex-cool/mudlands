@@ -81,6 +81,7 @@ public class ChunkManagerSystem{
                 if(entity instanceof Mob)
                     mobs.add((Mob)entity);
             }
+            loaded.add(pair);
         }
     }
     public void update() {
@@ -125,7 +126,6 @@ public class ChunkManagerSystem{
     private void handleDestroyed(){
         Set<Pair<Integer,Integer>> passivesToDelete = new HashSet<>();
         for(var key:passives.keySet()) {
-            //passives.get(key).react(ActionType.HIT,player);
             if(passives.get(key).isDestroyed()){
                 Entity successor = passives.get(key).getSuccessor();
                 if(successor instanceof Passive passive) {

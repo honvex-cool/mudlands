@@ -5,6 +5,7 @@ import entities.Hitbox;
 import entities.grounds.Ground;
 import entities.mobs.Mob;
 import utils.Pair;
+import utils.VectorMath;
 
 import java.util.*;
 
@@ -37,7 +38,7 @@ public class PlacementRules {
         for(Mob other : mobs) {
             if(other == mob || !other.isActive())
                 continue;
-            if(distance(other.mutablePositionComponent, positionComponent) < other.getRadius() + mob.getRadius())
+            if(VectorMath.distance(other.mutablePositionComponent.getPosition(), positionComponent.getPosition()) < other.getRadius() + mob.getRadius())
                 return false;
         }
         return true;
@@ -55,11 +56,5 @@ public class PlacementRules {
         if(forbiddenGrounds == null)
             return false;
         return forbiddenGrounds.contains(ground.getClass());
-    }
-
-    private static float distance(PositionComponent first, PositionComponent second) {
-        float xDiff = first.getX() - second.getX();
-        float yDiff = first.getY() - second.getY();
-        return (float)Math.sqrt(xDiff * xDiff + yDiff * yDiff);
     }
 }
