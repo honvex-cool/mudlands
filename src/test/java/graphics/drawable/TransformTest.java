@@ -195,6 +195,11 @@ class TransformTest {
         void testCenteredRightOf() {
             assertEquals(new Transform(2, 1, 4, 2), block.centeredRightOf(basis));
         }
+
+        @Test
+        void testWithCenterAtCenterOf() {
+            assertEquals(new Transform(-1, 1, 4, 2), block.withCenterAtCenterOf(basis));
+        }
     }
 
     @Nested

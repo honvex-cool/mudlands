@@ -20,8 +20,12 @@ public class Composition implements HealthComponent {
         maxHp = points;
     }
 
-    public void damage(Damage damage) {
-        currentHp = Math.max(currentHp - damage.against(mix), 0);
+    public void damage(Damage complexDamage) {
+        damage(complexDamage.against(mix));
+    }
+
+    public void damage(int amount) {
+        currentHp = Math.max(currentHp - amount, 0);
     }
 
     public void fix(int amount) {

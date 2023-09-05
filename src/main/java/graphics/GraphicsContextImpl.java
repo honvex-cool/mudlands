@@ -6,15 +6,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import graphics.drawable.Transform;
 import utils.AssetManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class GraphicsContextImpl implements GraphicsContext {
     private final SpriteBatch spriteBatch;
     private final OrthographicCamera camera;
     private final AssetManager assetManager;
     private final float tileSize;
-    private final List<List<Runnable>> layers = new ArrayList<>();
+    private final Map<Integer, List<Runnable>> layers = new TreeMap<>();
 
     public GraphicsContextImpl(
         SpriteBatch spriteBatch,
@@ -31,8 +30,6 @@ public class GraphicsContextImpl implements GraphicsContext {
         this.camera.update();
         this.assetManager = assetManager;
         tileSize = width / tilesOnScreen;
-        for(int i = 0; i < 10; i++)
-            layers.add(new ArrayList<>());
     }
 
     @Override
@@ -49,7 +46,7 @@ public class GraphicsContextImpl implements GraphicsContext {
             sprite.setAlpha(alpha);
             sprite.draw(spriteBatch);
         };
-        layers.get(layer).add(drawing);
+        layers.computeIfAbsent(layer, unused -> new ArrayList<>()).add(drawing);
     }
 
     @Override
@@ -62,13 +59,14 @@ public class GraphicsContextImpl implements GraphicsContext {
     @Override
     public void end() {
         spriteBatch.begin();
-        for(List<Runnable> layer : layers) {
+        for(List<Runnable> layer : layers.values()) {
             for(Runnable drawing : layer)
                 drawing.run();
             layer.clear();
         }
         spriteBatch.end();
     }
+
     @Override
     public void dispose(){
         spriteBatch.dispose();

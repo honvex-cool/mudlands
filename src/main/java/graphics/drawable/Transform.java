@@ -94,6 +94,10 @@ public record Transform(float x, float y, float width, float height) {
         return withPosition(other.right(), other.y + (other.height - height) / 2);
     }
 
+    public Transform withCenterAtCenterOf(Transform other) {
+        return withPosition(other.x + (other.width - width) / 2, other.y + (other.height - height) / 2);
+    }
+
     public static Transform boundingBox(Collection<Transform> transforms) {
         if(transforms.isEmpty())
             return null;

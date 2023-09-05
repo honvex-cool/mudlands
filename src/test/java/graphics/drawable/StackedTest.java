@@ -45,6 +45,7 @@ class StackedTest {
         testStacker(Stacked::horizontallyBottomAligned, block.bottomAlignedRightOf(basis));
         testStacker(Stacked::horizontallyTopAligned, block.topAlignedRightOf(basis));
         testStacker(Stacked::horizontallyCentered, block.centeredRightOf(basis));
+        testStacker(Stacked::withCommonCenter, block.withCenterAtCenterOf(basis));
     }
 
     @Test

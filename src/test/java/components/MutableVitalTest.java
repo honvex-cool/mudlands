@@ -60,12 +60,43 @@ class MutableVitalTest {
     }
 
     @Test
-    void testVitalIsDrainedWhenCurrentPointsIsZero() {
+    void testVitalIsNotInitiallyDrained() {
+        MutableVital vital = new MutableVital(100);
+        assertFalse(Vital.isDrained(vital));
+    }
+
+    @Test
+    void testVitalIsDrainedOnlyWhenCurrentPointsIsZero() {
         MutableVital vital = new MutableVital(100);
         assertFalse(Vital.isDrained(vital));
         vital.damage(50);
         assertFalse(Vital.isDrained(vital));
         vital.damage(50);
         assertTrue(Vital.isDrained(vital));
+        assertEquals(0, vital.getCurrentPoints());
+    }
+
+    @Test
+    void testVitalIsInitiallySatisfied() {
+        MutableVital vital = new MutableVital(100);
+        assertTrue(Vital.isSatisfied(vital));
+    }
+
+    @Test
+    void testVitalIsSatisfiedOnlyWhenItIsFullyFixed() {
+        MutableVital vital = new MutableVital(100);
+        vital.damage(30);
+        assertFalse(Vital.isSatisfied(vital));
+        vital.fix(40);
+        assertTrue(Vital.isSatisfied(vital));
+        assertEquals(100, vital.getCurrentPoints());
+    }
+
+    @Test
+    void testVitalMayBeNeitherDrainedNorSatisfied() {
+        MutableVital vital = new MutableVital(100);
+        vital.damage(50);
+        assertFalse(Vital.isDrained(vital));
+        assertFalse(Vital.isSatisfied(vital));
     }
 }

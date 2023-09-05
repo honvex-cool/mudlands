@@ -15,7 +15,7 @@ public class AppleItem extends Item {
 
     @Override
     public void use(Player player) {
-        player.heal(hp);
+        player.feed(hp);
     }
 
     @Override
