@@ -99,4 +99,18 @@ class MutableVitalTest {
         assertFalse(Vital.isDrained(vital));
         assertFalse(Vital.isSatisfied(vital));
     }
+
+    @Test
+    void testVitalMayBeAccordinglyRepresentedByAFraction() {
+        MutableVital vital = new MutableVital(200);
+        assertEquals(1, Vital.asFraction(vital));
+        vital.damage(50); // 150 / 200
+        assertEquals(0.75f, Vital.asFraction(vital));
+        vital.damage(50); // 100 / 200
+        assertEquals(0.5f, Vital.asFraction(vital));
+        vital.damage(70); // 30 / 200
+        assertEquals(0.15f, Vital.asFraction(vital));
+        vital.damage(30); // 0 / 200
+        assertEquals(0, Vital.asFraction(vital));
+    }
 }
