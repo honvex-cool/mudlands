@@ -124,9 +124,8 @@ public class Inventory implements Serializable {
         removeItem(pair.getFirst(), pair.getSecond(), number);
     }
 
-    public void useItem() {
+    public void checkItem() {
         Item rightHandItem = rightHand.getItem();
-        rightHandItem.damageItem();
         if(rightHandItem.getDurability() == 0){
             rightHand.clearField();
         }

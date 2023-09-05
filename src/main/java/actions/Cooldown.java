@@ -3,6 +3,7 @@ package actions;
 import openable.items.Item;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Cooldown implements Serializable {
     private final float duration;
@@ -41,6 +42,16 @@ public class Cooldown implements Serializable {
             return;
         item.damageItem();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof Cooldown other)
+            return Objects.equals(duration, other.duration) && Objects.equals(remaining, other.remaining);
+        return false;
+    }
+
     public static Cooldown readyToUse(float duration) {
         return new Cooldown(duration);
     }

@@ -2,6 +2,8 @@ package entities.materials;
 
 import components.HealthComponent;
 
+import java.util.Objects;
+
 public class Composition implements HealthComponent {
     private final Mix mix;
     private int currentHp;
@@ -18,8 +20,12 @@ public class Composition implements HealthComponent {
         maxHp = points;
     }
 
-    public void damage(Damage damage) {
-        currentHp = Math.max(currentHp - damage.against(mix), 0);
+    public void damage(Damage complexDamage) {
+        damage(complexDamage.against(mix));
+    }
+
+    public void damage(int amount) {
+        currentHp = Math.max(currentHp - amount, 0);
     }
 
     public void fix(int amount) {
@@ -34,5 +40,16 @@ public class Composition implements HealthComponent {
     @Override
     public int getMaxPoints() {
         return maxHp;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(obj instanceof Composition other)
+            return Objects.equals(mix, other.mix)
+                && Objects.equals(currentHp, other.currentHp)
+                && Objects.equals(maxHp, other.maxHp);
+        return false;
     }
 }

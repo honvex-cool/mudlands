@@ -69,6 +69,10 @@ public class Stacked implements Drawable {
         return new Stacked((previous, current) -> current.centeredRightOf(previous), drawables);
     }
 
+    public static Stacked withCommonCenter(Drawable... drawables) {
+        return new Stacked((previous, current) -> current.withCenterAtCenterOf(previous), drawables);
+    }
+
     @Override
     public void draw(GraphicsContext graphicsContext) {
         for(Drawable drawable : drawables)

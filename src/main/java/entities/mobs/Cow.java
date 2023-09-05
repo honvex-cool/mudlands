@@ -14,7 +14,7 @@ public class Cow extends RoamingMob {
     private static final float ROAMING_SPEED = 1.2f;
     private static final float CHARGE_SPEED = 3f;
     private final int attackOdds;
-    private boolean charging = false;
+    private Cooldown attackCooldown;
 
     public Cow(RandomGenerator generator, int attackOdds) {
         super(generator, ROAMING_SPEED);
@@ -25,13 +25,13 @@ public class Cow extends RoamingMob {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        if(charging)
+        if(attackCooldown != null && attackCooldown.use(deltaTime))
             this.nextAction = ActionType.HIT;
     }
 
     @Override
     protected void change() {
-        charging = false;
+        attackCooldown = null;
         super.change();
     }
 
@@ -49,6 +49,7 @@ public class Cow extends RoamingMob {
         );
         float direction = VectorMath.getRotationFromVector(difference) + generator.nextFloat(-15, 15);
         setVelocity(CHARGE_SPEED, direction);
-        untilChange = Cooldown.notReadyToUse(0.7f);
+        untilChange = Cooldown.notReadyToUse(0.6f);
+        attackCooldown = Cooldown.readyToUse(0.2f);
     }
 }

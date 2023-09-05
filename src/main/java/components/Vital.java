@@ -10,6 +10,10 @@ public interface Vital extends Serializable {
         return vital.getCurrentPoints() <= 0;
     }
 
+    static boolean isSatisfied(Vital vital) {
+        return vital.getCurrentPoints() == vital.getMaxPoints();
+    }
+
     static float asFraction(Vital vital) {
         return vital.getCurrentPoints() / (float)(vital.getMaxPoints());
     }

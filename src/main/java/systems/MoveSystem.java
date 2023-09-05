@@ -59,6 +59,8 @@ public class MoveSystem {
     //returns true on success
     boolean tryMove(Movement movement, Mob mob, Pair<Float,Float> velocity, float deltaTime) {
         var ground = grounds.get(PositionComponent.getFieldAsPair(mob.mutablePositionComponent));
+        if(ground == null)
+            return false;
         float modifier = ground.getSpeedModifier();
         float x = mob.mutablePositionComponent.getX();
         float y = mob.mutablePositionComponent.getY();

@@ -7,14 +7,15 @@ import graphics.drawable.Transform;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import utils.AssetManager;
 
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 class GraphicsContextImplTest {
     SpriteBatch spriteBatch;
     OrthographicCamera camera;
     ResolutionProvider resolutionProvider;
+    AssetManager assetManager;
     GraphicsContextImpl graphicsContext;
 
     @BeforeEach
@@ -22,34 +23,41 @@ class GraphicsContextImplTest {
         spriteBatch = mock(SpriteBatch.class);
         resolutionProvider = mock(ResolutionProvider.class);
         camera = mock(OrthographicCamera.class);
+        assetManager = mock(AssetManager.class);
         graphicsContext = new GraphicsContextImpl(
             spriteBatch,
             camera,
             resolutionProvider,
+            assetManager,
             10
         );
     }
 
     @Test
     void testSpriteBatchIsOperatedInCorrectOrder() {
-        Sprite sprite = mock(Sprite.class);
+        Sprite mySprite = mock(Sprite.class);
+        when(assetManager.getSprite("mySprite")).thenReturn(mySprite);
+
         graphicsContext.begin();
-        graphicsContext.drawSprite(sprite, new Transform(), 90, 3);
+        graphicsContext.drawSprite("mySprite", new Transform(), 90, 1, 3);
         graphicsContext.end();
 
-        InOrder order = inOrder(spriteBatch, sprite);
+        InOrder order = inOrder(spriteBatch, mySprite);
         order.verify(spriteBatch).begin();
-        order.verify(sprite).draw(spriteBatch);
+        order.verify(mySprite).draw(spriteBatch);
         order.verify(spriteBatch).end();
     }
 
     @Test
     void testSpritesAreDrawnInLayerOrder() {
         Sprite upper = mock(Sprite.class);
+        when(assetManager.getSprite("upper")).thenReturn(upper);
         Sprite lower = mock(Sprite.class);
+        when(assetManager.getSprite("lower")).thenReturn(lower);
+
         graphicsContext.begin();
-        graphicsContext.drawSprite(upper, new Transform(), 0, 1);
-        graphicsContext.drawSprite(lower, new Transform(), 0, 0);
+        graphicsContext.drawSprite("upper", new Transform(), 0, 1, 1);
+        graphicsContext.drawSprite("lower", new Transform(), 0, 1, 0);
         graphicsContext.end();
 
         InOrder order = inOrder(upper, lower, spriteBatch);

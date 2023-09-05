@@ -16,7 +16,6 @@ import utils.Pair;
 
 import java.util.*;
 
-import static java.util.Collections.copy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -99,6 +98,6 @@ class ChunkManagerSystemTest {
         };
         passives.put(new Pair<>(123,123),customTree);
         chunkManagerSystem.update();
-        assertFalse(passives.containsValue(customTree));
+        assertTrue(passives.values().stream().noneMatch(p -> p == customTree));
     }
 }

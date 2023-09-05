@@ -36,7 +36,7 @@ class TransformTest {
         }
 
         @Test
-        void testCannotConstructWithZeroDimensions() {
+        void testCanConstructWithZeroDimensions() {
             assertDoesNotThrow(() -> new Transform(1, 2, 0, 3));
             assertDoesNotThrow(() -> new Transform(1, 2, 1, 0));
         }
@@ -156,7 +156,7 @@ class TransformTest {
     }
 
     @Nested
-    class AdvancedModificationTest {
+    class AlignmentTest {
         private Transform basis;
         private Transform block;
 
@@ -194,6 +194,11 @@ class TransformTest {
         @Test
         void testCenteredRightOf() {
             assertEquals(new Transform(2, 1, 4, 2), block.centeredRightOf(basis));
+        }
+
+        @Test
+        void testWithCenterAtCenterOf() {
+            assertEquals(new Transform(-1, 1, 4, 2), block.withCenterAtCenterOf(basis));
         }
     }
 
