@@ -81,6 +81,7 @@ public class ChunkManagerSystem{
                 if(entity instanceof Mob)
                     mobs.add((Mob)entity);
             }
+            loaded.add(pair);
         }
     }
     public void update() {
