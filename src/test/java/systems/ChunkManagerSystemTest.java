@@ -1,6 +1,8 @@
 package systems;
 
+import entities.EntityMappings;
 import entities.Player;
+import entities.UniversalFactory;
 import entities.grounds.Ground;
 import entities.grounds.Water;
 import entities.mobs.Mob;
@@ -14,7 +16,8 @@ import utils.Pair;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static java.util.Collections.copy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -69,5 +72,33 @@ class ChunkManagerSystemTest {
         assertTrue(grounds.isEmpty());
         assertTrue(passives.isEmpty());
         assertTrue(mobs.isEmpty());
+    }
+
+    @Test
+    void testUpdateLoads9ChunksAndDeletesDestroyed(){
+        Player player = new Player();
+        player.mutablePositionComponent.setX(1);
+        player.mutablePositionComponent.setY(-1);
+        WorldLoader worldLoader = new WorldLoader(new UniversalFactory(EntityMappings.GROUND_MAP,EntityMappings.PASSIVE_MAP));
+        worldLoader.createWorld(123L,"testChunkManager");
+        Map<Pair<Integer,Integer>, Ground> grounds = new HashMap<>();
+        Map<Pair<Integer,Integer>, Passive> passives = new HashMap<>();
+        Collection<Mob> mobs = new ArrayList<>();
+
+        ChunkManagerSystem chunkManagerSystem = new ChunkManagerSystem(player,worldLoader,grounds,passives,mobs);
+
+        chunkManagerSystem.update();
+
+        assertEquals(9*16*16,grounds.size());
+
+        Tree customTree = new Tree(){
+            @Override
+            public boolean isDestroyed() {
+                return true;
+            }
+        };
+        passives.put(new Pair<>(123,123),customTree);
+        chunkManagerSystem.update();
+        assertFalse(passives.containsValue(customTree));
     }
 }
