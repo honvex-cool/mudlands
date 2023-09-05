@@ -13,6 +13,8 @@ public class PotionItem extends Item {
     private final int requiredMud = 1;
     private final int requiredZombie = 1;
     private final int requiredGhost = 1;
+
+    private final int hp = 100;
     private final GhostEssenceItem ghost = new GhostEssenceItem();
     private final ZombieBloodItem blood = new ZombieBloodItem();
     private final MudEssenceItem mud = new MudEssenceItem();
@@ -34,17 +36,15 @@ public class PotionItem extends Item {
 
     @Override
     public void use(Player player) {
+        player.heal(hp);
     }
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(inventory.checkInventory(ghost, requiredGhost) && inventory.checkInventory(blood, requiredZombie) && inventory.checkInventory(mud, requiredMud)){
-            inventory.addItem(new PotionItem(), 1);
-            inventory.removeItem(ghost, requiredGhost);
-            inventory.removeItem(mud, requiredMud);
-            inventory.removeItem(blood, requiredZombie);
-            return true;
+        if(super.craft(inventory)) {
+            return tryCrafting(inventory, new PotionItem());
         }
         return false;
     }
+
 }

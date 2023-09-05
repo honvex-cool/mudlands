@@ -5,6 +5,7 @@ import entities.materials.Damage;
 import openable.inventory.Inventory;
 import openable.inventory.ItemType;
 import utils.Pair;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -17,8 +18,11 @@ public class Item implements Serializable {
     protected boolean edible;
     protected boolean craftable;
     protected Damage damage = new Damage(5, 5, 5, 5);
+    protected int durability = 100;
 
+    protected int damageReceived = 1;
     protected ItemType type = ItemType.NONE;
+
     public ItemType getType() {
         return type;
     }
@@ -42,12 +46,33 @@ public class Item implements Serializable {
         return isCraftable();
     }
 
+    public boolean tryCrafting(Inventory inventory, Item item) {
+        for(Pair<Item, Integer> pair : recipe) {
+            if(!inventory.checkInventory(pair.getFirst(), pair.getSecond())) {
+                return false;
+            }
+        }
+        inventory.addItem(item, 1);
+        for(Pair<Item, Integer> pair : recipe) {
+            inventory.removeItem(pair.getFirst(), pair.getSecond());
+        }
+        return true;
+    }
+
     public void use(Player player) {
 
     }
 
-    public String getStats(){
-        return "";
+    public void damageItem() {
+        durability = Math.max(durability - damageReceived, 0);
+    }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    public String getStats() {
+        return "Durability " + durability;
     }
 
     public boolean isStackable() {

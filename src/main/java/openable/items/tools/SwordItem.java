@@ -27,18 +27,15 @@ public class SwordItem extends Item {
         createRecipe();
     }
 
-    private void createRecipe(){
+    private void createRecipe() {
         recipe.add(new Pair<>(stone, requiredStone));
         recipe.add(new Pair<>(stick, requiredStick));
     }
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(inventory.checkInventory(stone, requiredStone) && inventory.checkInventory(stick, requiredStick)){
-            inventory.addItem(new SwordItem(), 1);
-            inventory.removeItem(stone, requiredStone);
-            inventory.removeItem(stick, requiredStick);
-            return true;
+        if(super.craft(inventory)) {
+            return tryCrafting(inventory, new SwordItem());
         }
         return false;
     }

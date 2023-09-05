@@ -9,9 +9,9 @@ public class InventoryField implements Serializable {
     private Item item;
     private int number;
 
-    private ItemType type;
+    private final ItemType type;
 
-    InventoryField() {
+    public InventoryField() {
         this(new NoneItem(), 0, ItemType.NONE);
     }
 

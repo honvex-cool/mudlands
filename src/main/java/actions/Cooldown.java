@@ -1,5 +1,7 @@
 package actions;
 
+import openable.items.Item;
+
 import java.io.Serializable;
 
 public class Cooldown implements Serializable {
@@ -34,7 +36,11 @@ public class Cooldown implements Serializable {
         advance(time);
         return use();
     }
-
+    public void useItem(Item item){
+        if(!isReady())
+            return;
+        item.damageItem();
+    }
     public static Cooldown readyToUse(float duration) {
         return new Cooldown(duration);
     }

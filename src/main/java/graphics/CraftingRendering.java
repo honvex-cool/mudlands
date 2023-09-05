@@ -1,4 +1,4 @@
-package openable.crafting;
+package graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import openable.crafting.CraftingManager;
+import openable.crafting.Page;
 import openable.items.Item;
 import openable.items.NoneItem;
 import utils.AssetManager;
@@ -21,29 +23,25 @@ import static utils.Config.*;
 
 public class CraftingRendering {
 
-    private ShapeRenderer shapeRenderer;
+    private final ShapeRenderer shapeRenderer;
 
     public Stage getStage() {
         return stage;
     }
 
-    private Stage stage;
-    private Skin skin;
+    private final Stage stage;
+    private final Skin skin;
 
-    private Table mainTable;
+    private final Table inventoryTable;
 
-    private Table inventoryTable;
-
-    private AssetManager assetManager;
-
-    private ArrayList<Page> pages;
+    private final AssetManager assetManager;
 
     Dialog popupAccept;
     Dialog popupDeny;
 
     Dialog popupInfo;
 
-    private CraftingManager craftingManager;
+    private final CraftingManager craftingManager;
 
     public CraftingRendering(CraftingManager craftingManager, AssetManager assetManager) {
         shapeRenderer = new ShapeRenderer();
@@ -51,7 +49,7 @@ public class CraftingRendering {
         this.stage = new Stage();
         this.assetManager = assetManager;
         this.craftingManager = craftingManager;
-        mainTable = new Table();
+        Table mainTable = new Table();
         inventoryTable = new Table();
         mainTable.setFillParent(true);
 
@@ -147,8 +145,7 @@ public class CraftingRendering {
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = new TextureRegionDrawable(upTexture);
         style.down = new TextureRegionDrawable(downTexture);
-        ImageButton imageButton = new ImageButton(style);
-        return imageButton;
+        return new ImageButton(style);
     }
 
     public void update() {
