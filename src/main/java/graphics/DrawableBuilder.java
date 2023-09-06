@@ -10,6 +10,7 @@ class DrawableBuilder implements ComponentVisitor {
     private Drawable healthBar = null;
     private Drawable staminaBar = null;
     private Drawable hungerBar = null;
+    private float actionProgress = 0;
 
     private final int basisLayer;
     private final float barHeight;
@@ -101,6 +102,10 @@ class DrawableBuilder implements ComponentVisitor {
     public void visit(VelocityComponent component) {
     }
 
+    public void visit(ActionComponent actionComponent) {
+        actionProgress = actionComponent.getProgress();
+    }
+
     private Drawable bar() {
         return new PlaceholderDrawable(barTransform(1));
     }
@@ -127,6 +132,6 @@ class DrawableBuilder implements ComponentVisitor {
         float x = (float)(center.getFirst() + totalRadius * Math.cos(inRadians)) - itemTransform.width() / 2;
         float y = (float)(center.getSecond() + totalRadius * Math.sin(inRadians)) - itemTransform.height() / 2;
         itemSprite.setTransform(itemTransform.withPosition(x, y));
-        itemSprite.setRotation(rotation - 45);
+        itemSprite.setRotation(rotation - 45 + (float)Math.sin(actionProgress * Math.PI) * 15);
     }
 }

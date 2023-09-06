@@ -8,4 +8,5 @@ public interface ComponentVisitor {
     void visit(ItemComponent itemComponent);
     void visit(StaminaComponent staminaComponent);
     void visit(HungerComponent hungerComponent);
+    void visit(ActionComponent actionComponent);
 }

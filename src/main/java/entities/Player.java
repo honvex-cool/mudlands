@@ -27,6 +27,18 @@ public class Player extends Mob {
         return item == NoneItem.class ? null : item;
     };
 
+    private final ActionComponent actionComponent = new ActionComponent() {
+        @Override
+        public ActionType getActionType() {
+            return nextAction;
+        }
+
+        @Override
+        public float getProgress() {
+            return actionCooldown.getProgress();
+        }
+    };
+
     private boolean moving = false;
 
     private final DecreasingHungerComponent hunger = new DecreasingHungerComponent(100, 30, 3, 5);
@@ -107,7 +119,8 @@ public class Player extends Mob {
             itemComponent,
             stamina,
             hunger,
-            composition
+            composition,
+            actionComponent
         );
     }
 
