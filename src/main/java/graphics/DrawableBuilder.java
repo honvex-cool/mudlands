@@ -65,7 +65,7 @@ class DrawableBuilder implements ComponentVisitor {
 
     @Override
     public void visit(ItemComponent itemComponent) {
-        var rightHand = itemComponent.rightHandItem();
+        var rightHand = itemComponent.mainItem();
         if(rightHand == null)
             return;
         String name = rightHand.getSimpleName();

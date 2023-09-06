@@ -25,4 +25,31 @@ class DecreasingHungerComponentTest {
         hunger.update(2);
         assertEquals(96, hunger.getCurrentPoints());
     }
+
+    @Test
+    void testHungerDecreasesCorrectlyInOneBurst() {
+        DecreasingHungerComponent hunger = new DecreasingHungerComponent(100, 42, 4, 2);
+        hunger.update(50);
+        assertEquals(96, hunger.getCurrentPoints());
+    }
+
+    @Test
+    void testHungerResetsToFullnessWhenFixedCompletely() {
+        DecreasingHungerComponent hunger = new DecreasingHungerComponent(100, 42, 4, 2);
+        hunger.update(50);
+        hunger.fix(4);
+        hunger.update(42);
+        assertTrue(Vital.isSatisfied(hunger));
+    }
+
+    @Test
+    void testOngoingDecreasesResetWhenHungerIsFixedCompletely() {
+        DecreasingHungerComponent hunger = new DecreasingHungerComponent(100, 42, 4, 2);
+        hunger.update(50);
+        hunger.update(1);
+        hunger.fix(4);
+        hunger.update(42);
+        hunger.update(3);
+        assertTrue(Vital.isSatisfied(hunger));
+    }
 }
