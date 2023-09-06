@@ -17,6 +17,10 @@ public class LocalizedSprite extends PlaceholderDrawable {
         this.rotation = rotation;
     }
 
+    public float getRotation() {
+        return rotation;
+    }
+
     public void setAlpha(float alpha) {
         if(alpha < 0 || alpha > 1)
             throw new IllegalArgumentException("`alpha` must be from the interval [0, 1]");

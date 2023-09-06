@@ -2,36 +2,49 @@ package graphics;
 
 import components.*;
 import graphics.drawable.*;
+import utils.Pair;
 
 class DrawableBuilder implements ComponentVisitor {
     private final LocalizedSprite mainSprite;
-    private Drawable itemIcon = null;
+    private LocalizedSprite itemSprite = null;
     private Drawable healthBar = null;
     private Drawable staminaBar = null;
     private Drawable hungerBar = null;
 
     private final int basisLayer;
     private final float barHeight;
-    private final boolean anchoredAtCenter;
+    private final boolean isMob;
+    private final float itemSize;
 
-    public DrawableBuilder(String mainSpriteName, int basisLayer, float barHeight, boolean anchoredAtCenter) {
+    public DrawableBuilder(
+        String mainSpriteName,
+        int basisLayer,
+        float barHeight,
+        boolean isMob,
+        float itemSize
+    ) {
         this.basisLayer = basisLayer;
         mainSprite = new LocalizedSprite(mainSpriteName, new Transform(0, 0, 1, 1));
         mainSprite.setLayer(basisLayer);
         this.barHeight = barHeight;
-        this.anchoredAtCenter = anchoredAtCenter;
+        this.isMob = isMob;
+        this.itemSize = itemSize;
     }
 
     public Drawable build() {
         Drawable drawable = mainSprite;
-        if(itemIcon != null)
-            drawable = Stacked.withCommonCenter(drawable, itemIcon);
+        if(itemSprite != null && !isMob)
+            drawable = Stacked.withCommonCenter(drawable, itemSprite);
         if(staminaBar != null)
             drawable = Stacked.verticallyCentered(drawable, staminaBar);
         if(hungerBar != null)
             drawable = Stacked.verticallyCentered(drawable, hungerBar);
         if(healthBar != null)
             drawable = Stacked.verticallyCentered(drawable, healthBar);
+        if(itemSprite != null && isMob) {
+            directItemAlongMainDirection();
+            drawable = Stacked.grouped(drawable, itemSprite);
+        }
         return drawable;
     }
 
@@ -39,7 +52,7 @@ class DrawableBuilder implements ComponentVisitor {
     public void visit(PositionComponent positionComponent) {
         float x = positionComponent.getX();
         float y = positionComponent.getY();
-        if(anchoredAtCenter) {
+        if(isMob) {
             x -= 0.5f;
             y -= 0.5f;
         }
@@ -65,14 +78,13 @@ class DrawableBuilder implements ComponentVisitor {
 
     @Override
     public void visit(ItemComponent itemComponent) {
-        var rightHand = itemComponent.mainItem();
-        if(rightHand == null)
+        var itemType = itemComponent.mainItem();
+        if(itemType == null)
             return;
-        String name = rightHand.getSimpleName();
+        String name = itemType.getSimpleName();
         String itemName = "inventory/" + name.substring(0, name.indexOf("Item"));
-        LocalizedSprite itemSprite = new LocalizedSprite(itemName, new Transform(0, 0, 0.4f, 0.4f));
-        itemSprite.setLayer(basisLayer + 1);
-        itemIcon = itemSprite;
+        itemSprite = new LocalizedSprite(itemName, new Transform(0, 0, itemSize, itemSize));
+        itemSprite.setLayer(basisLayer + 2);
     }
 
     @Override
@@ -101,5 +113,20 @@ class DrawableBuilder implements ComponentVisitor {
 
     private Transform barTransform(float width) {
         return new Transform(0, 0, width, barHeight);
+    }
+
+    private void directItemAlongMainDirection() {
+        Transform mainTransform = mainSprite.getTransform();
+        Transform itemTransform = itemSprite.getTransform();
+        float mainRadius = mainTransform.width() / 2;
+        float itemRadius = itemTransform.width() * (float)Math.sqrt(2) / 2;
+        float totalRadius = mainRadius + itemRadius;
+        Pair<Float, Float> center = mainTransform.center();
+        float rotation = mainSprite.getRotation() + 90;
+        double inRadians = Math.toRadians(rotation);
+        float x = (float)(center.getFirst() + totalRadius * Math.cos(inRadians)) - itemTransform.width() / 2;
+        float y = (float)(center.getSecond() + totalRadius * Math.sin(inRadians)) - itemTransform.height() / 2;
+        itemSprite.setTransform(itemTransform.withPosition(x, y));
+        itemSprite.setRotation(rotation - 45);
     }
 }

@@ -15,12 +15,13 @@ public class DrawablePresenter implements Presenter<Drawable> {
     @Override
     public List<Drawable> present(ComponentHolder holder) {
         String mainSpriteName = extractSpriteName(holder);
-        int basisLayer = 2 * getLogicalLayer(holder);
+        int basisLayer = 3 * getLogicalLayer(holder);
         DrawableBuilder builder = new DrawableBuilder(
             mainSpriteName,
             basisLayer,
             0.1f,
-            holder instanceof Mob
+            holder instanceof Mob,
+            0.5f
         );
         for(Component component : holder.viewComponents())
             component.accept(builder);
