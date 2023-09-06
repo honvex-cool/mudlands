@@ -1,36 +1,21 @@
 package entities.mobs;
 
-import actions.ActionType;
-import actions.Cooldown;
-import entities.Player;
 import entities.materials.Composition;
 import entities.materials.Mix;
+import openable.items.Item;
 import openable.items.materials.GhostEssenceItem;
+import utils.Pair;
 
-public class Ghost extends Mob {
-    private final Cooldown hitCooldown = Cooldown.readyToUse(0.4f);
+import java.util.List;
 
+public class Ghost extends HostileMob {
     public Ghost() {
+        super(1);
         this.composition = new Composition(new Mix(0, 0, 100, 200));
     }
 
     @Override
-    public void update(float deltaTime) {
-        super.update(deltaTime);
-        hitCooldown.advance(deltaTime);
-    }
-
-    @Override
-    public void react(ActionType actionType, Mob actor) {
-        super.react(actionType, actor);
-        if(isDestroyed() && actor instanceof Player player){
-            player.getInventory().addItem(new GhostEssenceItem(), 1);
-        }
-    }
-
-    @Override
-    public void requestAction(ActionType actionType) {
-        if(actionType == ActionType.HIT && hitCooldown.use())
-            nextAction = actionType;
+    protected List<Pair<Item, Integer>> getDrops() {
+        return List.of(new Pair<>(new GhostEssenceItem(), 1));
     }
 }

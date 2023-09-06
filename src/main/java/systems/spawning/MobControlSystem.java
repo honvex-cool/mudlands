@@ -28,7 +28,7 @@ public class MobControlSystem {
     }
 
     public void addSpawningRule(float interval, @NotNull Function<PositionComponent, Mob> provider) {
-        spawnManager.add(Repeatable.notReady(interval, () -> tryAddMob(provider.apply(playerPosition))));
+        spawnManager.add(new Repeatable(interval, () -> tryAddMob(provider.apply(playerPosition))));
     }
 
     public void registerController(Class<? extends Mob> mobClass, Controller controller) {

@@ -4,19 +4,19 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DecayingHungerComponentTest {
+class DecreasingHungerComponentTest {
     @Test
-    void testHungerDoesNotStartDecayingBeforeTheProvidedTime() {
-        DecayingHungerComponent hunger = new DecayingHungerComponent(100, 42, 4, 5);
+    void testHungerDoesNotStartDecreasingBeforeTheProvidedTime() {
+        DecreasingHungerComponent hunger = new DecreasingHungerComponent(100, 42, 4, 5);
         hunger.update(41);
         assertTrue(Vital.isSatisfied(hunger));
-        hunger.update(42);
+        hunger.update(1);
         assertTrue(Vital.isSatisfied(hunger));
     }
 
     @Test
-    void testHungerDecaysAtTheRateProvidedDuringConstruction() {
-        DecayingHungerComponent hunger = new DecayingHungerComponent(100, 42, 4, 2);
+    void testHungerDecreasesAtTheRateProvidedDuringConstruction() {
+        DecreasingHungerComponent hunger = new DecreasingHungerComponent(100, 42, 4, 2);
         hunger.update(42);
         hunger.update(4);
         assertEquals(98, hunger.getCurrentPoints());

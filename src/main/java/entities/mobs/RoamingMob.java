@@ -1,12 +1,12 @@
 package entities.mobs;
 
-import actions.Cooldown;
+import actions.GameTimer;
 
 import java.util.random.RandomGenerator;
 
 public abstract class RoamingMob extends Mob {
     protected RandomGenerator generator;
-    protected Cooldown untilChange;
+    protected GameTimer untilChange;
     private final float roamingSpeed;
 
     protected RoamingMob(RandomGenerator generator, float roamingSpeed) {
@@ -18,7 +18,8 @@ public abstract class RoamingMob extends Mob {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        if(untilChange.use(deltaTime))
+        untilChange.advance(deltaTime);
+        if(untilChange.isFinished())
             change();
     }
 
@@ -27,7 +28,7 @@ public abstract class RoamingMob extends Mob {
     }
 
     protected final void triggerRoaming() {
-        untilChange = Cooldown.notReadyToUse(generator.nextFloat(5, 10));
+        untilChange = GameTimer.started(generator.nextFloat(5, 10));
         if(generator.nextBoolean()) {
             halt();
             return;

@@ -1,7 +1,7 @@
 package entities;
 
 import actions.ActionType;
-import actions.Cooldown;
+import actions.GameTimer;
 import actions.Movement;
 import components.*;
 import entities.materials.Composition;
@@ -17,10 +17,10 @@ public class Player extends Mob {
 
     private final Inventory inventory = new Inventory();
 
-    private final Cooldown actionCooldown = Cooldown.readyToUse(0.2f);
-    private final Cooldown regenerationCooldown = Cooldown.notReadyToUse(0.2f);
-    private final Cooldown starvationCooldown = Cooldown.notReadyToUse(1f);
-    private final Cooldown healCooldown = Cooldown.notReadyToUse(1f);
+    private final GameTimer actionCooldown = GameTimer.finished(0.2f);
+    private final GameTimer regenerationCooldown = GameTimer.started(0.2f);
+    private final GameTimer starvationCooldown = GameTimer.started(1f);
+    private final GameTimer healCooldown = GameTimer.started(1f);
 
     private final ItemComponent itemComponent = () -> {
         var item = inventory.getRightHand().getClass();
@@ -29,7 +29,7 @@ public class Player extends Mob {
 
     private boolean moving = false;
 
-    private final DecayingHungerComponent hunger = new DecayingHungerComponent(100, 30, 3, 5);
+    private final DecreasingHungerComponent hunger = new DecreasingHungerComponent(100, 30, 3, 5);
     private final MutableStaminaComponent stamina = new MutableStaminaComponent(1000);
 
     public Player(){
@@ -67,20 +67,20 @@ public class Player extends Mob {
 
     private void handleHealing(float deltaTime) {
         if(!Vital.isSatisfied(hunger)) {
-            healCooldown.reset();
+            healCooldown.restart();
             return;
         }
-        starvationCooldown.reset();
+        starvationCooldown.restart();
         if(healCooldown.use(deltaTime))
             composition.fix(5);
     }
 
     private void handleStarvation(float deltaTime) {
         if(!Vital.isDrained(hunger)) {
-            starvationCooldown.reset();
+            starvationCooldown.restart();
             return;
         }
-        healCooldown.reset();
+        healCooldown.restart();
         if(starvationCooldown.use(deltaTime))
             composition.damage(5);
     }
