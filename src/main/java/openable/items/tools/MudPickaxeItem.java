@@ -27,7 +27,7 @@ public class MudPickaxeItem extends PickaxeItem{
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(super.craft(inventory)) {
+        if(isCraftable()) {
             return tryCrafting(inventory, new MudPickaxeItem());
         }
         return false;

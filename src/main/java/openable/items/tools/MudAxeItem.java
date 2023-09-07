@@ -10,7 +10,6 @@ import utils.Pair;
 public class MudAxeItem extends AxeItem{
     private final MudEssenceItem mud = new MudEssenceItem();
     private final GhostEssenceItem ghost = new GhostEssenceItem();
-
     private final ZombieBloodItem zombie = new ZombieBloodItem();
     private final int requiredZombie = 3;
     private final int requiredMud = 3;
@@ -27,7 +26,7 @@ public class MudAxeItem extends AxeItem{
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(super.craft(inventory)) {
+        if(isCraftable()) {
             return tryCrafting(inventory, new MudAxeItem());
         }
         return false;
