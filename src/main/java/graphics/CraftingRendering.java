@@ -115,14 +115,18 @@ public class CraftingRendering {
                             return false;
                         }
                         if(button == Input.Buttons.RIGHT && item.isCraftable()) {
+                            popupInfo.getTitleLabel().setText(item.toString());
                             showPopup(popupInfo, item.getRecipe());
                             return true;
                         }
                         if(!item.isCraftable()) {
+                            popupDeny.getTitleLabel().setText(item.toString());
                             showPopup(popupDeny, "Cannot be crafted");
                         } else if(craftingManager.craft(item)) {
+                            popupAccept.getTitleLabel().setText(item.toString());
                             showPopup(popupAccept, "Crafted " + item);
                         } else {
+                            popupDeny.getTitleLabel().setText(item.toString());
                             showPopup(popupDeny, "Not enough materials: " + item.getRecipe());
                         }
                         return true;

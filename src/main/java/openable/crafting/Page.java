@@ -6,14 +6,15 @@ import java.util.ArrayList;
 
 public class Page {
 
-    private String name;
-    private ArrayList<Item> items;
-    public Page(String name){
+    private final String name;
+    private final ArrayList<Item> items;
+
+    public Page(String name) {
         this.name = name;
         items = new ArrayList<>();
     }
 
-    public void addItem(Item item){
+    public void addItem(Item item) {
         items.add(item);
     }
 
@@ -22,11 +23,11 @@ public class Page {
         return name;
     }
 
-    public Item getItem(int index){
+    public Item getItem(int index) {
         return items.get(index);
     }
 
-    public int getSize(){
+    public int getSize() {
         return items.size();
     }
 }

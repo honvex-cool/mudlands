@@ -2,10 +2,7 @@ package openable.crafting;
 
 import openable.inventory.Inventory;
 import openable.items.Item;
-import openable.items.tools.AxeItem;
-import openable.items.tools.PickaxeItem;
-import openable.items.tools.PotionItem;
-import openable.items.tools.SwordItem;
+import openable.items.tools.*;
 
 import java.util.ArrayList;
 
@@ -13,11 +10,11 @@ public class CraftingManager {
 
     private int page;
 
-    private int maxPage = 0;
+    private final int maxPage;
 
-    private ArrayList<Page> pages;
+    private final ArrayList<Page> pages;
 
-    private Inventory inventory;
+    private final Inventory inventory;
 
     public CraftingManager(Inventory inventory) {
         this.inventory = inventory;
@@ -29,8 +26,11 @@ public class CraftingManager {
     private void createPages() {
         Page page = new Page("Tools");
         page.addItem(new PickaxeItem());
+        page.addItem(new MudPickaxeItem());
         page.addItem(new SwordItem());
+        page.addItem(new MudSwordItem());
         page.addItem(new AxeItem());
+        page.addItem(new MudAxeItem());
         page.addItem(new PotionItem());
         pages.add(page);
     }

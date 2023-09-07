@@ -3,9 +3,7 @@ package openable.inventory;
 import openable.items.Item;
 import openable.items.NoneItem;
 import utils.Pair;
-
 import java.io.Serializable;
-
 import java.util.ArrayList;
 
 import static utils.Config.INVENTORY_HEIGHT;
@@ -13,21 +11,19 @@ import static utils.Config.INVENTORY_WIDTH;
 
 public class Inventory implements Serializable {
 
-    private InventoryField rightHand;
-    private InventoryField leftHand;
+    private final InventoryField rightHand;
+    private final InventoryField leftHand;
 
-    private InventoryField head;
-    private InventoryField chest;
-    private InventoryField legs;
-    private InventoryField boots;
+    private final InventoryField head;
+    private final InventoryField chest;
+    private final InventoryField legs;
+    private final InventoryField boots;
 
     public Grid getFields() {
         return fields;
     }
 
-    private Grid fields;
-
-    private ArrayList<InventoryField> equipment;
+    private final Grid fields;
 
     public Inventory() {
         fields = new Grid(INVENTORY_WIDTH, INVENTORY_HEIGHT);
@@ -37,13 +33,6 @@ public class Inventory implements Serializable {
         legs = new InventoryField(ItemType.LEGS);
         boots = new InventoryField(ItemType.BOOTS);
         leftHand = new InventoryField(ItemType.HANDS);
-        equipment = new ArrayList<>();
-        equipment.add(head);
-        equipment.add(chest);
-        equipment.add(legs);
-        equipment.add(boots);
-        equipment.add(rightHand);
-        equipment.add(leftHand);
         fields.add(0, head);
         fields.add(1, chest);
         fields.add(2, legs);
@@ -53,6 +42,7 @@ public class Inventory implements Serializable {
         //printInventory();
     }
 
+    @Deprecated
     public void printInventory() {
         for(int i = 0; i < fields.getHeight(); i++) {
             for(int j = 0; j < fields.getWidth(); j++) {

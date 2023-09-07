@@ -38,7 +38,7 @@ public class InventoryChangeListener extends InputListener {
                 InventoryField tmp = new InventoryField();
                 InventoryField source = inventory.get(finalRow, finalCol);
                 InventoryField target = inventory.get(INVENTORY_HEIGHT - inventoryImage.i - 1, inventoryImage.j);
-                if(target.accept(source.getItem())) {
+                if(target.accept(source.getItem()) && (source.accept(target.getItem()) || target.getItem().toString().equals("None"))) {
                     tmp.setField(source);
                     source.setField(target);
                     target.setField(tmp);
