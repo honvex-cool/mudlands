@@ -1,6 +1,7 @@
 package graphics;
 
 import com.badlogic.gdx.Gdx;
+import entities.Player;
 import openable.crafting.CraftingManager;
 import openable.inventory.InventoryManager;
 import openable.status.StatusManager;
@@ -14,10 +15,10 @@ public class GraphicsContextInventoryImpl implements GraphicsContextInventory {
 
     boolean invOpen = false, craftOpen = false, statusOpen = false;
 
-    public GraphicsContextInventoryImpl(InventoryManager inventoryManager, CraftingManager craftingManager, StatusManager statusManager, AssetManager assetManager) {
-        craftingRendering = new CraftingRendering(craftingManager, assetManager);
-        statusRendering = new StatusRendering(statusManager, assetManager);
-        inventoryRendering = new InventoryRendering(inventoryManager, assetManager);
+    public GraphicsContextInventoryImpl(AssetManager assetManager) {
+        craftingRendering = new CraftingRendering(assetManager);
+        statusRendering = new StatusRendering(assetManager);
+        inventoryRendering = new InventoryRendering(assetManager);
     }
 
 
@@ -65,6 +66,13 @@ public class GraphicsContextInventoryImpl implements GraphicsContextInventory {
         else{
             Gdx.input.setInputProcessor(null);
         }
+    }
+
+    @Override
+    public void setPlayer(Player player) {
+        statusRendering.setPlayer(player);
+        craftingRendering.setPlayer(player);
+        inventoryRendering.setPlayer(player);
     }
 
     @Override

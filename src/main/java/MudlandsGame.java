@@ -31,9 +31,6 @@ public class MudlandsGame {
     private GraphicsContext graphicsContext;
     private GraphicsContextInventory graphicsContextInventory;
     private final AssetManager assetManager = new AssetManager("assets");
-    private StatusManager statusManager;
-    private CraftingManager craftingManager;
-    private InventoryManager inventoryManager;
     private RenderingSystem renderingSystem;
     private OpenableRenderingSystem openableRenderingSystem;
     private final InputSystem inputSystem;
@@ -51,6 +48,8 @@ public class MudlandsGame {
     private final Collection<Passive> passivesView;
     private final Collection<Mob> mobsView;
     private boolean running = true;
+
+    private boolean created = false;
     public MudlandsGame(){
         UniversalFactory universalFactory = new UniversalFactory(
             EntityMappings.GROUND_MAP,
@@ -69,13 +68,6 @@ public class MudlandsGame {
         groundsView = Collections.unmodifiableCollection(ground.values());
         passivesView = Collections.unmodifiableCollection(passives.values());
         mobsView = Collections.unmodifiableCollection(mobs);
-
-        if(Debug.LOAD_WORLD) {
-            load("testWorld");
-        } else {
-            create(42,"testWorld");
-        }
-
     }
     public void update(float delta){
         updateSystem.update(delta);
@@ -98,6 +90,7 @@ public class MudlandsGame {
         loader.createWorld(seed, name);
         player = loader.loadPlayer();
         prepare();
+        created = true;
     }
 
     public void load(String name){
@@ -108,6 +101,7 @@ public class MudlandsGame {
             throw new RuntimeException(e);
         }
         prepare();
+        created = true;
     }
 
     public void setGraphicsContext(GraphicsContextImpl graphicsContext, GraphicsContextInventory graphicsContextInventory){
@@ -172,35 +166,27 @@ public class MudlandsGame {
             mobsView
         );
 
-        craftingManager = new CraftingManager(player.getInventory());
-        statusManager = new StatusManager(player);
-        inventoryManager = new InventoryManager(player);
         openableRenderingSystem = new OpenableRenderingSystem(inputSystem);
     }
-    public InventoryManager getInventoryManager(){
-        return inventoryManager;
-    }
-    public StatusManager getStatusManager() {
-        return statusManager;
-    }
-
-    public CraftingManager getCraftingManager() {
-        return craftingManager;
-    }
-
     public AssetManager getAssetManager() {
         return assetManager;
     }
 
     public void dispose(){
         assetManager.dispose();
-        chunkManagerSystem.unloadAll();
-        loader.savePlayer(player);
-        try {
-            loader.saveWorld();
-        } catch(IOException e) {
-            throw new RuntimeException(e);
+        if(created) {
+            chunkManagerSystem.unloadAll();
+            loader.savePlayer(player);
+            try {
+                loader.saveWorld();
+            } catch(IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public boolean isRunning(){

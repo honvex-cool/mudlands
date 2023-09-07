@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import entities.Player;
 import openable.status.StatusManager;
 import utils.AssetManager;
 
@@ -18,19 +19,22 @@ public class StatusRendering {
     private final Skin skin;
     private final Stage stage;
     private final AssetManager assetManager;
-    private final StatusManager statusManager;
-    private final Image headImage;
-    private final Image chestImage;
-    private final Image legsImage;
-    private final Image bootsImage;
-    private final Image rightHandImage;
-    private final Image leftHandImage;
+    private StatusManager statusManager;
+    private Image headImage;
+    private Image chestImage;
+    private Image legsImage;
+    private Image bootsImage;
+    private Image rightHandImage;
+    private Image leftHandImage;
 
-    public StatusRendering(StatusManager statusManager, AssetManager assetManager) {
+    public StatusRendering(AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
         stage = new Stage();
         this.assetManager = assetManager;
-        this.statusManager = statusManager;
+    }
+
+    public void setPlayer(Player player){
+        this.statusManager = new StatusManager(new Player());
 
         headImage = new Image(assetManager.getInventoryTexture(statusManager.getHead().toString()));
         headImage.setSize(64, 64);
@@ -61,7 +65,6 @@ public class StatusRendering {
 
         stage.addActor(mainTable);
     }
-
 
     public void updateInventory() {
         statusManager.updateStatus();

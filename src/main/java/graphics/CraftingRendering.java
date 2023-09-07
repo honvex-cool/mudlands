@@ -11,8 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import entities.Player;
 import openable.crafting.CraftingManager;
 import openable.crafting.Page;
+import openable.inventory.Inventory;
 import openable.items.Item;
 import openable.items.NoneItem;
 import utils.AssetManager;
@@ -32,7 +34,7 @@ public class CraftingRendering {
     private final Stage stage;
     private final Skin skin;
 
-    private final Table inventoryTable;
+    private Table inventoryTable;
 
     private final AssetManager assetManager;
 
@@ -41,14 +43,18 @@ public class CraftingRendering {
 
     Dialog popupInfo;
 
-    private final CraftingManager craftingManager;
+    private CraftingManager craftingManager;
 
-    public CraftingRendering(CraftingManager craftingManager, AssetManager assetManager) {
+    public CraftingRendering(AssetManager assetManager) {
         shapeRenderer = new ShapeRenderer();
         skin = new Skin(Gdx.files.internal(UISKIN));
         this.stage = new Stage();
         this.assetManager = assetManager;
-        this.craftingManager = craftingManager;
+
+    }
+
+    public void setPlayer(Player player){
+        this.craftingManager = new CraftingManager(player.getInventory());
         Table mainTable = new Table();
         inventoryTable = new Table();
         mainTable.setFillParent(true);
