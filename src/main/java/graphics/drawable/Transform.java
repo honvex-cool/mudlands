@@ -1,5 +1,7 @@
 package graphics.drawable;
 
+import utils.Pair;
+
 import java.util.Collection;
 
 public record Transform(float x, float y, float width, float height) {
@@ -20,6 +22,10 @@ public record Transform(float x, float y, float width, float height) {
 
     public float top() {
         return y + height;
+    }
+
+    public Pair<Float, Float> center() {
+        return new Pair<>(x + width / 2, y + height / 2);
     }
 
     public Transform withX(float x) {

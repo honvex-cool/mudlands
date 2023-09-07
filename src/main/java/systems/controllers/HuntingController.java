@@ -48,15 +48,15 @@ public class HuntingController implements Controller {
     }
 
     private VelocityComponent getVelocity(PositionComponent from) {
-        var field = PositionComponent.getFieldAsPair(from);
-        if(!field.equals(last)) {
+        var huntedField = PositionComponent.getFieldAsPair(hunted);
+        if(!huntedField.equals(last))
             update();
-            last = field;
-        }
-        var target = predecessor.get(field);
+        last = huntedField;
+        var fromField = PositionComponent.getFieldAsPair(from);
+        var target = predecessor.get(fromField);
         if(target == null)
             return new VelocityComponent(0, 0);
-        return new VelocityComponent(target.getFirst() - field.getFirst(), target.getSecond() - field.getSecond());
+        return new VelocityComponent(target.getFirst() - fromField.getFirst(), target.getSecond() - fromField.getSecond());
     }
 
     private void update() {

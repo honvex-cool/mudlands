@@ -3,20 +3,29 @@ package actions;
 import org.jetbrains.annotations.NotNull;
 
 public class Repeatable {
-    private final Cooldown cooldown;
+    private final GameTimer timer;
     private final Runnable runnable;
 
-    private Repeatable(Cooldown cooldown, @NotNull Runnable runnable) {
-        this.cooldown = cooldown;
+    private Repeatable(GameTimer timer, @NotNull Runnable runnable) {
+        this.timer = timer;
         this.runnable = runnable;
     }
 
-    public void update(float time) {
-        if(cooldown.use(time))
-            runnable.run();
+    public Repeatable(float interval, Runnable runnable) {
+        this(GameTimer.started(interval), runnable);
     }
 
-    public static Repeatable notReady(float interval, Runnable runnable) {
-        return new Repeatable(Cooldown.notReadyToUse(interval), runnable);
+    public void update(float time) {
+        while(time > 0) {
+            time = timer.advance(time);
+            if(timer.isFinished()) {
+                runnable.run();
+                timer.restart();
+            }
+        }
+    }
+
+    public static void repeatWithTimer(Runnable runnable, GameTimer timer, float time) {
+        new Repeatable(timer, runnable).update(time);
     }
 }

@@ -42,6 +42,7 @@ public class GraphicsContextImpl implements GraphicsContext {
         Runnable drawing = () -> {
             sprite.setPosition(x, y);
             sprite.setSize(width, height);
+            sprite.setOrigin(width / 2, height / 2);
             sprite.setRotation(rotation);
             sprite.setAlpha(alpha);
             sprite.draw(spriteBatch);

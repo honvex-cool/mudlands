@@ -9,13 +9,13 @@ class RepeatableTest {
     @Test
     void testUpdate() {
         Runnable runnable = mock(Runnable.class);
-        Repeatable repeatable = Repeatable.notReady(5, runnable);
+        Repeatable repeatable = new Repeatable(5, runnable);
         verify(runnable, never()).run();
         repeatable.update(4);
         verify(runnable, never()).run();
         repeatable.update(4);
         verify(runnable, times(1)).run();
         repeatable.update(4);
-        verify(runnable, times(1)).run();
+        verify(runnable, times(2)).run();
     }
 }

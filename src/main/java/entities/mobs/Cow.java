@@ -1,7 +1,7 @@
 package entities.mobs;
 
 import actions.ActionType;
-import actions.Cooldown;
+import actions.GameTimer;
 import components.PositionComponent;
 import entities.materials.Composition;
 import entities.materials.Mix;
@@ -14,7 +14,7 @@ public class Cow extends RoamingMob {
     private static final float ROAMING_SPEED = 1.2f;
     private static final float CHARGE_SPEED = 3f;
     private final int attackOdds;
-    private Cooldown attackCooldown;
+    private GameTimer attackCooldown;
 
     public Cow(RandomGenerator generator, int attackOdds) {
         super(generator, ROAMING_SPEED);
@@ -49,7 +49,7 @@ public class Cow extends RoamingMob {
         );
         float direction = VectorMath.getRotationFromVector(difference) + generator.nextFloat(-15, 15);
         setVelocity(CHARGE_SPEED, direction);
-        untilChange = Cooldown.notReadyToUse(0.6f);
-        attackCooldown = Cooldown.readyToUse(0.2f);
+        untilChange = GameTimer.started(0.6f);
+        attackCooldown = GameTimer.finished(0.2f);
     }
 }

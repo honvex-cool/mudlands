@@ -1,7 +1,7 @@
 package entities.mobs;
 
 import actions.ActionType;
-import actions.Cooldown;
+import actions.GameTimer;
 import components.PositionComponent;
 import entities.materials.Composition;
 import entities.materials.Mix;
@@ -34,6 +34,6 @@ public class Pig extends RoamingMob {
             mutablePositionComponent.getY() - danger.getY()
         );
         setVelocity(ESCAPE_SPEED, VectorMath.getRotationFromVector(difference));
-        untilChange = Cooldown.notReadyToUse(0.5f);
+        untilChange = GameTimer.started(0.5f);
     }
 }

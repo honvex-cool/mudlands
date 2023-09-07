@@ -1,7 +1,7 @@
 package entities.passives;
 
 import actions.ActionType;
-import actions.Cooldown;
+import actions.GameTimer;
 import components.Component;
 import components.ItemComponent;
 import components.MutablePositionComponent;
@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class Tree extends Passive {
     private final static float APPLE_GROW_TIME = 20;
-    private Cooldown appleCooldown;
+    private GameTimer appleCooldown;
     private Item apple;
     private final ItemComponent itemComponent = () -> apple == null ? null : apple.getClass();
 
@@ -55,7 +55,7 @@ public class Tree extends Passive {
 
     private void collectApple() {
         apple = null;
-        appleCooldown = Cooldown.notReadyToUse(APPLE_GROW_TIME);
+        appleCooldown = GameTimer.started(APPLE_GROW_TIME);
     }
 
     @Override
