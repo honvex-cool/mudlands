@@ -2,6 +2,9 @@ package openable.crafting;
 
 import openable.inventory.Inventory;
 import openable.items.Item;
+import openable.items.structures.StoneFenceItem;
+import openable.items.structures.WoodenFenceItem;
+import openable.items.structures.WoodenGateItem;
 import openable.items.tools.*;
 
 import java.util.ArrayList;
@@ -32,6 +35,9 @@ public class CraftingManager {
         page.addItem(new AxeItem());
         page.addItem(new MudAxeItem());
         page.addItem(new PotionItem());
+        page.addItem(new WoodenFenceItem());
+        page.addItem(new StoneFenceItem());
+        page.addItem(new WoodenGateItem());
         pages.add(page);
     }
 

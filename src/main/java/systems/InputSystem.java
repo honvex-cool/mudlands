@@ -67,6 +67,8 @@ public class InputSystem {
             player.requestAction(ActionType.HIT);
         else if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && !open)
             player.requestAction(ActionType.INTERACT);
+        else if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
+            player.requestAction(ActionType.BUILD);
     }
 
 

@@ -35,4 +35,8 @@ public class Entity implements Serializable, ComponentHolder {
     public Set<Component> viewComponents() {
         return Set.of(mutablePositionComponent);
     }
+
+    public String getLogicalName(){
+        return getClass().getSimpleName().toLowerCase();
+    }
 }
