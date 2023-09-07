@@ -8,7 +8,6 @@ public class NoneItem extends Item {
         stackable = false;
         craftable = false;
         edible = false;
-        usable = false;
         damageReceived = 0;
         recipe = new ArrayList<>();
     }

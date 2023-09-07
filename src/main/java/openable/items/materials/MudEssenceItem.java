@@ -7,7 +7,6 @@ public class MudEssenceItem extends Item {
         name = "MudEssence";
         stackable = true;
         craftable = false;
-        edible = true;
-        usable = false;
+        edible = false;
     }
 }

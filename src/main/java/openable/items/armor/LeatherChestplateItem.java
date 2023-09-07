@@ -13,7 +13,6 @@ public class LeatherChestplateItem extends Item {
     public LeatherChestplateItem() {
         name = "Chestplate";
         type = ItemType.CHEST;
-        usable = false;
         edible = false;
         stackable = false;
         craftable = true;

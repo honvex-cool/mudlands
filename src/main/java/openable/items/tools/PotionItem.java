@@ -22,7 +22,6 @@ public class PotionItem extends Item {
     public PotionItem() {
         name = "Potion";
         edible = true;
-        usable = true;
         stackable = true;
         craftable = true;
         createRecipe();

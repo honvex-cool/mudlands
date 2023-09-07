@@ -7,7 +7,6 @@ public class GhostEssenceItem extends Item {
         name = "GhostEssence";
         edible = false;
         craftable = false;
-        usable = false;
         stackable = true;
     }
 }

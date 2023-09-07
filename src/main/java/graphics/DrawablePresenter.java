@@ -2,6 +2,7 @@ package graphics;
 
 import components.Component;
 import components.ComponentHolder;
+import entities.Entity;
 import entities.mobs.Mob;
 import entities.Player;
 import entities.grounds.Ground;
@@ -13,23 +14,23 @@ import java.util.List;
 
 public class DrawablePresenter implements Presenter<Drawable> {
     @Override
-    public List<Drawable> present(ComponentHolder holder) {
-        String mainSpriteName = extractSpriteName(holder);
-        int basisLayer = 3 * getLogicalLayer(holder);
+    public List<Drawable> present(Entity entity) {
+        String mainSpriteName = extractSpriteName(entity);
+        int basisLayer = 3 * getLogicalLayer(entity);
         DrawableBuilder builder = new DrawableBuilder(
             mainSpriteName,
             basisLayer,
             0.1f,
-            holder instanceof Mob,
+            entity instanceof Mob,
             0.5f
         );
-        for(Component component : holder.viewComponents())
+        for(Component component : entity.viewComponents())
             component.accept(builder);
         return List.of(builder.build());
     }
 
-    private String extractSpriteName(ComponentHolder holder) {
-        return "textures/" + holder.getClass().getSimpleName().toLowerCase();
+    private String extractSpriteName(Entity entity) {
+        return "textures/" + entity.getLogicalName();
     }
 
     private static int getLogicalLayer(Object holder) {

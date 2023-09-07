@@ -14,7 +14,6 @@ public class Item implements Serializable {
 
     protected String name = "";
     protected boolean stackable;
-    protected boolean usable;
     protected boolean edible;
     protected boolean craftable;
     protected Damage damage = new Damage(5, 5, 5, 5);
@@ -81,14 +80,6 @@ public class Item implements Serializable {
 
     public void setStackable(boolean stackable) {
         this.stackable = stackable;
-    }
-
-    public boolean isUsable() {
-        return usable;
-    }
-
-    public void setUsable(boolean usable) {
-        this.usable = usable;
     }
 
     public boolean isEdible() {

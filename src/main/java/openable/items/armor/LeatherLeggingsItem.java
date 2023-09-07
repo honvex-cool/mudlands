@@ -13,7 +13,6 @@ public class LeatherLeggingsItem extends Item {
     public LeatherLeggingsItem() {
         name = "Leggings";
         type = ItemType.LEGS;
-        usable = false;
         edible = false;
         stackable = false;
         craftable = true;

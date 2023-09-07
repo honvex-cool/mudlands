@@ -20,7 +20,6 @@ public class PickaxeItem extends Item {
         stackable = false;
         craftable = true;
         edible = false;
-        usable = false;
         damage = new Damage(1, 20, 1, 1);
         type = ItemType.RIGHT_HAND;
         createRecipe();

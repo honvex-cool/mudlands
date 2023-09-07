@@ -4,6 +4,9 @@ import openable.inventory.Inventory;
 import openable.items.Item;
 import openable.items.armor.*;
 import openable.items.materials.LeatherItem;
+import openable.items.structures.StoneFenceItem;
+import openable.items.structures.WoodenFenceItem;
+import openable.items.structures.WoodenGateItem;
 import openable.items.tools.*;
 
 import java.util.ArrayList;
@@ -45,6 +48,11 @@ public class CraftingManager {
         page1.addItem(new LeatherBootsItem(), 21);
         page1.addItem(new MudBootsItem(), 22);
         pages.add(page1);
+        Page page2 = new Page("Structures", 42);
+        page2.addItem(new WoodenFenceItem());
+        page2.addItem(new StoneFenceItem());
+        page2.addItem(new WoodenGateItem());
+        pages.add(page2);
     }
 
     public boolean updatePage(int value) {
@@ -63,7 +71,6 @@ public class CraftingManager {
     public boolean craft(Item item) {
         return item.craft(inventory);
     }
-
     public Page getCurrentPage() {
         return pages.get(page);
     }

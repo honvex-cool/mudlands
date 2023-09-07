@@ -21,7 +21,6 @@ public class AxeItem extends Item{
         stackable = false;
         craftable = true;
         edible = false;
-        usable = false;
         damage = new Damage(20, 1, 1, 10);
         type = ItemType.RIGHT_HAND;
         createRecipe();

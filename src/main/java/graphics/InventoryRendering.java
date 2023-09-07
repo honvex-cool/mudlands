@@ -189,7 +189,7 @@ public class InventoryRendering {
             return;
         }
         Item item = inventoryManager.getItem(lastClickedI, lastClickedJ);
-        if(item.isUsable()) {
+        if(item.isEdible()) {
             item.use(inventoryManager.getPlayer());
             inventoryManager.removeItem(lastClickedI, lastClickedJ, 1);
             updateInventory();

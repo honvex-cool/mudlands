@@ -13,7 +13,6 @@ public class LeatherHelmetItem extends Item {
     public LeatherHelmetItem() {
         name = "Helmet";
         type = ItemType.HEAD;
-        usable = false;
         edible = false;
         stackable = false;
         craftable = true;
