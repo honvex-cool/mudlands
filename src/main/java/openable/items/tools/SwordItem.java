@@ -23,7 +23,7 @@ public class SwordItem extends Item {
         edible = false;
         usable = false;
         damage = new Damage(1, 1, 1, 20);
-        type = ItemType.HANDS;
+        type = ItemType.RIGHT_HAND;
         createRecipe();
     }
 
@@ -34,9 +34,6 @@ public class SwordItem extends Item {
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(super.craft(inventory)) {
-            return tryCrafting(inventory, new SwordItem());
-        }
-        return false;
+        return tryCrafting(inventory, new SwordItem());
     }
 }

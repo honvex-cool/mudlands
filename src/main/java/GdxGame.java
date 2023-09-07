@@ -8,9 +8,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GdxGame extends Game {
-
+    MainMenuScreen mainMenuScreen;
     GameScreen gameScreen;
-    GameScreen mainMenuScreen;
     private GraphicsContextImpl graphicsContext;
 
     private GraphicsContextInventoryImpl graphicsContextInventory;
@@ -32,9 +31,10 @@ public class GdxGame extends Game {
         graphicsContextInventory = new GraphicsContextInventoryImpl(mudlandsGame.getInventoryManager(), mudlandsGame.getCraftingManager(), mudlandsGame.getStatusManager(), mudlandsGame.getAssetManager());
         mudlandsGame.setGraphicsContext(graphicsContext, graphicsContextInventory);
 
-        gameScreen = new GameScreen(mudlandsGame,this);
+        gameScreen = new GameScreen(mudlandsGame, this);
+
         setScreen(gameScreen);
-    } //change to MainMenuScreen latah bruda
+    }
 
     @Override
     public void render() {

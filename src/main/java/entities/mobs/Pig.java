@@ -5,9 +5,13 @@ import actions.GameTimer;
 import components.PositionComponent;
 import entities.materials.Composition;
 import entities.materials.Mix;
+import openable.items.Item;
+import openable.items.materials.GhostEssenceItem;
+import openable.items.materials.LeatherItem;
 import utils.Pair;
 import utils.VectorMath;
 
+import java.util.List;
 import java.util.random.RandomGenerator;
 
 public class Pig extends RoamingMob {
@@ -36,4 +40,5 @@ public class Pig extends RoamingMob {
         setVelocity(ESCAPE_SPEED, VectorMath.getRotationFromVector(difference));
         untilChange = GameTimer.started(0.5f);
     }
+
 }

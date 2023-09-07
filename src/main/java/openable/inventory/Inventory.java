@@ -27,12 +27,12 @@ public class Inventory implements Serializable {
 
     public Inventory() {
         fields = new Grid(INVENTORY_WIDTH, INVENTORY_HEIGHT);
-        rightHand = new InventoryField(ItemType.HANDS);
+        rightHand = new InventoryField(ItemType.RIGHT_HAND);
         head = new InventoryField(ItemType.HEAD);
         chest = new InventoryField(ItemType.CHEST);
         legs = new InventoryField(ItemType.LEGS);
         boots = new InventoryField(ItemType.BOOTS);
-        leftHand = new InventoryField(ItemType.HANDS);
+        leftHand = new InventoryField(ItemType.LEFT_HAND);
         fields.add(0, head);
         fields.add(1, chest);
         fields.add(2, legs);
@@ -72,7 +72,7 @@ public class Inventory implements Serializable {
     public boolean checkInventory(Item item, int number) {
         int currentNumber = 0;
         for(int i = 0; i < INVENTORY_HEIGHT; i++) {
-            for(int j = 0; j < INVENTORY_WIDTH; j++) {
+            for(int j = 0; j <= INVENTORY_WIDTH; j++) {
                 if(get(i, j).getItem().toString().equals(item.toString())) {
                     currentNumber += get(i, j).getNumber();
                 }
@@ -82,8 +82,8 @@ public class Inventory implements Serializable {
     }
 
     public Pair<Integer, Integer> searchItem(Item item) {
-        for(int i = 0; i < fields.getHeight(); i++) {
-            for(int j = 0; j < fields.getWidth(); j++) {
+        for(int i = 0; i < INVENTORY_HEIGHT; i++) {
+            for(int j = 0; j <= INVENTORY_WIDTH; j++) {
                 if(!item.isStackable() && fields.get(i).get(j).getItem().toString().equals("None")) {
                     return new Pair<>(i, j);
                 }

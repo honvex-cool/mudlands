@@ -8,8 +8,6 @@ import openable.items.materials.StickItem;
 import openable.items.materials.StoneItem;
 import utils.Pair;
 
-import java.util.ArrayList;
-
 public class PickaxeItem extends Item {
     private final int requiredStone = 3;
     private final int requiredStick = 2;
@@ -24,7 +22,7 @@ public class PickaxeItem extends Item {
         edible = false;
         usable = false;
         damage = new Damage(1, 20, 1, 1);
-        type = ItemType.HANDS;
+        type = ItemType.RIGHT_HAND;
         createRecipe();
     }
 
@@ -35,9 +33,6 @@ public class PickaxeItem extends Item {
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(super.craft(inventory)) {
-            return tryCrafting(inventory, new PickaxeItem());
-        }
-        return false;
+        return tryCrafting(inventory, new PickaxeItem());
     }
 }

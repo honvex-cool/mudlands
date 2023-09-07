@@ -27,9 +27,6 @@ public class MudSwordItem extends SwordItem{
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(isCraftable()) {
-            return tryCrafting(inventory, new MudSwordItem());
-        }
-        return false;
+        return tryCrafting(inventory, new MudSwordItem());
     }
 }

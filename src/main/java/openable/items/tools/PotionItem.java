@@ -41,10 +41,6 @@ public class PotionItem extends Item {
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(super.craft(inventory)) {
-            return tryCrafting(inventory, new PotionItem());
-        }
-        return false;
+        return tryCrafting(inventory, new PotionItem());
     }
-
 }

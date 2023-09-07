@@ -10,7 +10,7 @@ import utils.Pair;
 
 import java.util.ArrayList;
 
-public class AxeItem extends Item {
+public class AxeItem extends Item{
     private final int requiredStone = 3;
     private final int requiredStick = 2;
     private final StoneItem stone = new StoneItem();
@@ -23,7 +23,7 @@ public class AxeItem extends Item {
         edible = false;
         usable = false;
         damage = new Damage(20, 1, 1, 10);
-        type = ItemType.HANDS;
+        type = ItemType.RIGHT_HAND;
         createRecipe();
     }
 
@@ -34,9 +34,6 @@ public class AxeItem extends Item {
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(super.craft(inventory)) {
-            return tryCrafting(inventory, new AxeItem());
-        }
-        return false;
+        return tryCrafting(inventory, new AxeItem());
     }
 }
