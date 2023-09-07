@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import entities.Player;
 import openable.inventory.Inventory;
 import openable.inventory.InventoryImage;
 import openable.inventory.InventoryManager;
@@ -28,15 +29,14 @@ public class InventoryRendering {
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     boolean dragging = false;
     private final Skin skin;
-    private final Dialog description;
+    private Dialog description;
     public Stage getStage() {
         return stage;
     }
     private final Stage stage;
-    private final Label objectLabel;
-    private final Label edible;
-    private final Label number;
-
+    private Label objectLabel;
+    private Label edible;
+    private Label number;
     int lastClickedI = -1;
     int lastClickedJ = -1;
     AssetManager assetManager;
@@ -44,14 +44,17 @@ public class InventoryRendering {
     float offsetX;
     float offsetY;
     Image image;
-    private final Table equipmentTable;
+    private Table equipmentTable;
 
-    public InventoryRendering(InventoryManager inventoryManager, AssetManager assetManager) {
+    public InventoryRendering(AssetManager assetManager) {
         skin = new Skin(Gdx.files.internal(UISKIN));
         stage = new Stage();
-        this.inventoryManager = inventoryManager;
         this.assetManager = assetManager;
 
+
+    }
+    public void setPlayer(Player player){
+        this.inventoryManager = new InventoryManager(player);
         description = new Dialog("description", skin);
         description.button("OK");
 

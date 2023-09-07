@@ -111,6 +111,9 @@ public class Inventory implements Serializable {
 
     public void removeItem(Item item, int number) {
         var pair = searchItem(item);
+        if(pair == null){
+            return;
+        }
         removeItem(pair.getFirst(), pair.getSecond(), number);
     }
 

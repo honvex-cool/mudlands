@@ -23,7 +23,6 @@ public class GameScreen implements Screen {
             mudlandsGame.dispose();
             gdxGame.setScreen(new MainMenuScreen(mudlandsGame, gdxGame));
         }
-
     }
 
     @Override

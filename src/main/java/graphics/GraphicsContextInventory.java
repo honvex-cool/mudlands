@@ -1,5 +1,7 @@
 package graphics;
 
+import entities.Player;
+
 public interface GraphicsContextInventory {
     default void begin() {
 
@@ -9,5 +11,6 @@ public interface GraphicsContextInventory {
 
     }
 
+    void setPlayer(Player player);
     void dispose();
 }
