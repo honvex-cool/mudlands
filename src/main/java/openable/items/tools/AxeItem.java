@@ -32,6 +32,7 @@ public class AxeItem extends Item{
         recipe.add(new Pair<>(stick, requiredStick));
     }
 
+    @Override
     public boolean craft(Inventory inventory) {
         return tryCrafting(inventory, new AxeItem());
     }
