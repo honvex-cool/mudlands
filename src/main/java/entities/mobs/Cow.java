@@ -3,11 +3,16 @@ package entities.mobs;
 import actions.ActionType;
 import actions.GameTimer;
 import components.PositionComponent;
+import entities.Player;
 import entities.materials.Composition;
 import entities.materials.Mix;
+import openable.items.Item;
+import openable.items.materials.GhostEssenceItem;
+import openable.items.materials.LeatherItem;
 import utils.Pair;
 import utils.VectorMath;
 
+import java.util.List;
 import java.util.random.RandomGenerator;
 
 public class Cow extends RoamingMob {
@@ -38,8 +43,9 @@ public class Cow extends RoamingMob {
     @Override
     public void react(ActionType actionType, Mob actor) {
         super.react(actionType, actor);
-        if(actionType == ActionType.HIT && generator.nextInt() % attackOdds == 0)
+        if(actionType == ActionType.HIT && generator.nextInt() % attackOdds == 0) {
             triggerCharge(actor.mutablePositionComponent);
+        }
     }
 
     private void triggerCharge(PositionComponent target) {
@@ -51,5 +57,10 @@ public class Cow extends RoamingMob {
         setVelocity(CHARGE_SPEED, direction);
         untilChange = GameTimer.started(0.6f);
         attackCooldown = GameTimer.finished(0.2f);
+    }
+
+    @Override
+    protected List<Pair<Item, Integer>> getDrops() {
+        return List.of(new Pair<>(new LeatherItem(), 1));
     }
 }

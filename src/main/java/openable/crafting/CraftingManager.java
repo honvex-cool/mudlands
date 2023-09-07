@@ -2,6 +2,8 @@ package openable.crafting;
 
 import openable.inventory.Inventory;
 import openable.items.Item;
+import openable.items.armor.*;
+import openable.items.materials.LeatherItem;
 import openable.items.tools.*;
 
 import java.util.ArrayList;
@@ -24,15 +26,25 @@ public class CraftingManager {
     }
 
     private void createPages() {
-        Page page = new Page("Tools");
-        page.addItem(new PickaxeItem());
-        page.addItem(new MudPickaxeItem());
-        page.addItem(new SwordItem());
-        page.addItem(new MudSwordItem());
-        page.addItem(new AxeItem());
-        page.addItem(new MudAxeItem());
-        page.addItem(new PotionItem());
-        pages.add(page);
+        Page page0 = new Page("Tools", 42);
+        page0.addItem(new PickaxeItem(), 0);
+        page0.addItem(new MudPickaxeItem(), 1);
+        page0.addItem(new SwordItem(), 7);
+        page0.addItem(new MudSwordItem(), 8);
+        page0.addItem(new AxeItem(), 14);
+        page0.addItem(new MudAxeItem(), 15);
+        page0.addItem(new PotionItem(), 21);
+        pages.add(page0);
+        Page page1 = new Page("Armor", 42);
+        page1.addItem(new LeatherHelmetItem(), 0);
+        page1.addItem(new MudHelmetItem(), 1);
+        page1.addItem(new LeatherChestplateItem(), 7);
+        page1.addItem(new MudChestplateItem(), 8);
+        page1.addItem(new LeatherLeggingsItem(), 14);
+        page1.addItem(new MudLeggingsItem(), 15);
+        page1.addItem(new LeatherBootsItem(), 21);
+        page1.addItem(new MudBootsItem(), 22);
+        pages.add(page1);
     }
 
     public boolean updatePage(int value) {
@@ -48,9 +60,10 @@ public class CraftingManager {
         return true;
     }
 
-    public boolean craft(Item item){
+    public boolean craft(Item item) {
         return item.craft(inventory);
     }
+
     public Page getCurrentPage() {
         return pages.get(page);
     }

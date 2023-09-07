@@ -7,14 +7,15 @@ import openable.items.materials.MudEssenceItem;
 import openable.items.materials.ZombieBloodItem;
 import utils.Pair;
 
-public class MudAxeItem extends AxeItem{
+public class MudAxeItem extends AxeItem {
     private final MudEssenceItem mud = new MudEssenceItem();
     private final GhostEssenceItem ghost = new GhostEssenceItem();
     private final ZombieBloodItem zombie = new ZombieBloodItem();
     private final int requiredZombie = 3;
     private final int requiredMud = 3;
     private final int requiredGhost = 3;
-    public MudAxeItem(){
+
+    public MudAxeItem() {
         super();
         name = "MudAxe";
         damage = new Damage(35, 1, 20, 25);
@@ -26,9 +27,6 @@ public class MudAxeItem extends AxeItem{
 
     @Override
     public boolean craft(Inventory inventory) {
-        if(isCraftable()) {
-            return tryCrafting(inventory, new MudAxeItem());
-        }
-        return false;
+        return tryCrafting(inventory, new MudAxeItem());
     }
 }

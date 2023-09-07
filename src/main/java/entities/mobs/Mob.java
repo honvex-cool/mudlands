@@ -8,10 +8,14 @@ import components.MutableRotationComponent;
 import components.VelocityComponent;
 import entities.Entity;
 import entities.Hitbox;
+import entities.Player;
 import entities.materials.Damage;
+import openable.items.Item;
+import openable.items.NoneItem;
 import utils.Pair;
 import utils.VectorMath;
 
+import java.util.List;
 import java.util.Set;
 
 public abstract class Mob extends Entity implements Hitbox {
@@ -62,6 +66,11 @@ public abstract class Mob extends Entity implements Hitbox {
         if(actionType == ActionType.HIT){
             composition.damage(actor.getAttackDamage());
         }
+        if(isDestroyed() && actor instanceof Player player){
+            List<Pair<Item, Integer>> drops = getDrops();
+            for(var drop : drops)
+                player.getInventory().addItem(drop.getFirst(), drop.getSecond());
+        }
     }
 
     @Override
@@ -81,5 +90,9 @@ public abstract class Mob extends Entity implements Hitbox {
     }
 
     public void requestAction(ActionType actionType) {
+    }
+
+    protected List<Pair<Item, Integer>> getDrops(){
+        return List.of(new Pair<>(new NoneItem(), 0));
     }
 }

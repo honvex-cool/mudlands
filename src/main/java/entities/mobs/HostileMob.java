@@ -25,16 +25,4 @@ public abstract class HostileMob extends Mob {
         if(actionType == ActionType.HIT && hitCooldown.use())
             nextAction = actionType;
     }
-
-    @Override
-    public void react(ActionType actionType, Mob actor) {
-        super.react(actionType, actor);
-        if(isDestroyed() && actor instanceof Player player){
-            List<Pair<Item, Integer>> drops = getDrops();
-            for(var drop : drops)
-                player.getInventory().addItem(drop.getFirst(), drop.getSecond());
-        }
-    }
-
-    protected abstract List<Pair<Item, Integer>> getDrops();
 }

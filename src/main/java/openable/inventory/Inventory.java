@@ -27,12 +27,12 @@ public class Inventory implements Serializable {
 
     public Inventory() {
         fields = new Grid(INVENTORY_WIDTH, INVENTORY_HEIGHT);
-        rightHand = new InventoryField(ItemType.HANDS);
+        rightHand = new InventoryField(ItemType.RIGHT_HAND);
         head = new InventoryField(ItemType.HEAD);
         chest = new InventoryField(ItemType.CHEST);
         legs = new InventoryField(ItemType.LEGS);
         boots = new InventoryField(ItemType.BOOTS);
-        leftHand = new InventoryField(ItemType.HANDS);
+        leftHand = new InventoryField(ItemType.LEFT_HAND);
         fields.add(0, head);
         fields.add(1, chest);
         fields.add(2, legs);
