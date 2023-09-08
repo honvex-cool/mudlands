@@ -34,7 +34,8 @@ public class StatusRendering {
     }
 
     public void setPlayer(Player player){
-        this.statusManager = new StatusManager(new Player());
+        stage.clear();
+        this.statusManager = new StatusManager(player);
 
         headImage = new Image(assetManager.getInventoryTexture(statusManager.getHead().toString()));
         headImage.setSize(64, 64);

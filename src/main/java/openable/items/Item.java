@@ -37,7 +37,7 @@ public class Item implements Serializable {
     }
 
 
-    public Damage getAttackStrength() {
+    public Damage getDamageCharacteristic() {
         return damage;
     }
 

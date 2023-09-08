@@ -112,6 +112,7 @@ public class MudlandsGame {
     }
 
     private void prepare(){
+        running = true;
 
         PlacementRules placementRules = new PlacementRules(
             Collections.unmodifiableMap(passives),

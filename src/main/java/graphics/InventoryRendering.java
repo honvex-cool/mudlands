@@ -54,6 +54,7 @@ public class InventoryRendering {
 
     }
     public void setPlayer(Player player){
+        stage.clear();
         this.inventoryManager = new InventoryManager(player);
         description = new Dialog("description", skin);
         description.button("OK");

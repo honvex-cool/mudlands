@@ -5,7 +5,10 @@ import components.VelocityComponent;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import entities.Player;
+import entities.materials.Damage;
+import entities.mobs.Mob;
 import utils.Config;
+import utils.Debug;
 import utils.Pair;
 
 public class InputSystem {
@@ -46,6 +49,15 @@ public class InputSystem {
 
         Pair<Float, Float> pointerPosition = new Pair<>((float)Gdx.input.getX() - Config.NATIVE_WIDTH / 2, (float)Config.NATIVE_HEIGHT / 2 - Gdx.input.getY());
         player.rotationComponent.setRotationFromVector(pointerPosition);
+
+        if(Debug.INSTANT_DEATH && Gdx.input.isKeyPressed(Input.Keys.O)) {
+            player.react(ActionType.HIT, new Mob() {
+                @Override
+                public Damage getAttackDamage() {
+                    return new Damage(1000, 1000, 1000, 1000);
+                }
+            });
+        }
 
         if(Gdx.input.isKeyPressed(Input.Keys.E)) {
             setBooleans(true, false, false);

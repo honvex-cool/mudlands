@@ -47,5 +47,7 @@ public class AssetManager {
             sprite.getTexture().dispose();
         for(Texture texture : inventoryTextures.values())
             texture.dispose();
+        sprites.clear();
+        inventoryTextures.clear();
     }
 }
