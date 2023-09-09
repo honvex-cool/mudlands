@@ -3,6 +3,7 @@ package graphics.drawable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import utils.Pair;
 
 import java.util.List;
 
@@ -55,10 +56,11 @@ class TransformTest {
         }
 
         @Test
-        void testRightAndTop() {
+        void testProperties() {
             Transform transform = new Transform(10, 20, 5, 8);
             assertEquals(15, transform.right());
             assertEquals(28, transform.top());
+            assertEquals(new Pair<>(12.5f, 24f), transform.center());
         }
     }
 

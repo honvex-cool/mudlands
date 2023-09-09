@@ -1,5 +1,6 @@
 package graphics.drawable;
 
+import graphics.GraphicsContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class StackedTest {
     private Transform basis;
@@ -49,12 +51,27 @@ class StackedTest {
     }
 
     @Test
-    void testSetTransform() {
+    void testSetTransformChangesTransformsOfChildDrawablesAsNecessary() {
         Stacked group = Stacked.grouped(basisDrawable, blockDrawable);
         Transform transform = new Transform(1, 1, 20, 5);
         group.setTransform(transform);
         assertEquals(new Transform(1, 1, 8, 4), basisDrawable.getTransform());
         assertEquals(new Transform(5, 4, 16, 2), blockDrawable.getTransform());
         assertEquals(transform, group.getTransform());
+    }
+
+    @Test
+    void testChildDrawablesAreEventuallyDrawnWhenStacked() {
+        GraphicsContext context = mock(GraphicsContext.class);
+        Drawable first = mock(Drawable.class);
+        when(first.getTransform()).thenReturn(basis);
+        Drawable second = mock(Drawable.class);
+        when(second.getTransform()).thenReturn(block);
+
+        Stacked group = Stacked.grouped(first, second);
+        group.draw(context);
+
+        verify(first).draw(context);
+        verify(second).draw(context);
     }
 }

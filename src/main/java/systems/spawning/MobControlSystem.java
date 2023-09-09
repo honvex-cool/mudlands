@@ -4,7 +4,6 @@ import actions.Repeatable;
 import actions.RepeatableManager;
 import components.PositionComponent;
 import entities.mobs.Mob;
-import org.jetbrains.annotations.NotNull;
 import systems.controllers.Controller;
 
 import java.util.Collection;
@@ -27,8 +26,12 @@ public class MobControlSystem {
         this.limit = limit;
     }
 
-    public void addSpawningRule(float interval, @NotNull Function<PositionComponent, Mob> provider) {
-        spawnManager.add(new Repeatable(interval, () -> tryAddMob(provider.apply(playerPosition))));
+    public void addSpawningRule(float interval, Function<PositionComponent, Mob> provider) {
+        addSpawningRule(interval, 0, provider);
+    }
+
+    public void addSpawningRule(float interval, float delay, Function<PositionComponent, Mob> provider) {
+        spawnManager.add(new Repeatable(interval, delay, () -> tryAddMob(provider.apply(playerPosition))));
     }
 
     public void registerController(Class<? extends Mob> mobClass, Controller controller) {
