@@ -35,7 +35,8 @@ public class UniversalFactory {
         return ground;
     }
     public Passive createPassive(FieldStruct struct, Pair<Integer,Integer> key) {
-        //return passiveLoader.entityFromStruct(struct);
+        if(struct.objectType == ObjectType.NONE)
+            return new EmptyPassive();
         Passive passive;
         try {
             passive = passiveMap.get(struct.objectType).getConstructor().newInstance();

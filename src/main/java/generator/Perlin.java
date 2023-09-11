@@ -36,7 +36,7 @@ public class Perlin {
     }
 
     private double grad(int x, int y, double xf, double yf) {
-        Random random = new Random(x * this.seed + y);
+        Random random = new Random(x * this.seed + y + this.seed);
         return switch(random.nextInt() & 3) {
             case 0 -> xf + yf;
             case 1 -> -xf + yf;
