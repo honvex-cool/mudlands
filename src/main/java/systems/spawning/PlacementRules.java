@@ -31,10 +31,11 @@ public class PlacementRules {
     }
 
     public boolean canMobBePlaced(Mob mob, PositionComponent positionComponent) {
-        if(isForbiddenAt(mob.getClass(), positionComponent))
+        Pair<Integer, Integer> field = PositionComponent.getFieldAsPair(positionComponent);
+        if(isForbiddenAt(mob.getClass(), field))
             return false;
-        if(!mob.isActive())
-            return true;
+        if(isOccupied(field) && mob.isActive())
+            return false;
         for(Mob other : mobs) {
             if(other == mob || !other.isActive())
                 continue;
@@ -44,11 +45,7 @@ public class PlacementRules {
         return true;
     }
 
-    public boolean isForbiddenAt(Class<? extends Mob> mobClass, PositionComponent positionComponent) {
-        Pair<Integer, Integer> gridPosition = PositionComponent.getFieldAsPair(positionComponent);
-        Hitbox passive = passives.get(gridPosition);
-        if(passive != null && passive.isActive())
-            return true;
+    public boolean isForbiddenAt(Class<? extends Mob> mobClass, Pair<Integer, Integer> gridPosition) {
         Ground ground = grounds.get(gridPosition);
         if(ground == null)
             return true;
@@ -56,5 +53,10 @@ public class PlacementRules {
         if(forbiddenGrounds == null)
             return false;
         return forbiddenGrounds.contains(ground.getClass());
+    }
+
+    public boolean isOccupied(Pair<Integer, Integer> gridPosition) {
+        Hitbox passive = passives.get(gridPosition);
+        return passive != null && passive.isActive();
     }
 }

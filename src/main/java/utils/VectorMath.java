@@ -1,11 +1,9 @@
 package utils;
 
-import components.PositionComponent;
-
 public class VectorMath {
-    public static float distance(Pair<Float,Float> first, Pair<Float,Float> second) {
-        float xDiff = first.getFirst() - second.getFirst();
-        float yDiff = first.getSecond() - second.getSecond();
+    public static float distance(Pair<? extends Number, ? extends Number> first, Pair<? extends Number, ? extends Number> second) {
+        float xDiff = first.getFirst().floatValue() - second.getFirst().floatValue();
+        float yDiff = first.getSecond().floatValue() - second.getSecond().floatValue();
         return (float)Math.sqrt(xDiff * xDiff + yDiff * yDiff);
     }
 
