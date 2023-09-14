@@ -1,6 +1,7 @@
 package openable.inventory;
 
 import openable.items.materials.StickItem;
+import openable.items.tools.SwordItem;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +27,23 @@ class InventoryTest {
     }
 
     @Test
+    void destroyedItemRemovedFromInventory() {
+        Inventory inventory = new Inventory();
+        inventory.get(4, 7).setItem(
+            new SwordItem(){
+                @Override
+                public void damageItem() {
+                    durability = 0;
+                }
+            });
+        inventory.checkItem();
+        assertEquals("Sword", inventory.getRightHand().toString());
+        inventory.getRightHand().damageItem();
+        inventory.checkItem();
+        assertNotEquals("Sword", inventory.getRightHand().toString());
+    }
+
+    @Test
     void testRemoveItem() {
         Inventory inventory = new Inventory();
         inventory.addItem(new StickItem(), 20);
@@ -38,6 +56,5 @@ class InventoryTest {
         assertEquals(0, inventory.get(0, 0).getNumber());
         assertFalse(inventory.get(0, 0).getItem().isStackable());
         assertFalse(inventory.get(0, 0).getItem().isEdible());
-
     }
 }

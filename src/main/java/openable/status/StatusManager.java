@@ -8,9 +8,9 @@ public class StatusManager {
 
     private Item head, chest, legs, boots, rightHand, leftHand;
 
-    private Player player;
+    private final Player player;
 
-    private Inventory inventory;
+    private final Inventory inventory;
 
     public StatusManager(Player player) {
         this.player = player;
@@ -27,7 +27,7 @@ public class StatusManager {
         head = inventory.getHead();
         chest = inventory.getChest();
         legs = inventory.getLegs();
-        boots = inventory.getLegs();
+        boots = inventory.getBoots();
         rightHand = inventory.getRightHand();
         leftHand = inventory.getLeftHand();
     }

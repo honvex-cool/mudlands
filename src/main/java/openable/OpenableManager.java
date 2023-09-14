@@ -9,7 +9,7 @@ public class OpenableManager {
     private boolean inventoryOpen;
     private boolean craftingOpen;
     private boolean statusOpen;
-    private InputSystem inputSystem;
+    private final InputSystem inputSystem;
 
     public OpenableManager(InputSystem inputSystem) {
         this.inputSystem = inputSystem;
@@ -18,7 +18,7 @@ public class OpenableManager {
         statusOpen = false;
     }
 
-    private void setBooleans(boolean inv, boolean craft, boolean status) {
+    protected void setBooleans(boolean inv, boolean craft, boolean status) {
         inventoryOpen = inv;
         craftingOpen = craft;
         statusOpen = status;
@@ -31,7 +31,7 @@ public class OpenableManager {
             setBooleans(false, true, false);
         } else if(inputSystem.isStatusClicked()) {
             setBooleans(false, false, true);
-        } else if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        } else if(Gdx.input == null || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             setBooleans(false, false, false);
         }
     }

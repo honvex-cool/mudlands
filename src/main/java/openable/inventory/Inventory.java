@@ -128,7 +128,6 @@ public class Inventory implements Serializable {
         return rightHand.getItem();
     }
 
-
     public Item getHead() {
         return head.getItem();
     }
