@@ -51,7 +51,7 @@ public class Player extends Mob {
 
     @Override
     public Damage getAttackDamage(){
-        return inventory.getRightHand().getAttackStrength();
+        return inventory.getRightHand().getDamageCharacteristic();
     }
     @Override
     public void update(float deltaTime) {

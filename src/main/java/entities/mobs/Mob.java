@@ -64,7 +64,7 @@ public abstract class Mob extends Entity implements Hitbox {
     public void react(ActionType actionType, Mob actor) {
         super.react(actionType, actor);
         if(actionType == ActionType.HIT){
-            composition.damage(actor.getAttackDamage());
+            composition.damage(actor.getAttackDamage().withResistance(getAttackResistance()));
         }
         if(isDestroyed() && actor instanceof Player player){
             List<Pair<Item, Integer>> drops = getDrops();
@@ -94,5 +94,9 @@ public abstract class Mob extends Entity implements Hitbox {
 
     protected List<Pair<Item, Integer>> getDrops(){
         return List.of(new Pair<>(new NoneItem(), 0));
+    }
+
+    protected Damage getAttackResistance() {
+        return null;
     }
 }

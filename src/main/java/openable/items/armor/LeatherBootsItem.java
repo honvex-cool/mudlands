@@ -1,5 +1,6 @@
 package openable.items.armor;
 
+import entities.materials.Damage;
 import openable.inventory.Inventory;
 import openable.inventory.ItemType;
 import openable.items.Item;
@@ -16,6 +17,7 @@ public class LeatherBootsItem extends Item {
         edible = false;
         stackable = false;
         craftable = true;
+        damage = new Damage(100, 100, 100, 100);
         createRecipe();
     }
 

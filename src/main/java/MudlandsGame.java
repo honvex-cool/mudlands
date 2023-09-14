@@ -10,17 +10,12 @@ import graphics.DrawablePresenter;
 import graphics.GraphicsContext;
 import graphics.GraphicsContextImpl;
 import graphics.GraphicsContextInventory;
-import openable.crafting.CraftingManager;
-import openable.inventory.InventoryManager;
-import openable.status.StatusManager;
 import systems.*;
-import systems.controllers.CluelessController;
 import systems.controllers.HuntingController;
 import systems.spawning.MobControlSystem;
 import systems.spawning.MobSpawner;
 import systems.spawning.PlacementRules;
 import utils.AssetManager;
-import utils.Debug;
 import utils.Pair;
 
 import java.io.IOException;
@@ -112,6 +107,7 @@ public class MudlandsGame {
     }
 
     private void prepare(){
+        running = true;
 
         PlacementRules placementRules = new PlacementRules(
             Collections.unmodifiableMap(passives),
@@ -141,11 +137,10 @@ public class MudlandsGame {
         mobControlSystem = new MobControlSystem(player.mutablePositionComponent, mobs, 40);
         mobControlSystem.addSpawningRule(20, spawner::spawnPigAround);
         mobControlSystem.addSpawningRule(10, spawner::spawnCowAround);
-        mobControlSystem.addSpawningRule(30, spawner::spawnZombieAround);
-        mobControlSystem.addSpawningRule(40, spawner::spawnGhostAround);
+        mobControlSystem.addSpawningRule(8, 0, spawner::spawnZombieAround);
+        mobControlSystem.addSpawningRule(10, 0, spawner::spawnGhostAround);
         mobControlSystem.registerController(Zombie.class, zombieHuntingController);
         mobControlSystem.registerController(Ghost.class, ghostHuntingController);
-        mobControlSystem.registerController(Pig.class, new CluelessController(randomForMobs, 100));
 
         moveSystem = new MoveSystem(placementRules, Collections.unmodifiableMap(ground), mobsView);
 

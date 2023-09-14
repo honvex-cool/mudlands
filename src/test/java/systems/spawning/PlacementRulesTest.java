@@ -1,6 +1,6 @@
 package systems.spawning;
 
-import entities.grounds.Grass;
+import components.PositionComponent;
 import entities.grounds.Ground;
 import entities.grounds.Sand;
 import entities.mobs.Mob;
@@ -32,12 +32,18 @@ class PlacementRulesTest {
         grounds.put(new Pair<>(2,3),sand);
 
         assertTrue(placementRules.canMobBePlaced(zombie, zombie.mutablePositionComponent));
-        assertFalse(placementRules.isForbiddenAt(Zombie.class, zombie.mutablePositionComponent));
+        assertFalse(placementRules.isForbiddenAt(
+            Zombie.class,
+            PositionComponent.getFieldAsPair(zombie.mutablePositionComponent))
+        );
 
         placementRules.forbidOn(Zombie.class,Sand.class);
 
         assertFalse(placementRules.canMobBePlaced(zombie, zombie.mutablePositionComponent));
-        assertTrue(placementRules.isForbiddenAt(Zombie.class, zombie.mutablePositionComponent));
+        assertTrue(placementRules.isForbiddenAt(
+            Zombie.class,
+            PositionComponent.getFieldAsPair(zombie.mutablePositionComponent))
+        );
     }
 
     @Test
