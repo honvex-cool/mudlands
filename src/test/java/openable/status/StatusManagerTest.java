@@ -12,7 +12,7 @@ class StatusManagerTest {
     @Test
     void checkUpdateStatus() {
         Player player = new Player();
-        StatusManager statusManager = new StatusManager(player);
+        StatusManager statusManager = new StatusManager(player.getInventory());
         player.getInventory().get(3, 7).setItem(new MudBootsItem());
         player.getInventory().get(4, 7).setItem(new MudSwordItem());
         assertEquals("None", statusManager.getBoots().toString());

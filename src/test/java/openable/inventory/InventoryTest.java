@@ -1,5 +1,7 @@
 package openable.inventory;
 
+import openable.items.armor.MudBootsItem;
+import openable.items.materials.MudEssenceItem;
 import openable.items.materials.StickItem;
 import openable.items.tools.SwordItem;
 import org.junit.jupiter.api.Test;
@@ -30,7 +32,7 @@ class InventoryTest {
     void destroyedItemRemovedFromInventory() {
         Inventory inventory = new Inventory();
         inventory.get(4, 7).setItem(
-            new SwordItem(){
+            new SwordItem() {
                 @Override
                 public void damageItem() {
                     durability = 0;
@@ -57,4 +59,48 @@ class InventoryTest {
         assertFalse(inventory.get(0, 0).getItem().isStackable());
         assertFalse(inventory.get(0, 0).getItem().isEdible());
     }
+
+    @Test
+    void damageItemsTest() {
+        Inventory inventory = new Inventory();
+        inventory.get(3, 7).setItem(new MudBootsItem());
+        assertEquals(100, inventory.getBoots().getDurability());
+        inventory.damageItems();
+        assertNotEquals(100, inventory.getBoots().getDurability());
+    }
+
+    @Test
+    void repairItemsTest() {
+        Inventory inventory = new Inventory();
+        inventory.get(3, 7).setItem(new MudBootsItem());
+        inventory.get(4, 7).setItem(new SwordItem());
+        assertEquals(100, inventory.getBoots().getDurability());
+        assertEquals(100, inventory.getRightHand().getDurability());
+        inventory.damageItems();
+        inventory.getRightHand().damageItem();
+        assertNotEquals(100, inventory.getBoots().getDurability());
+        assertNotEquals(100, inventory.getRightHand().getDurability());
+        inventory.addItem(new MudEssenceItem(), 5);
+        inventory.repair();
+        assertEquals(100, inventory.getBoots().getDurability());
+        assertEquals(100, inventory.getRightHand().getDurability());
+    }
+
+    @Test
+    void repairItemsTestWithoutMud() {
+        Inventory inventory = new Inventory();
+        inventory.get(3, 7).setItem(new MudBootsItem());
+        inventory.get(4, 7).setItem(new SwordItem());
+        assertEquals(100, inventory.getBoots().getDurability());
+        assertEquals(100, inventory.getRightHand().getDurability());
+        inventory.damageItems();
+        inventory.getRightHand().damageItem();
+        assertNotEquals(100, inventory.getBoots().getDurability());
+        assertNotEquals(100, inventory.getRightHand().getDurability());
+        inventory.repair();
+        assertNotEquals(100, inventory.getBoots().getDurability());
+        assertNotEquals(100, inventory.getRightHand().getDurability());
+    }
+
+
 }

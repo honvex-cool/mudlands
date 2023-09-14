@@ -20,6 +20,7 @@ public class MudPickaxeItem extends PickaxeItem{
         name = "MudPickaxe";
         damage = new Damage(1, 30, 20, 1);
         durability = 250;
+        max_durability = 250;
         recipe.add(new Pair<>(mud, requiredMud));
         recipe.add(new Pair<>(zombie, requiredZombie));
         recipe.add(new Pair<>(ghost, requiredGhost));

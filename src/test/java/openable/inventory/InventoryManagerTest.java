@@ -18,7 +18,6 @@ class InventoryManagerTest {
         Player player = new Player();
         Inventory inventory = player.getInventory();
         InventoryManager inventoryManager = new InventoryManager(player);
-        assertEquals(player.getRadius(), inventoryManager.getPlayer().getRadius());
         assertEquals("None", inventoryManager.getHead().toString());
         assertEquals("None", inventoryManager.getChest().toString());
         inventory.get(2, 7).setItem(new MudLeggingsItem());

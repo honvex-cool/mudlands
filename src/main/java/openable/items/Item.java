@@ -18,6 +18,7 @@ public class Item implements Serializable {
     protected boolean craftable;
     protected Damage damage = new Damage(5, 5, 5, 5);
     protected int durability = 100;
+    protected int max_durability = 100;
 
     protected int damageReceived = 1;
     protected ItemType type = ItemType.NONE;
@@ -68,6 +69,10 @@ public class Item implements Serializable {
 
     public int getDurability() {
         return durability;
+    }
+
+    public void repair(){
+        durability = max_durability;
     }
 
     public String getStats() {

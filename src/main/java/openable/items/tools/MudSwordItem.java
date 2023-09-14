@@ -20,6 +20,7 @@ public class MudSwordItem extends SwordItem{
         name = "MudSword";
         damage = new Damage(1, 1, 1, 30);
         durability = 250;
+        max_durability = 250;
         recipe.add(new Pair<>(mud, requiredMud));
         recipe.add(new Pair<>(ghost, requiredGhost));
         recipe.add(new Pair<>(zombie, requiredZombie));

@@ -6,8 +6,7 @@ import components.PositionComponent;
 import entities.materials.Composition;
 import entities.materials.Mix;
 import openable.items.Item;
-import openable.items.materials.GhostEssenceItem;
-import openable.items.materials.LeatherItem;
+import openable.items.food.PorkchopItem;
 import utils.Pair;
 import utils.VectorMath;
 
@@ -39,6 +38,11 @@ public class Pig extends RoamingMob {
         );
         setVelocity(ESCAPE_SPEED, VectorMath.getRotationFromVector(difference));
         untilChange = GameTimer.started(0.5f);
+    }
+
+    @Override
+    protected List<Pair<Item, Integer>> getDrops() {
+        return List.of(new Pair<>(new PorkchopItem(), 1));
     }
 
 }
