@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import entities.Player;
 import openable.crafting.CraftingManager;
 import openable.crafting.Page;
 import openable.inventory.Inventory;
@@ -19,8 +18,8 @@ import openable.items.Item;
 import openable.items.NoneItem;
 import utils.AssetManager;
 
-import java.util.ArrayList;
 
+import static graphics.InventoryRendering.getImageButton;
 import static utils.Config.*;
 
 public class CraftingRendering {
@@ -58,9 +57,14 @@ public class CraftingRendering {
         this.craftingManager = new CraftingManager(inventory);
         Table mainTable = new Table();
         inventoryTable = new Table();
+        Table leftTable = new Table();
+        Table rightTable = new Table();
         mainTable.setFillParent(true);
+        leftTable.defaults().size(200f, 50f);
+        rightTable.defaults().size(200f, 50f);
 
-        TextButton leftButton = new TextButton("LEFT", skin);
+
+        ImageButton leftButton = createImageButton("left", "left_pressed");
         leftButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -70,7 +74,7 @@ public class CraftingRendering {
                 return true;
             }
         });
-        TextButton rightButton = new TextButton("RIGHT", skin);
+        ImageButton rightButton = createImageButton("right", "right_pressed");
         rightButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -94,10 +98,16 @@ public class CraftingRendering {
         popupInfo.button("OK", true);
 
         showPage(this.craftingManager.getCurrentPage());
-        mainTable.add(leftButton);
+        leftTable.add(leftButton);
+        mainTable.add(leftTable);
         mainTable.add(inventoryTable);
-        mainTable.add(rightButton);
+        rightTable.add(rightButton);
+        mainTable.add(rightTable);
         stage.addActor(mainTable);
+    }
+
+    private ImageButton createImageButton(String up, String down){
+        return getImageButton(up, down, assetManager);
     }
 
 

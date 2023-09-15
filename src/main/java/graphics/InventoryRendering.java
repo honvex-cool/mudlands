@@ -49,8 +49,6 @@ public class InventoryRendering {
         skin = new Skin(Gdx.files.internal(UISKIN));
         stage = new Stage();
         this.assetManager = assetManager;
-
-
     }
     public void setPlayer(Player player){
         stage.clear();
@@ -78,16 +76,16 @@ public class InventoryRendering {
         edible = new Label("Edible: ", skin);
         number = new Label("Number: ", skin);
 
-        leftTable.add(objectLabel).row();
-        leftTable.add(edible).row();
-        leftTable.add(number).row();
+        leftTable.add(objectLabel).pad(5f).row();
+        leftTable.add(edible).pad(5f).row();
+        leftTable.add(number).pad(5f).row();
 
-        TextButton useButton = new TextButton("USE", skin);
-        TextButton repairButton = new TextButton("REPAIR",  skin);
-        TextButton destroyButton = new TextButton("DESTROY", skin);
+        ImageButton useButton = createImageButton("use", "use_pressed");
+        ImageButton repairButton = createImageButton("repair", "repair_pressed");
+        ImageButton destroyButton = createImageButton("destroy", "destroy_pressed");
         leftTable.defaults().size(200f, 50f);
 
-        leftTable.add(useButton).row();
+        leftTable.add(useButton).pad(5f).row();
         useButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -96,7 +94,7 @@ public class InventoryRendering {
             }
         });
 
-        leftTable.add(repairButton).row();
+        leftTable.add(repairButton).pad(5f).row();
         repairButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -105,7 +103,7 @@ public class InventoryRendering {
             }
         });
 
-        leftTable.add(destroyButton).row();
+        leftTable.add(destroyButton).pad(5f).row();
         destroyButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -126,7 +124,6 @@ public class InventoryRendering {
                 inventoryTable.add(inventorySlot).size(64).pad(5);
                 inventoryImageMap.put(new Pair<>(row, col), inventorySlot);
                 inventorySlot.addListener(new InventoryChangeListener(this, row, col));
-
             }
             inventoryTable.row();
         }
@@ -141,6 +138,20 @@ public class InventoryRendering {
                 addTexture(inventoryManager.getItem(row, col), inventoryImageMap.get(pair));
             }
         }
+    }
+
+
+    private ImageButton createImageButton(String up, String down){
+        return getImageButton(up, down, assetManager);
+    }
+
+    static ImageButton getImageButton(String up, String down, AssetManager assetManager) {
+        Texture upTexture = assetManager.getInventoryTexture(up);
+        Texture downTexture = assetManager.getInventoryTexture(down);
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.up = new TextureRegionDrawable(upTexture);
+        style.down = new TextureRegionDrawable(downTexture);
+        return new ImageButton(style);
     }
 
 

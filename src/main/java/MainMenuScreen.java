@@ -21,8 +21,7 @@ public class MainMenuScreen implements Screen {
     public Sprite backgroundSprite;
     private final SpriteBatch batch;
 
-    private Dialog infoDialog;
-
+    private final Dialog infoDialog;
     public MainMenuScreen(MudlandsGame mudlandsGame, GdxGame gdxGame) {
         this.mudlandsGame = mudlandsGame;
         this.gdxGame = gdxGame;
