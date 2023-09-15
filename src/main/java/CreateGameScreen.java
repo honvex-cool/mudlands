@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import java.util.Random;
 
 import static utils.Config.UISKIN;
+import static utils.Config.WORLD_NAME;
+
 public class CreateGameScreen implements Screen {
     private final MudlandsGame mudlandsGame;
     private final GdxGame gdxGame;
@@ -39,7 +41,7 @@ public class CreateGameScreen implements Screen {
 
         TextField seed = new TextField(String.valueOf(Math.abs(random.nextLong())), skin);
 
-        TextField worldName = new TextField("NewWorld1", skin);
+        TextField worldName = new TextField(WORLD_NAME, skin);
 
         TextButton playButton = new TextButton("Play", skin);
 

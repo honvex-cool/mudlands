@@ -11,8 +11,7 @@ public class Config {
     public static final Color CLEAR_COLOR = Color.MAGENTA;
     public static final int CHUNK_SIZE = 16;
     public static final int DEFAULT_GRID_SIZE = 32;
-    public static final int WORLD_SEED = 42;
-    public static final String WORLD_NAME = "mudlands";
+    public static final String WORLD_NAME = "NewWorld";
     public static final String SAVE_PATH = "src/main/resources/saves/";
     public static final String EXTENSION = ".mud";
     public static final int TILES_ON_SCREEN = 16;

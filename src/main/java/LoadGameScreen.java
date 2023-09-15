@@ -14,6 +14,7 @@ import entities.Player;
 
 
 import static utils.Config.UISKIN;
+import static utils.Config.WORLD_NAME;
 
 public class LoadGameScreen implements Screen {
     private final MudlandsGame mudlandsGame;
@@ -35,7 +36,7 @@ public class LoadGameScreen implements Screen {
         table.defaults().size(200f, 75f);
         table.setFillParent(true);
 
-        TextField worldName = new TextField("NewWorld1", skin);
+        TextField worldName = new TextField(WORLD_NAME, skin);
 
         TextButton loadButton = new TextButton("Load", skin);
         loadButton.addListener(new InputListener(){
