@@ -37,6 +37,7 @@ public class CraftingManager {
         page0.addItem(new AxeItem(), 14);
         page0.addItem(new MudAxeItem(), 15);
         page0.addItem(new PotionItem(), 21);
+        page0.addItem(new WandItem(), 28);
         pages.add(page0);
         Page page1 = new Page("Armor", 42);
         page1.addItem(new LeatherHelmetItem(), 0);

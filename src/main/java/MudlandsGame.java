@@ -137,8 +137,8 @@ public class MudlandsGame {
         mobControlSystem = new MobControlSystem(player.mutablePositionComponent, mobs, 40);
         mobControlSystem.addSpawningRule(20, spawner::spawnPigAround);
         mobControlSystem.addSpawningRule(10, spawner::spawnCowAround);
-        mobControlSystem.addSpawningRule(8, 0, spawner::spawnZombieAround);
-        mobControlSystem.addSpawningRule(10, 0, spawner::spawnGhostAround);
+        mobControlSystem.addSpawningRule(20, 30, spawner::spawnZombieAround);
+        mobControlSystem.addSpawningRule(30, 30, spawner::spawnGhostAround);
         mobControlSystem.registerController(Zombie.class, zombieHuntingController);
         mobControlSystem.registerController(Ghost.class, ghostHuntingController);
 
