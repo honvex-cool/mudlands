@@ -27,8 +27,16 @@ public class LocalizedSprite extends PlaceholderDrawable {
         this.alpha = alpha;
     }
 
+    public float getAlpha() {
+        return alpha;
+    }
+
     public void setLayer(int layer) {
         this.layer = layer;
+    }
+
+    public int getLayer() {
+        return layer;
     }
 
     @Override
