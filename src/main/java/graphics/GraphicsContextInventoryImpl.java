@@ -3,6 +3,7 @@ package graphics;
 import com.badlogic.gdx.Gdx;
 import entities.Player;
 import openable.crafting.CraftingManager;
+import openable.inventory.Inventory;
 import openable.inventory.InventoryManager;
 import openable.status.StatusManager;
 import utils.AssetManager;
@@ -70,8 +71,8 @@ public class GraphicsContextInventoryImpl implements GraphicsContextInventory {
 
     @Override
     public void setPlayer(Player player) {
-        statusRendering.setPlayer(player);
-        craftingRendering.setPlayer(player);
+        statusRendering.setPlayer(player.getInventory());
+        craftingRendering.setPlayer(player.getInventory());
         inventoryRendering.setPlayer(player);
     }
 

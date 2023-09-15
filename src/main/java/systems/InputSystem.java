@@ -90,6 +90,18 @@ public class InputSystem {
         statusClicked = status;
     }
 
+    public void setInventoryClicked(boolean inventoryClicked) {
+        this.inventoryClicked = inventoryClicked;
+    }
+
+    public void setCraftingClicked(boolean craftingClicked) {
+        this.craftingClicked = craftingClicked;
+    }
+
+    public void setStatusClicked(boolean statusClicked) {
+        this.statusClicked = statusClicked;
+    }
+
     public boolean isInventoryClicked() {
         return inventoryClicked;
     }

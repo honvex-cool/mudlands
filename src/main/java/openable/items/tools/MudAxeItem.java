@@ -20,6 +20,7 @@ public class MudAxeItem extends AxeItem {
         name = "MudAxe";
         damage = new Damage(35, 1, 20, 25);
         durability = 250;
+        max_durability = 250;
         recipe.add(new Pair<>(mud, requiredMud));
         recipe.add(new Pair<>(zombie, requiredZombie));
         recipe.add(new Pair<>(ghost, requiredGhost));

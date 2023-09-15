@@ -1,4 +1,4 @@
-package openable.inventory;
+package graphics;
 
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;

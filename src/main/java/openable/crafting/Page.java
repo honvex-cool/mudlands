@@ -18,7 +18,7 @@ public class Page {
         this.name = name;
         this.size = size;
         items = new Item[size];
-        for(int i = 0; i < 42; i++){
+        for(int i = 0; i < size; i++){
             items[i] = new NoneItem();
         }
     }

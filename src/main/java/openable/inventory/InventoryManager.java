@@ -4,6 +4,7 @@ import entities.Player;
 import openable.items.Item;
 
 public class InventoryManager {
+
     Player player;
     Inventory inventory;
 
@@ -54,5 +55,9 @@ public class InventoryManager {
 
     public void removeItem(int row, int col){
         inventory.removeItem(row, col);
+    }
+
+    public void repair(){
+        inventory.repair();
     }
 }

@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import entities.Player;
 import openable.inventory.Inventory;
-import openable.inventory.InventoryImage;
 import openable.inventory.InventoryManager;
 import openable.items.Item;
 import utils.AssetManager;
@@ -84,6 +83,7 @@ public class InventoryRendering {
         leftTable.add(number).row();
 
         TextButton useButton = new TextButton("USE", skin);
+        TextButton repairButton = new TextButton("REPAIR",  skin);
         TextButton destroyButton = new TextButton("DESTROY", skin);
         leftTable.defaults().size(200f, 50f);
 
@@ -92,6 +92,15 @@ public class InventoryRendering {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 handleUseButton();
+                return true;
+            }
+        });
+
+        leftTable.add(repairButton).row();
+        repairButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                inventoryManager.repair();
                 return true;
             }
         });

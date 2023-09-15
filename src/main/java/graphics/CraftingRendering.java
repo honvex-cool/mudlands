@@ -53,9 +53,9 @@ public class CraftingRendering {
 
     }
 
-    public void setPlayer(Player player){
+    public void setPlayer(Inventory inventory){
         stage.clear();
-        this.craftingManager = new CraftingManager(player.getInventory());
+        this.craftingManager = new CraftingManager(inventory);
         Table mainTable = new Table();
         inventoryTable = new Table();
         mainTable.setFillParent(true);

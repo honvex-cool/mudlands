@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import entities.Player;
+import openable.inventory.Inventory;
 import openable.status.StatusManager;
 import utils.AssetManager;
 
@@ -33,9 +33,9 @@ public class StatusRendering {
         this.assetManager = assetManager;
     }
 
-    public void setPlayer(Player player){
+    public void setPlayer(Inventory inventory){
         stage.clear();
-        this.statusManager = new StatusManager(player);
+        this.statusManager = new StatusManager(inventory);
 
         headImage = new Image(assetManager.getInventoryTexture(statusManager.getHead().toString()));
         headImage.setSize(64, 64);

@@ -2,7 +2,9 @@ package openable.inventory;
 
 import openable.items.Item;
 import openable.items.NoneItem;
+import openable.items.materials.MudEssenceItem;
 import utils.Pair;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -57,9 +59,9 @@ public class Inventory implements Serializable {
     }
 
     public void addItem(Item item, int number) {
-        Pair<Integer, Integer> pair = searchItem(item);
+        Pair<Integer, Integer> pair = searchItemMain(item);
         if(pair == null) {
-            pair = searchItem(new NoneItem());
+            pair = searchItemMain(new NoneItem());
             if(pair == null) {
                 return;
             }
@@ -81,19 +83,29 @@ public class Inventory implements Serializable {
         return currentNumber >= number;
     }
 
-    public Pair<Integer, Integer> searchItem(Item item) {
+    public Pair<Integer, Integer> searchItemMain(Item item) {
         for(int i = 0; i < INVENTORY_HEIGHT; i++) {
-            for(int j = 0; j <= INVENTORY_WIDTH; j++) {
-                if(!item.isStackable() && fields.get(i).get(j).getItem().toString().equals("None")) {
-                    return new Pair<>(i, j);
-                }
-                if(item.isStackable() && fields.get(i).get(j).getItem().toString().equals(item.toString())) {
-                    return new Pair<>(i, j);
-                }
+            for(int j = 0; j < INVENTORY_WIDTH; j++) {
+                if(checkField(item, i, j)) return new Pair<>(i, j);
             }
         }
         return null;
     }
+    public Pair<Integer, Integer> searchItem(Item item) {
+        for(int i = 0; i < INVENTORY_HEIGHT; i++) {
+            for(int j = 0; j <= INVENTORY_WIDTH; j++) {
+                if(checkField(item, i, j)) return new Pair<>(i, j);
+            }
+        }
+        return null;
+    }
+    private boolean checkField(Item item, int i, int j) {
+        if(!item.isStackable() && fields.get(i).get(j).getItem().toString().equals("None")) {
+            return true;
+        }
+        return item.isStackable() && fields.get(i).get(j).getItem().toString().equals(item.toString());
+    }
+
 
     public void removeItem(int i, int j, int number) {
         InventoryField field = fields.get(i).get(j);
@@ -111,7 +123,7 @@ public class Inventory implements Serializable {
 
     public void removeItem(Item item, int number) {
         var pair = searchItem(item);
-        if(pair == null){
+        if(pair == null) {
             return;
         }
         removeItem(pair.getFirst(), pair.getSecond(), number);
@@ -119,15 +131,32 @@ public class Inventory implements Serializable {
 
     public void checkItem() {
         Item rightHandItem = rightHand.getItem();
-        if(rightHandItem.getDurability() == 0){
+        if(rightHandItem.getDurability() == 0) {
             rightHand.clearField();
+        }
+    }
+
+    public void damageItems() {
+        getHead().damageItem();
+        getChest().damageItem();
+        getLegs().damageItem();
+        getBoots().damageItem();
+    }
+
+    public void repair(){
+        if(checkInventory(new MudEssenceItem(), 5)) {
+            getHead().repair();
+            getChest().repair();
+            getLegs().repair();
+            getBoots().repair();
+            getRightHand().repair();
+            removeItem(new MudEssenceItem(), 5);
         }
     }
 
     public Item getRightHand() {
         return rightHand.getItem();
     }
-
 
     public Item getHead() {
         return head.getItem();

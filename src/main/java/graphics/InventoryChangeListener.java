@@ -6,10 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import graphics.InventoryRendering;
 import openable.inventory.Inventory;
 import openable.inventory.InventoryField;
-import openable.inventory.InventoryImage;
 
 import static utils.Config.INVENTORY_HEIGHT;
 
