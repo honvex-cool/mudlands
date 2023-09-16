@@ -24,14 +24,12 @@ public class CreateGameScreen implements Screen {
     Random random;
 
     Texture texture = new Texture(Gdx.files.internal("assets/image.png"));
-    public Sprite backgroundSprite;
     private final SpriteBatch batch;
     public CreateGameScreen(MudlandsGame mudlandsGame, GdxGame gdxGame) {
         random = new Random();
         this.mudlandsGame = mudlandsGame;
         this.gdxGame = gdxGame;
         batch = new SpriteBatch();
-        backgroundSprite = new Sprite(texture);
         stage = new Stage();
         Skin skin = new Skin(Gdx.files.internal(UISKIN));
         Table table = new Table();
@@ -79,7 +77,7 @@ public class CreateGameScreen implements Screen {
     @Override
     public void render(float delta) {
         batch.begin();
-        backgroundSprite.draw(batch);
+        batch.draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
         stage.act();
         stage.draw();

@@ -22,7 +22,6 @@ public class LoadGameScreen implements Screen {
     private final Stage stage;
 
     Texture texture = new Texture(Gdx.files.internal("assets/image.png"));
-    public Sprite backgroundSprite;
     private final SpriteBatch batch;
 
     public LoadGameScreen(MudlandsGame mudlandsGame, GdxGame gdxGame) {
@@ -30,7 +29,6 @@ public class LoadGameScreen implements Screen {
         this.gdxGame = gdxGame;
         stage = new Stage();
         batch = new SpriteBatch();
-        backgroundSprite = new Sprite(texture);
         Skin skin = new Skin(Gdx.files.internal(UISKIN));
         Table table = new Table();
         table.defaults().size(200f, 75f);
@@ -78,7 +76,7 @@ public class LoadGameScreen implements Screen {
     @Override
     public void render(float delta) {
         batch.begin();
-        backgroundSprite.draw(batch);
+        batch.draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
         stage.act();
         stage.draw();

@@ -3,12 +3,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import static utils.Config.UISKIN;
 
@@ -18,7 +20,6 @@ public class MainMenuScreen implements Screen {
     Stage stage;
 
     Texture texture = new Texture(Gdx.files.internal("assets/image.png"));
-    public Sprite backgroundSprite;
     private final SpriteBatch batch;
 
     private final Dialog infoDialog;
@@ -27,7 +28,6 @@ public class MainMenuScreen implements Screen {
         this.gdxGame = gdxGame;
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-        backgroundSprite = new Sprite(texture);
         batch = new SpriteBatch();
         Skin skin = new Skin(Gdx.files.internal(UISKIN));
         TextButton playButton = new TextButton("PLAY", skin);
@@ -98,7 +98,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void render(float delta) {
         batch.begin();
-        backgroundSprite.draw(batch);
+        batch.draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
         stage.act();
         stage.draw();
