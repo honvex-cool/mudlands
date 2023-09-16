@@ -8,12 +8,7 @@ import openable.items.materials.*;
 import utils.Pair;
 
 public class WandItem extends Item {
-    private final int requiredMud = 3;
-    private final int requiredStick = 2;
 
-    private final int requiredZombie = 1;
-    private final int requiredGhost = 1;
-    private final int requiredLeather = 1;
     private final MudEssenceItem mud = new MudEssenceItem();
     private final GhostEssenceItem ghost = new GhostEssenceItem();
     private final ZombieBloodItem zombie = new ZombieBloodItem();
@@ -33,10 +28,15 @@ public class WandItem extends Item {
     }
 
     private void createRecipe() {
+        int requiredMud = 3;
         recipe.add(new Pair<>(mud, requiredMud));
+        int requiredStick = 2;
         recipe.add(new Pair<>(stick, requiredStick));
+        int requiredGhost = 1;
         recipe.add(new Pair<>(ghost, requiredGhost));
+        int requiredZombie = 1;
         recipe.add(new Pair<>(zombie, requiredZombie));
+        int requiredLeather = 1;
         recipe.add(new Pair<>(leather, requiredLeather));
     }
 

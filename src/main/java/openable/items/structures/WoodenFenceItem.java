@@ -6,7 +6,6 @@ import openable.inventory.Inventory;
 import openable.inventory.ItemType;
 import openable.items.Item;
 import openable.items.materials.StickItem;
-import openable.items.tools.AxeItem;
 import utils.Pair;
 
 public class WoodenFenceItem extends Item implements Placable {

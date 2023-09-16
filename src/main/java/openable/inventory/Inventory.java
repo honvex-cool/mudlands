@@ -6,8 +6,6 @@ import openable.items.materials.MudEssenceItem;
 import utils.Pair;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-
 import static utils.Config.INVENTORY_HEIGHT;
 import static utils.Config.INVENTORY_WIDTH;
 

@@ -11,8 +11,6 @@ import utils.Pair;
 import java.util.ArrayList;
 
 public class SwordItem extends Item {
-    private final int requiredStone = 2;
-    private final int requiredStick = 1;
     private final StoneItem stone = new StoneItem();
     private final StickItem stick = new StickItem();
 
@@ -27,7 +25,9 @@ public class SwordItem extends Item {
     }
 
     private void createRecipe() {
+        int requiredStone = 2;
         recipe.add(new Pair<>(stone, requiredStone));
+        int requiredStick = 1;
         recipe.add(new Pair<>(stick, requiredStick));
     }
 

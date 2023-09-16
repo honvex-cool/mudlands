@@ -8,12 +8,6 @@ import openable.items.materials.ZombieBloodItem;
 import utils.Pair;
 
 public class MudAxeItem extends AxeItem {
-    private final MudEssenceItem mud = new MudEssenceItem();
-    private final GhostEssenceItem ghost = new GhostEssenceItem();
-    private final ZombieBloodItem zombie = new ZombieBloodItem();
-    private final int requiredZombie = 3;
-    private final int requiredMud = 3;
-    private final int requiredGhost = 3;
 
     public MudAxeItem() {
         super();
@@ -21,8 +15,14 @@ public class MudAxeItem extends AxeItem {
         damage = new Damage(35, 1, 20, 25);
         durability = 250;
         max_durability = 250;
+        MudEssenceItem mud = new MudEssenceItem();
+        int requiredMud = 3;
         recipe.add(new Pair<>(mud, requiredMud));
+        ZombieBloodItem zombie = new ZombieBloodItem();
+        int requiredZombie = 3;
         recipe.add(new Pair<>(zombie, requiredZombie));
+        GhostEssenceItem ghost = new GhostEssenceItem();
+        int requiredGhost = 3;
         recipe.add(new Pair<>(ghost, requiredGhost));
     }
 

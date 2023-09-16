@@ -3,7 +3,6 @@ package openable.crafting;
 import openable.items.Item;
 import openable.items.NoneItem;
 
-import java.util.ArrayList;
 
 public class Page {
 

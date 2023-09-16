@@ -4,7 +4,6 @@ import entities.Player;
 import openable.items.Item;
 
 public class PorkchopItem extends Item {
-    private final int hp = 50;
     public PorkchopItem() {
         name = "Porkchop";
         stackable = true;
@@ -14,6 +13,7 @@ public class PorkchopItem extends Item {
 
     @Override
     public void use(Player player) {
+        int hp = 50;
         player.feed(hp);
     }
 }

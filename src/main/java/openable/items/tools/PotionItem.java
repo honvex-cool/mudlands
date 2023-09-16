@@ -10,11 +10,6 @@ import utils.Pair;
 
 public class PotionItem extends Item {
 
-    private final int requiredMud = 1;
-    private final int requiredZombie = 1;
-    private final int requiredGhost = 1;
-
-    private final int hp = 100;
     private final GhostEssenceItem ghost = new GhostEssenceItem();
     private final ZombieBloodItem blood = new ZombieBloodItem();
     private final MudEssenceItem mud = new MudEssenceItem();
@@ -28,13 +23,17 @@ public class PotionItem extends Item {
     }
 
     private void createRecipe(){
+        int requiredGhost = 1;
         recipe.add(new Pair<>(ghost, requiredGhost));
+        int requiredZombie = 1;
         recipe.add(new Pair<>(blood, requiredZombie));
+        int requiredMud = 1;
         recipe.add(new Pair<>(mud, requiredMud));
     }
 
     @Override
     public void use(Player player) {
+        int hp = 100;
         player.heal(hp);
     }
 

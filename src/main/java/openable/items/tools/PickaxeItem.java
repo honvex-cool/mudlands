@@ -9,8 +9,6 @@ import openable.items.materials.StoneItem;
 import utils.Pair;
 
 public class PickaxeItem extends Item {
-    private final int requiredStone = 3;
-    private final int requiredStick = 2;
     private final StoneItem stone = new StoneItem();
     private final StickItem stick = new StickItem();
 
@@ -26,7 +24,9 @@ public class PickaxeItem extends Item {
     }
 
     private void createRecipe(){
+        int requiredStone = 3;
         recipe.add(new Pair<>(stone, requiredStone));
+        int requiredStick = 2;
         recipe.add(new Pair<>(stick, requiredStick));
     }
 

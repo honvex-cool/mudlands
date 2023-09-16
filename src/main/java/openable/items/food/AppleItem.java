@@ -4,7 +4,6 @@ import entities.Player;
 import openable.items.Item;
 
 public class AppleItem extends Item {
-    private final int hp = 20;
     public AppleItem() {
         name = "Apple";
         stackable = true;
@@ -14,6 +13,7 @@ public class AppleItem extends Item {
 
     @Override
     public void use(Player player) {
+        int hp = 20;
         player.feed(hp);
     }
 }

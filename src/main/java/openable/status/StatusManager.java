@@ -1,6 +1,5 @@
 package openable.status;
 
-import entities.Player;
 import openable.inventory.Inventory;
 import openable.items.Item;
 

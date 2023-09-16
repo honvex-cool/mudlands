@@ -8,7 +8,6 @@ import utils.Pair;
 
 public class LeatherHelmetItem extends Item {
     private final LeatherItem leather = new LeatherItem();
-    private final int requiredLeather = 5;
 
     public LeatherHelmetItem() {
         name = "Helmet";
@@ -20,6 +19,7 @@ public class LeatherHelmetItem extends Item {
     }
 
     private void createRecipe() {
+        int requiredLeather = 5;
         recipe.add(new Pair<>(leather, requiredLeather));
     }
 

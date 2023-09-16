@@ -3,7 +3,6 @@ package openable.crafting;
 import openable.inventory.Inventory;
 import openable.items.Item;
 import openable.items.armor.*;
-import openable.items.materials.LeatherItem;
 import openable.items.structures.StoneFenceItem;
 import openable.items.structures.WoodenFenceItem;
 import openable.items.structures.WoodenGateItem;
