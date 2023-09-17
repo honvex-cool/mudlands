@@ -60,11 +60,10 @@ public class GraphicsContextImpl implements GraphicsContext {
     @Override
     public void end() {
         spriteBatch.begin();
-        for(List<Runnable> layer : layers.values()) {
+        for(List<Runnable> layer : layers.values())
             for(Runnable drawing : layer)
                 drawing.run();
-            layer.clear();
-        }
+        layers.clear();
         spriteBatch.end();
     }
 

@@ -57,7 +57,7 @@ class GraphicsContextImplTest {
 
         graphicsContext.begin();
         graphicsContext.drawSprite("upper", new Transform(), 0, 1, 1);
-        graphicsContext.drawSprite("lower", new Transform(), 0, 1, 0);
+        graphicsContext.drawSprite("lower", new Transform(), 0, 1, -1);
         graphicsContext.end();
 
         InOrder order = inOrder(upper, lower, spriteBatch);
