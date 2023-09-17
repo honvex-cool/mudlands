@@ -5,7 +5,6 @@ import components.MutablePositionComponent;
 import entities.Player;
 import entities.mobs.Mob;
 import openable.items.materials.MudEssenceItem;
-import openable.items.materials.StickItem;
 
 public class MudEssence extends Drop {
     MudEssence(MutablePositionComponent mutablePositionComponent) {

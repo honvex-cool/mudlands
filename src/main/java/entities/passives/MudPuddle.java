@@ -1,13 +1,9 @@
 package entities.passives;
 
-import actions.ActionType;
 import components.MutablePositionComponent;
 import entities.Entity;
-import entities.Player;
 import entities.materials.Composition;
 import entities.materials.Mix;
-import entities.mobs.Mob;
-import openable.items.food.AppleItem;
 
 public class MudPuddle extends Passive {
     public MudPuddle() {

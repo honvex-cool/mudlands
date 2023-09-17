@@ -22,7 +22,7 @@ public abstract class Mob extends Entity implements Hitbox {
     public VelocityComponent velocityComponent;
     public MutableRotationComponent rotationComponent;
     public ActionType nextAction = null;
-    private Damage damage = new Damage(5, 5, 5, 5);
+    private final Damage damage = new Damage(5, 5, 5, 5);
 
     public Mob() {
         this(0,0);
@@ -43,16 +43,8 @@ public abstract class Mob extends Entity implements Hitbox {
         return new Movement(velocityComponent, Integer.MAX_VALUE, null);
     }
 
-    public void setAttackDamage(Damage damage) {
-        this.damage = damage;
-    }
-
     public Damage getAttackDamage(){
         return damage;
-    }
-
-    public ActionType getNextAction(){
-        return nextAction;
     }
 
     @Override

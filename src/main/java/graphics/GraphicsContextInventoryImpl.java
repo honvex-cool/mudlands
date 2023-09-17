@@ -2,10 +2,6 @@ package graphics;
 
 import com.badlogic.gdx.Gdx;
 import entities.Player;
-import openable.crafting.CraftingManager;
-import openable.inventory.Inventory;
-import openable.inventory.InventoryManager;
-import openable.status.StatusManager;
 import utils.AssetManager;
 
 public class GraphicsContextInventoryImpl implements GraphicsContextInventory {

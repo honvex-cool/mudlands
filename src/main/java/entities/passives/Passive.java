@@ -3,13 +3,10 @@ package entities.passives;
 import actions.ActionType;
 import components.Component;
 import components.MutablePositionComponent;
-import components.Vital;
 import entities.Entity;
 import entities.Hitbox;
-import entities.materials.Composition;
 import entities.mobs.Mob;
 
-import java.util.Map;
 import java.util.Set;
 
 public class Passive extends Entity implements Hitbox {
