@@ -131,4 +131,14 @@ public class Player extends Mob {
     public void heal(int amount) {
         composition.fix(amount);
     }
+
+    @Override
+    protected Damage getAttackResistance() {
+        return Damage.combined(
+            inventory.getHead().getDamageCharacteristic(),
+            inventory.getChest().getDamageCharacteristic(),
+            inventory.getLegs().getDamageCharacteristic(),
+            inventory.getBoots().getDamageCharacteristic()
+        );
+    }
 }
