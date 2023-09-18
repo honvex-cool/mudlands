@@ -118,14 +118,20 @@ public class MudlandsGame {
         placementRules.forbidOn(Cow.class, Water.class);
         placementRules.forbidOn(Zombie.class, Water.class);
 
+        PlacementRules fallbackPlacementRules = new PlacementRules(
+            Map.of(),
+            Collections.unmodifiableMap(ground),
+            mobsView
+        );
+
         HuntingController zombieHuntingController = new HuntingController(
-            placementRules,
+            List.of(placementRules, fallbackPlacementRules),
             player.mutablePositionComponent,
             30
         );
         zombieHuntingController.addHunter(Zombie.class);
         HuntingController ghostHuntingController = new HuntingController(
-            placementRules,
+            List.of(placementRules, fallbackPlacementRules),
             player.mutablePositionComponent,
             40
         );

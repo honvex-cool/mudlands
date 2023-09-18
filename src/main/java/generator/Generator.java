@@ -86,7 +86,7 @@ public class Generator {
 
 
     //Unused debug functions which won't (hopefully) be longer needed
-    @Deprecated
+    /*@Deprecated
     void printMap(Map<Pair<Integer, Integer>, Pair<GroundType, ObjectType>> map) {
         int minx = Integer.MAX_VALUE;
         int maxx = Integer.MIN_VALUE;
@@ -160,6 +160,6 @@ public class Generator {
             fileWriter.write('\n');
         }
         fileWriter.close();
-    }
+    }*/
 
 }

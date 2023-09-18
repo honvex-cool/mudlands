@@ -42,7 +42,7 @@ public class Inventory implements Serializable {
         //printInventory();
     }
 
-    @Deprecated
+   /* @Deprecated
     public void printInventory() {
         for(int i = 0; i < fields.getHeight(); i++) {
             for(int j = 0; j < fields.getWidth(); j++) {
@@ -51,6 +51,8 @@ public class Inventory implements Serializable {
             System.out.println();
         }
     }
+
+    */
 
     public InventoryField get(int i, int j) {
         return fields.get(i).get(j);

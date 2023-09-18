@@ -15,10 +15,16 @@ public class HuntingController implements Controller {
     private final PositionComponent hunted;
     private Pair<Integer, Integer> last;
     private final int distance;
-    private final GridSearch search;
+    private final List<GridSearch> searches;
 
-    public HuntingController(PlacementRules placementRules, PositionComponent hunted, int distance) {
-        this.search = new GridSearch(placementRules, Collections.unmodifiableSet(hunters));
+    public HuntingController(
+        List<PlacementRules> placementRules,
+        PositionComponent hunted,
+        int distance
+    ) {
+        this.searches = placementRules.stream().map(
+            rules -> new GridSearch(rules, Collections.unmodifiableSet(hunters))
+        ).toList();
         this.hunted = hunted;
         this.distance = distance;
         update();
@@ -46,7 +52,8 @@ public class HuntingController implements Controller {
     }
 
     private void update() {
-        search.runFrom(PositionComponent.getFieldAsPair(hunted), distance);
+        var huntedField = PositionComponent.getFieldAsPair(hunted);
+        searches.forEach(search -> search.runFrom(huntedField, distance));
     }
 
     private VelocityComponent getVelocity(PositionComponent from) {
@@ -55,7 +62,12 @@ public class HuntingController implements Controller {
             update();
         last = huntedField;
         var fromField = PositionComponent.getFieldAsPair(from);
-        var target = search.getPredecessor(fromField);
+        Pair<Integer, Integer> target = null;
+        for(GridSearch search : searches) {
+            target = search.getPredecessor(fromField);
+            if(target != null)
+                break;
+        }
         if(target == null)
             return new VelocityComponent(0, 0);
         return new VelocityComponent(target.getFirst() - fromField.getFirst(), target.getSecond() - fromField.getSecond());
