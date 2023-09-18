@@ -21,10 +21,10 @@ public record Damage(int wood, int mineral, int mud, int flesh) implements Seria
         if(resistance == null)
             return this;
         return new Damage(
-            Math.max(wood - 1, 1),
-            Math.max(mineral - 1, 1),
-            Math.max(mud - 1, 1),
-            Math.max(flesh - 1, 1)
+            Math.max(wood - resistance.wood / 100, 1),
+            Math.max(mineral - resistance.mineral / 100, 1),
+            Math.max(mud - resistance.mud / 100, 1),
+            Math.max(flesh - resistance.flesh / 100, 1)
         );
     }
 

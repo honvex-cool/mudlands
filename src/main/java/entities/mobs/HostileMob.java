@@ -2,11 +2,6 @@ package entities.mobs;
 
 import actions.ActionType;
 import actions.GameTimer;
-import entities.Player;
-import openable.items.Item;
-import utils.Pair;
-
-import java.util.List;
 
 public abstract class HostileMob extends Mob {
     private final GameTimer hitCooldown;

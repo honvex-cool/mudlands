@@ -2,14 +2,11 @@ package systems;
 
 import graphics.GraphicsContextInventory;
 import openable.OpenableManager;
-import openable.crafting.CraftingManager;
-import openable.inventory.InventoryManager;
-import openable.status.StatusManager;
 
 public class OpenableRenderingSystem {
 
     private GraphicsContextInventory graphicsContext;
-    private OpenableManager openableManager;
+    private final OpenableManager openableManager;
 
     public OpenableRenderingSystem(InputSystem inputSystem) {
         this.openableManager = new OpenableManager(inputSystem);

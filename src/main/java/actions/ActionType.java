@@ -1,5 +1,5 @@
 package actions;
 
 public enum ActionType {
-    HIT,INTERACT,BUILD;
+    HIT,INTERACT,BUILD
 }

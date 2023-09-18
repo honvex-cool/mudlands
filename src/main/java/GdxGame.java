@@ -2,7 +2,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entities.Player;
 import graphics.*;
-import openable.inventory.Inventory;
 import utils.Config;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.utils.ScreenUtils;

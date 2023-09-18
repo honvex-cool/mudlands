@@ -1,7 +1,6 @@
 package graphics;
 
 import components.Component;
-import components.ComponentHolder;
 import entities.Entity;
 import entities.mobs.Mob;
 import entities.Player;

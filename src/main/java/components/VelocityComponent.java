@@ -36,10 +36,6 @@ public class VelocityComponent implements Component {
         return new Pair<>(x, y);
     }
 
-    public void clear() {
-        x = y = 0f;
-    }
-
     @Override
     public void accept(ComponentVisitor visitor) {
         visitor.visit(this);

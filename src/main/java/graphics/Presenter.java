@@ -1,6 +1,5 @@
 package graphics;
 
-import components.ComponentHolder;
 import entities.Entity;
 
 import java.util.List;

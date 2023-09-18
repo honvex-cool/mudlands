@@ -1,10 +1,8 @@
 package systems;
 
 import actions.ActionType;
-import components.MutablePositionComponent;
 import components.PositionComponent;
 import entities.Entity;
-import entities.grounds.Ground;
 import entities.mobs.Mob;
 import entities.Player;
 import entities.passives.Passive;

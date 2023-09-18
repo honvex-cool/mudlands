@@ -10,6 +10,7 @@ import java.util.Set;
 public abstract class Drop extends Passive {
     private boolean pickedUp = false;
 
+    @SuppressWarnings("unused")
     public Drop() {
     }
 
